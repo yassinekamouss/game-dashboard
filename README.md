@@ -1,59 +1,38 @@
-# TeacherDashboard
+# 📚 Mathémagique - Plateforme d'Apprentissage des Mathématiques
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.8.
+**Mathémagique** est une plateforme éducative interactive permettant aux **étudiants** d’apprendre les mathématiques à travers des **jeux ludiques**, tout en offrant un système de **suivi des performances** pour les **enseignants**, **parents** et **administrateurs**.
 
-## Development server
+---
 
-To start a local development server, run:
+## Fonctionnalités principales
 
-```bash
-ng serve
-```
+### 👨‍🎓 Étudiants
+- Apprentissage des mathématiques via des mini-jeux interactifs
+- Adaptation du niveau selon la progression de l'élève
+- Historique des tests et résultats
+- Suivi personnalisé
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### 👩‍🏫 Enseignants
+- Gestion des comptes étudiants
+- Visualisation des performances de la classe
+- Analyse détaillée par élève
 
-## Code scaffolding
+### 👨‍👩‍👧 Parents
+- Suivi des résultats et progression de leurs enfants
+- Accès aux retours pédagogiques
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### ⚙️ Administrateurs
+- Gestion des utilisateurs et rôles
+- Génération de rapports d’analyse
+- Authentification et autorisation centralisées
 
-```bash
-ng generate component component-name
-```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🛠️ Technologies utilisées
 
-```bash
-ng generate --help
-```
+- **Frontend** : Angular 19 + TailwindCSS
+- **Backend** : Firebase 
+- **Base de données** : NoSQL (MongoDB, Firestore)
+- **Auth** : Authentification basée sur rôles (Étudiant, Enseignant, Parent, Admin)
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
