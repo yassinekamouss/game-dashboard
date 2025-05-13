@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { SharedDashboardComponent } from '../shared-dashboard/shared-dashboard.component';
-
 @Component({
   selector: 'app-admin',
   imports: [SharedDashboardComponent],
@@ -8,7 +7,8 @@ import { SharedDashboardComponent } from '../shared-dashboard/shared-dashboard.c
   styleUrl: './admin.component.css'
 })
 export class AdminComponent {
-  adminLinks : { label: string; path: string; icon?: string }[] = [
+
+  adminLinks : { label: string; path: string; icon: string }[] = [
     { label: 'Tableau de bord', path: '/admin/dashboard', icon: "fas fa-home" },
     { label: 'Gestion des eleves', path: '/admin/students', icon: "fas fa-user-cog" },
     { label: 'Gestion des parents', path: '/admin/parents', icon: "fas fa-user-cog" },

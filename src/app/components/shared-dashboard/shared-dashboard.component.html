@@ -11,32 +11,11 @@
       <div class="profile-image">
         <img src="assets/images/avatar.jpg" alt="Profile" />
       </div>
-      <h3 class="personal-name">M. Dupont</h3>
+      <h3 class="teacher-name">M. Dupont</h3>
       <p class="teacher-subject">Mathématiques</p>
     </div>
 
-    <!-- <nav class="sidebar-nav">
-        <button class="nav-button" routerLink="/prof/dashboard" routerLinkActive="active">
-          <i class="fas fa-home"></i>
-          Tableau de bord
-        </button>
-        
-        <button class="nav-button" routerLink="/prof/students" routerLinkActive="active">
-          <i class="fas fa-users"></i>
-          Mes élèves
-        </button>
-  
-        <button class="nav-button" routerLink="/prof/tests" routerLinkActive="active">
-          <i class="fas fa-tasks"></i>
-          Tests
-        </button>
-  
-        <button class="nav-button" routerLink="/prof/settings" routerLinkActive="active">
-          <i class="fas fa-cog"></i>
-          Paramètres
-        </button>
-      </nav> -->
-
+    <!-- Navigation Links -->
     <nav class="sidebar-nav">
       <button
         *ngFor="let link of links"
@@ -60,3 +39,4 @@
     <router-outlet></router-outlet>
   </main>
 </div>
+ 

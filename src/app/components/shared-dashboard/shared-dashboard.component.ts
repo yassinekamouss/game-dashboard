@@ -3,7 +3,6 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 @Component({
   selector: 'app-shared-dashboard',
   standalone: true,
@@ -13,7 +12,8 @@ import { FormsModule } from '@angular/forms';
 })
 
 export class SharedDashboardComponent  {
-  @Input() links: { label: string; path: string; icon?: string }[] = [];
+  @Input() links: { label: string; path: string; icon: string }[] = [];
+  
   constructor(
     private authService: AuthService, 
     private router: Router,

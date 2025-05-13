@@ -116,7 +116,7 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.personal-name {
+.teacher-name {
   color: var(--primary-color);
   font-size: 24px;
   margin: 10px 0 5px;
