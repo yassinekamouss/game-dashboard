@@ -30,7 +30,7 @@ export class LoginComponent {
               const role = userWithRole.role;
               if (role === 'admin') {
                 console.log('Admin role detected');
-                // this.router.navigate(['/admin']);
+                this.router.navigate(['/admin']);
               } else if (role === 'student') {
                 console.log('User role detected');
                 this.router.navigate(['/dashboard']);
