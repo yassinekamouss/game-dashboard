@@ -1,37 +1,43 @@
-// import { Injectable } from '@angular/core';
-// import { BehaviorSubject, map, Observable } from 'rxjs';
-// import { UserService } from '../users/user.service';
-// import { Student } from '../../models/student';
+import {Injectable} from '@angular/core';
+import {Student} from '../../models/student';
+import {from, Observable, throwError} from 'rxjs';
+import {equalTo, orderByChild, query} from 'firebase/database';
+import {Database, get, ref} from '@angular/fire/database';
+import {catchError, map} from 'rxjs/operators';
+import {GradeLevel} from '../../models/grade-level';
+import {UserRole} from '../../models/user-role';
 
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class StudentService {
+@Injectable({
+   providedIn: 'root'
+ })
+ export class StudentService {
 
-//    private filtersSubject = new BehaviorSubject<Filters>({
-//     grade: '',
-//     gender: '',
-//     ageMin: null,
-//     ageMax: null,
-//     teacherId: '',
-//     search: ''
-//   });
 
-//   filters$ = this.filtersSubject.asObservable();
+   constructor(private db:Database) {}
+   getStudentsByGrade(grade:GradeLevel): Observable<Student[]> {
+     const usersQuery = query(
+       ref(this.db, 'users'),
+       orderByChild('grade'),
+       equalTo(grade.toLowerCase())
+     )
 
-//   constructor(private userService: UserService) {}
-
-//   setFilters(filters: Filters) {
-//     this.filtersSubject.next(filters);
-//   }
-
-//   getAllStudents(): Observable<Student[]> {
-//     return this.userService.getUsersByRole('student') as Observable<Student[]>;
-//   }
-
-//   getStudentsByTeacher(teacherId: string): Observable<Student[]> {
-//     return this.getAllStudents().pipe(
-//       map(students => students.filter(s => s.teacherId === teacherId))
-//     );
-//   }
-// }
+     return from(get(usersQuery)).pipe(
+       map(snapshot => {
+         if (snapshot.exists()) {
+           const students: Student[] = [];
+           snapshot.forEach(childSnapshot => {
+             const student = childSnapshot.val() as Student;
+             if(student.role === UserRole.STUDENT)
+             students.push(student);
+           });
+           return students;
+         }
+         return [];
+       }),
+       catchError(error => {
+         console.error('Erreur lors de la récupération des utilisateurs:', error);
+         return throwError(() => error);
+       })
+     );
+   }
+ }
