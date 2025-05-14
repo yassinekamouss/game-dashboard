@@ -1,7 +1,7 @@
 <div class="profile-theme-container" *ngIf="user; else loading">
   <div class="profile-theme-header">
     <div class="profile-theme-avatar">
-      <span>{{ user.firstName }}{{ user.lastName[0] }}</span>
+      <span>{{ user.firstName[0] }}{{ user.lastName[0] }}</span>
     </div>
     <div>
       <h2 class="profile-theme-name">{{ !isEditing ? (user.firstName + ' ' + user.lastName) : 'Modifier le profil' }}</h2>

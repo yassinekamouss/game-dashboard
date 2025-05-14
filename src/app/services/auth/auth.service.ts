@@ -26,8 +26,9 @@ export class AuthService {
   constructor(private auth: Auth, private db: Database) {
     this.setSessionStoragePersistence();
     this.user$ = user(this.auth);
+    console.log('consotractor !!:', );
     // Configurer la surveillance d'authentification
-    this.setupAuthStateListener();
+    this.setupAuthStateListener(); 
   }
 
   private setSessionStoragePersistence(): void {
@@ -36,7 +37,7 @@ export class AuthService {
 
   // Récupération des données utilisateur avec son rôle
   private fetchUserWithRole(uid: string): Observable<User | null> {
-    
+    console.log('fetchUserWithRole called with uid:', uid);
     const userRef = ref(this.db, `users/${uid}`);
     
     return from(get(userRef)).pipe(
@@ -57,8 +58,8 @@ export class AuthService {
     );
   }
 
-   login(email: string, password: string): Observable<User | null> {
-    
+  login(email: string, password: string): Observable<User | null> {
+    console.log('login called with email:', email);
     return from(
       signInWithEmailAndPassword(this.auth, email, password)
     ).pipe(
@@ -86,7 +87,10 @@ export class AuthService {
 
   // Configuration de l'écouteur d'état d'authentification
   private setupAuthStateListener(): void {
+   
+    console.log('setupAuthStateListener called');
     this.user$.subscribe(firebaseUser => {
+      console.log('Utilisateur connecté:', firebaseUser);
       if (firebaseUser) {
         // L'utilisateur est connecté, récupérez ses données complètes
         this.fetchUserWithRole(firebaseUser.uid).subscribe();

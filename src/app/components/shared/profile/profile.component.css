@@ -1,45 +1,48 @@
 :host {
   display: block;
-  font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
-  --primary-color: #4a6cd1;
-  --secondary-color: #ff7e5f;
-  --accent-color: #32cd32;
-  --border-radius: 18px;
+  font-family: 'Fira Sans', 'Roboto', sans-serif;
+  --primary-color: #3b67c5;
+  --secondary-color: #e63946;
+  --accent-color: #00b050;
+  --light-gray: #f5f7fa;
+  --dark-gray: #4a5568;
+  --border-radius: 8px;
+  --math-font: 'Cambria Math', 'STIX Two Math', serif;
 }
 
 .profile-theme-container {
-  max-width: 550px;
+  max-width: 600px;
   margin: 40px auto;
-  padding: 2.8rem 2.5rem;
+  padding: 2.5rem;
   background: #fff;
   border-radius: var(--border-radius);
-  box-shadow: 0 8px 16px rgba(74, 108, 209, 0.08);
-  border: 2px solid #f0f0f0;
+  box-shadow: 0 8px 30px rgba(59, 103, 197, 0.12);
+  border: 1px solid #eaedf3;
   position: relative;
   overflow: hidden;
 }
 
 /* Symboles mathématiques décoratifs */
 .profile-theme-container::before {
-  content: "∑";
+  content: "∫";
   position: absolute;
-  top: -15px;
+  top: -10px;
   right: 20px;
-  font-size: 80px;
-  color: rgba(74, 108, 209, 0.05);
+  font-size: 100px;
+  font-family: var(--math-font);
+  color: rgba(59, 103, 197, 0.06);
   z-index: 0;
-  font-weight: bold;
 }
 
 .profile-theme-container::after {
-  content: "π";
+  content: "∞";
   position: absolute;
-  bottom: -20px;
-  left: 15px;
-  font-size: 70px;
-  color: rgba(255, 126, 95, 0.05);
+  bottom: -15px;
+  left: 25px;
+  font-size: 80px;
+  font-family: var(--math-font);
+  color: rgba(230, 57, 70, 0.05);
   z-index: 0;
-  font-weight: bold;
 }
 
 .profile-theme-header {
@@ -51,96 +54,169 @@
   z-index: 1;
 }
 
-/* Avatar stylisé en forme de cercle avec cadre coloré */
+/* Avatar stylisé avec formules mathématiques */
 .profile-theme-avatar {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4a6cd1 40%, #ff7e5f 100%);
+  width: 100px;
+  height: 100px;
+  border-radius: 20%;
+  background: linear-gradient(135deg, var(--primary-color) 0%, #2a4c97 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   color: #fff;
   font-weight: bold;
-  box-shadow: 0 4px 12px rgba(74, 108, 209, 0.15);
-  border: 4px solid #fff;
+  box-shadow: 0 6px 16px rgba(59, 103, 197, 0.2);
+  border: 3px solid #fff;
   position: relative;
   overflow: hidden;
+  transform: rotate(5deg);
 }
 
-/* Ajouter une règle mathématique dans l'avatar */
-.profile-theme-avatar::after {
-  content: "+";
+/* Amélioration visuelle de l'avatar */
+.profile-theme-avatar::before {
+  content: "";
   position: absolute;
-  top: -10px;
-  right: -5px;
-  font-size: 24px;
-  color: rgba(255, 255, 255, 0.7);
-  transform: rotate(15deg);
+  width: 140%;
+  height: 140%;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.1) 0px,
+    rgba(255, 255, 255, 0.1) 3px,
+    transparent 3px,
+    transparent 6px
+  );
+  z-index: 0;
+}
+
+/* Lignes qui ressemblent à une page de cahier de maths */
+.profile-theme-avatar::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .profile-theme-name {
-  color: var(--primary-color);
-  font-size: 2.2rem;
+  color: var(--dark-gray);
+  font-size: 1.8rem;
   margin: 0 0 0.4rem 0;
-  font-weight: bold;
+  font-weight: 700;
   line-height: 1.1;
+  position: relative;
+  display: inline-block;
 }
 
-/* Badge de rôle avec animation subtile */
+/* Soulignement stylisé pour le nom */
+.profile-theme-name::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+/* Badge de rôle avec thème mathématique */
 .profile-theme-role {
   background: var(--accent-color);
   color: #fff;
   display: inline-block;
-  padding: 0.4rem 1.2rem;
-  border-radius: 20px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  padding: 0.35rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
   letter-spacing: 0.5px;
-  box-shadow: 0 3px 6px rgba(50, 205, 50, 0.2);
-  animation: pulse 3s infinite;
+  box-shadow: 0 3px 8px rgba(0, 176, 80, 0.2);
+  position: relative;
+  z-index: 1;
+  margin-left: 10px;
+}
+
+/* Ajout de notation mathématique au badge */
+.profile-theme-role::before {
+  content: "role  → ";
+  margin-right: 5px;
+  font-family: var(--math-font);
+  font-weight: normal;
 }
 
 .profile-theme-details {
   margin-top: 2rem;
-  font-size: 1.15rem;
-  color: #333;
+  font-size: 1rem;
+  color: var(--dark-gray);
   position: relative;
   z-index: 1;
 }
 
 .profile-theme-details div {
-  margin-bottom: 1.3rem;
-  padding: 0.7rem 1rem;
-  border-radius: 12px;
-  background-color: rgba(249, 249, 255, 0.7);
+  margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: var(--border-radius);
+  background-color: var(--light-gray);
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
+  border-left: 3px solid transparent;
 }
 
 .profile-theme-details div:hover {
-  transform: translateX(5px);
-  background-color: rgba(74, 108, 209, 0.05);
+  transform: translateX(3px);
+  border-left: 3px solid var(--primary-color);
+  background-color: rgba(59, 103, 197, 0.05);
 }
 
 .profile-theme-details strong {
   color: var(--primary-color);
   font-weight: 600;
-  min-width: 150px;
+  min-width: 130px;
   display: inline-block;
+  position: relative;
+}
+
+/* Ajouter un symbole de mathématiques avant chaque libellé */
+.profile-theme-details div:nth-child(1) strong::before {
+  content: "α";
+  font-family: var(--math-font);
+  margin-right: 5px;
+  opacity: 0.7;
+}
+
+.profile-theme-details div:nth-child(2) strong::before {
+  content: "β";
+  font-family: var(--math-font);
+  margin-right: 5px;
+  opacity: 0.7;
+}
+
+.profile-theme-details div:nth-child(3) strong::before {
+  content: "γ";
+  font-family: var(--math-font);
+  margin-right: 5px;
+  opacity: 0.7;
+}
+
+.profile-theme-details div:nth-child(4) strong::before {
+  content: "δ";
+  font-family: var(--math-font);
+  margin-right: 5px;
+  opacity: 0.7;
 }
 
 /* Style pour le bouton d'édition */
 .edit-button {
   position: absolute;
-  right: 0;
+  right: 5px;
   top: 5px;
-  background: #f0f0f0;
+  background: var(--light-gray);
   border: none;
-  border-radius: 50px;
-  padding: 0.7rem 1.2rem;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
   cursor: pointer;
   color: var(--primary-color);
   font-weight: 600;
@@ -148,13 +224,13 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  box-shadow: 0 2px 8px rgba(74, 108, 209, 0.1);
+  box-shadow: 0 2px 6px rgba(59, 103, 197, 0.1);
 }
 
 .edit-button:hover {
   background: var(--primary-color);
   color: white;
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 }
 
 /* Style amélioré pour le formulaire */
@@ -162,75 +238,85 @@
   margin-top: 2rem;
   position: relative;
   z-index: 1;
+  background: rgba(245, 247, 250, 0.6);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid #eaedf3;
 }
 
 .form-group {
-  margin-bottom: 1.8rem;
+  margin-bottom: 1.5rem;
   position: relative;
 }
 
-/* Icônes dans le formulaire pour les champs */
+/* Symboles mathématiques dans le formulaire */
 .form-group::before {
   position: absolute;
-  left: -5px;
-  top: 50%;
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
+  left: 0;
+  top: 35px;
+  font-family: var(--math-font);
   color: var(--primary-color);
   opacity: 0.5;
-  transform: translateY(-50%);
-  font-size: 0.9rem;
+  transform: translateX(-20px);
+  font-size: 1.1rem;
 }
 
 .form-group:nth-child(1)::before {
-  content: "∝";
+  content: "∂";
 }
 
 .form-group:nth-child(2)::before {
-  content: "∞";
+  content: "∑";
 }
 
 .form-group:nth-child(3)::before {
-  content: "⊕";
+  content: "√";
+}
+
+.form-group:nth-child(4)::before {
+  content: "∇";
+}
+
+.form-group:nth-child(5)::before {
+  content: "≡";
 }
 
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: var(--primary-color);
+  color: var(--dark-gray);
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
 }
 
 .form-group input {
   width: 100%;
-  padding: 1rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  border: 1px solid #d0d7e2;
+  border-radius: var(--border-radius);
   font-family: inherit;
-  font-size: 1.05rem;
+  font-size: 1rem;
   transition: all 0.3s;
-  background-color: #f9f9ff;
+  background-color: #fff;
 }
 
 .form-group input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(74, 108, 209, 0.1);
-  background-color: white;
+  box-shadow: 0 0 0 3px rgba(59, 103, 197, 0.1);
 }
 
 .form-group input:disabled {
-  background-color: #f0f0f0;
+  background-color: #f0f2f5;
   cursor: not-allowed;
   opacity: 0.7;
 }
 
 /* Message d'erreur stylisé */
 .error-message {
-  color: #ff5252;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
+  color: var(--secondary-color);
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
   padding-left: 0.5rem;
   position: relative;
   display: flex;
@@ -242,31 +328,31 @@
   display: inline-block;
   width: 18px;
   height: 18px;
-  background: #ff5252;
+  background: var(--secondary-color);
   color: white;
   border-radius: 50%;
   text-align: center;
   line-height: 18px;
-  margin-right: 8px;
+  margin-right: 6px;
   font-weight: bold;
   font-size: 12px;
 }
 
 .form-actions {
   display: flex;
-  gap: 1.2rem;
-  margin-top: 2.5rem;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
 .save-button, .cancel-button {
-  padding: 0.9rem 1.8rem;
-  border-radius: 10px;
+  padding: 0.7rem 1.5rem;
+  border-radius: var(--border-radius);
   border: none;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
   font-family: inherit;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
 }
 
 .save-button {
@@ -277,56 +363,78 @@
   overflow: hidden;
 }
 
-.save-button::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  width: 20px;
-  height: 20px;
-  background: rgba(255,255,255,0.3);
-  border-radius: 50%;
-  transform: scale(1);
-  opacity: 0;
-}
-
-.save-button:hover:not([disabled])::before {
-  animation: ripple 1s;
+.save-button:hover:not([disabled])::after {
+  opacity: 0.6;
+  right: 10px;
 }
 
 .save-button:hover:not([disabled]) {
-  background: #3955b0;
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(74, 108, 209, 0.2);
+  background: #2a4c97;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 103, 197, 0.2);
+  padding-right: 2.2rem;
 }
 
 .save-button:disabled {
-  background: #a5b1d9;
+  background: #95a7d1;
   cursor: not-allowed;
 }
 
 .cancel-button {
-  background: #f0f0f0;
-  color: #555;
+  background: #e0e5f0;
+  color: var(--dark-gray);
   flex: 1;
 }
 
 .cancel-button:hover {
-  background: #e0e0e0;
-  transform: translateY(-2px);
+  background: #d0d7e2;
+  transform: translateY(-2px); 
 }
 
-/* Animation pour le badge de rôle */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
+/* État de chargement stylisé avec thème mathématique */
+.profile-theme-loading {
+  text-align: center;
+  color: var(--dark-gray);
+  margin: 4rem auto;
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
 }
 
-/* Animation pour le bouton de sauvegarde */
-@keyframes ripple {
-  0% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(60); opacity: 0; }
+/* Animation du symbole mathématique pour le chargement */
+.profile-theme-loading::before {
+  content: "θ";
+  font-family: var(--math-font);
+  font-size: 3.5rem;
+  color: var(--primary-color);
+  animation: mathRotate 2s infinite ease-in-out;
+  display: block;
+}
+
+/* Décoration autour du loader */
+.profile-theme-loading::after {
+  content: "";
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+  position: absolute;
+  bottom: -10px;
+  animation: mathPulse 1.5s infinite;
+}
+
+/* Animation pour le chargement */
+@keyframes mathRotate {
+  0% { transform: rotateY(0deg); opacity: 0.5; }
+  50% { transform: rotateY(180deg); opacity: 1; }
+  100% { transform: rotateY(360deg); opacity: 0.5; }
+}
+
+@keyframes mathPulse {
+  0%, 100% { width: 60px; opacity: 0.5; }
+  50% { width: 100px; opacity: 1; }
 }
 
 /* Responsive design */
@@ -342,8 +450,17 @@
     gap: 1rem;
   }
   
+  .profile-theme-avatar {
+    margin: 0 auto;
+  }
+  
   .profile-theme-name {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+  
+  .profile-theme-name::after {
+    left: 50%;
+    transform: translateX(-50%);
   }
   
   .edit-button {
@@ -356,29 +473,8 @@
   .form-actions {
     flex-direction: column;
   }
-}
-
-/* État de chargement stylisé */
-.profile-theme-loading {
-  text-align: center;
-  color: #666;
-  margin: 4rem auto;
-  font-size: 1.3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.profile-theme-loading::before {
-  content: "∞";
-  font-size: 3rem;
-  color: var(--primary-color);
-  animation: rotate 2s infinite linear;
-  display: block;
-}
-
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  
+  .form-group::before {
+    display: none;
+  }
 }
