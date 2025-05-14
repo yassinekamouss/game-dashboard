@@ -1,0 +1,71 @@
+<div class="student-card" *ngIf="student">
+  <!-- Avatar de l'élève -->
+  <div
+    class="student-avatar"
+    [ngClass]="{
+      female: student.gender === 'female',
+      male: student.gender === 'male'
+    }"
+  >
+    <span>{{ student.firstName[0] }}{{ student.lastName[0] }}</span>
+    <div class="grade-badge">{{ student.grade }}</div>
+  </div>
+
+  <!-- Informations de l'élève -->
+  <div class="student-info">
+    <h3 class="student-name">{{ student.firstName }} {{ student.lastName }}</h3>
+    <div class="student-details">
+      <div class="detail-item">
+        <i class="fas fa-birthday-cake"></i>
+        <span>{{ student.dateOfBirth }}</span>
+      </div>
+      <div class="detail-item">
+        <i class="fas fa-venus-mars"></i>
+        <span>{{ student.gender === "M" ? "Garçon" : "Fille" }}</span>
+      </div>
+      <div class="detail-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Niveau {{ student.grade }}</span>
+      </div>
+      <div class="detail-item">
+        <i class="fas fa-gamepad"></i>
+        <span>{{ student.gameProgress.length || 0 }} jeux</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barre de progression et médailles -->
+  <div class="student-progress-section">
+    <div class="progress-bar">
+      <div
+        class="progress-fill"
+        [style.width.%]="calculateProgress(student)"
+      ></div>
+      <span class="progress-text">{{ calculateProgress(student) }}%</span>
+    </div>
+    <div class="achievements-section">
+      <span
+        class="badge"
+        *ngFor="let badge of getLimitedAchievements(student); let i = index"
+      >
+        <i class="fas fa-medal" [ngClass]="getBadgeClass(i)"></i>
+      </span>
+      <span class="more-badge" *ngIf="student.achievements.length > 3">
+        +{{ student.achievements.length - 3 }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="student-actions">
+    <button class="action-btn view-btn" title="Voir le profil">
+      <i class="fas fa-eye"></i>
+    </button>
+    <button class="action-btn edit-btn" title="Modifier">
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+    <button class="action-btn delete-btn" title="Supprimer">
+      <i class="fas fa-trash-alt"></i>
+    </button>
+  </div>
+</div>
