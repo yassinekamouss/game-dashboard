@@ -1,0 +1,65 @@
+<div class="profile-theme-container" *ngIf="user; else loading">
+  <div class="profile-theme-header">
+    <div class="profile-theme-avatar">
+      <span>{{ user.firstName }}{{ user.lastName }}</span>
+    </div>
+    <div>
+      <h2 class="profile-theme-name">{{ !isEditing ? (user.firstName + ' ' + user.lastName) : 'Modifier le profil' }}</h2>
+      <div class="profile-theme-role">{{ user.role }}</div>
+    </div>
+    <button *ngIf="!isEditing" class="edit-button" (click)="startEditing()">
+      <i class="fas fa-pencil-alt"></i> Modifier
+    </button>
+  </div>
+
+  <!-- Mode visualisation -->
+  <div class="profile-theme-details" *ngIf="!isEditing">
+    <div><strong>Prénom :</strong> {{ user.firstName }}</div>
+    <div><strong>Nom :</strong> {{ user.lastName }}</div>
+    <div><strong>Email :</strong> {{ user.email }}</div>
+    <div><strong>Date de naissance :</strong> {{ user.dateOfBirth }}</div>
+  </div>
+
+  <!-- Mode édition -->
+  <form *ngIf="isEditing" [formGroup]="profileForm" (ngSubmit)="saveChanges()" class="edit-form">
+    <div class="form-group">
+      <label for="firstName">Prénom :</label>
+      <input type="text" id="firstName" formControlName="firstName">
+      <div class="error-message" *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched">
+        Le prénom est requis
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="lastName">Nom :</label>
+      <input type="text" id="lastName" formControlName="lastName">
+      <div class="error-message" *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched">
+        Le nom est requis
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="dateOfBirth">Date de naissance :</label>
+      <input type="date" id="dateOfBirth" formControlName="dateOfBirth">
+    </div>
+    
+    <div class="form-group">
+      <label for="email">Email :</label>
+      <input type="email" id="email" formControlName="email">
+    </div>
+    
+    <div class="form-group">
+      <label for="role">Rôle :</label>
+      <input type="text" id="role" formControlName="role">
+    </div>
+    
+    <div class="form-actions">
+      <button type="submit" class="save-button" [disabled]="profileForm.invalid">Enregistrer</button>
+      <button type="button" class="cancel-button" (click)="cancelEditing()">Annuler</button>
+    </div>
+  </form>
+</div>
+
+<ng-template #loading>
+  <div class="profile-theme-loading">Chargement du profil...</div>
+</ng-template>

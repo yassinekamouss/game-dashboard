@@ -6,63 +6,108 @@ import {
   setPersistence, 
   signInWithEmailAndPassword, 
   signOut, 
-  User 
+  User as FirebaseUser
 } from "firebase/auth";
 import { Database, ref, set, get } from '@angular/fire/database';
-import { from, Observable } from "rxjs";
-import { map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, from, Observable, of, throwError } from "rxjs";
+import { catchError, map, switchMap, tap } from "rxjs/operators";
+import { User } from "../../models/user";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  user$: Observable<User | null>;
+  user$: Observable<FirebaseUser | null>;
+
+  // BehaviorSubject pour stocker l'utilisateur avec son rôle
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  
+  // Observable exposé publiquement pour les composants
+  public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private auth: Auth, private db: Database) {
     this.setSessionStoragePersistence();
     this.user$ = user(this.auth);
+    // Configurer la surveillance d'authentification
+    this.setupAuthStateListener();
   }
 
   private setSessionStoragePersistence(): void {
     setPersistence(this.auth, browserSessionPersistence);
   }
 
-  login(email: string, password: string): Observable<User | null> {
-    return from(
-      signInWithEmailAndPassword(this.auth, email, password)
-        .then((cred) => {
-          return cred.user;
-        })
-        .catch((err) => {
-          console.error('Login failed:', err.message);
-          throw err;
-        })
+  // Récupération des données utilisateur avec son rôle
+  private fetchUserWithRole(uid: string): Observable<User | null> {
+    
+    const userRef = ref(this.db, `users/${uid}`);
+    
+    return from(get(userRef)).pipe(
+      map(snapshot => {
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          
+          // Mettre à jour le BehaviorSubject et le stockage
+          this.currentUserSubject.next(userData);
+          return userData;
+        }
+        return null;
+      }),
+      catchError(error => {
+        console.error('Error fetching user data:', error);
+        return of(null);
+      })
     );
   }
 
-  getCurrentUserWithRole(): Observable<any> {
-    return new Observable(observer => {
-      this.auth.onAuthStateChanged(user => {
-        if (!user) {
-          observer.next(null);
-          observer.complete();
-        } else {
-          const userRef = ref(this.db, `users/${user.uid}`);
-          from(get(userRef)).subscribe({
-            next: snapshot => {
-              observer.next(snapshot.val());
-              observer.complete();
-            },
-            error: err => {
-              observer.error(err);
-            }
-          });          
-        }
-      });
+   login(email: string, password: string): Observable<User | null> {
+    
+    return from(
+      signInWithEmailAndPassword(this.auth, email, password)
+    ).pipe(
+      switchMap(cred => {
+        // Après authentification Firebase, récupérer les données utilisateur
+        return this.fetchUserWithRole(cred.user.uid);
+      }),
+      catchError(err => {
+        console.error('Login failed:', err.message);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  // Méthode réactive pour obtenir l'utilisateur courant avec son rôle
+  getCurrentUserWithRole(): Observable<User | null> {
+    return this.currentUser$;
+  }
+
+  // Ajouter cette méthode dans auth.service.ts
+  updateCurrentUser(user: User): void {
+    // Met à jour le BehaviorSubject, ce qui notifie tous les abonnés
+    this.currentUserSubject.next(user);
+  }
+
+  // Configuration de l'écouteur d'état d'authentification
+  private setupAuthStateListener(): void {
+    this.user$.subscribe(firebaseUser => {
+      if (firebaseUser) {
+        // L'utilisateur est connecté, récupérez ses données complètes
+        this.fetchUserWithRole(firebaseUser.uid).subscribe();
+      } else {
+        // L'utilisateur est déconnecté
+        this.currentUserSubject.next(null);
+      }
     });
+  }
+
+  // Récupérer l'utilisateur actuel (synchrone)
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
   }
 
   logout(): Observable<void> {
     return from(
-      signOut(this.auth).then(() => sessionStorage.clear())
+      signOut(this.auth).then(() => {
+        // sessionStorage.clear();
+        this.currentUserSubject.next(null);
+      })
     );
   }
 
@@ -76,5 +121,4 @@ export class AuthService {
       })
     );
   }
-  
 }

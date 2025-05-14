@@ -1,4 +1,4 @@
-interface PlayerProfile {
+export interface PlayerProfile {
     playerName: string; // to be used in the game
     gameLevel: number;
     mathLevel: number;

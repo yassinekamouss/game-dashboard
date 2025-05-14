@@ -1,0 +1,206 @@
+:host {
+  display: block;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+}
+
+.profile-theme-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 2.5rem 2rem;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 16px rgba(74, 108, 209, 0.08);
+  border: 2px solid #f0f0f0;
+  position: relative;
+}
+
+.profile-theme-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.profile-theme-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a6cd1 60%, #ff7e5f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(74, 108, 209, 0.15);
+  border: 3px solid #fff;
+}
+
+.profile-theme-name {
+  color: #4a6cd1;
+  font-size: 2rem;
+  margin: 0 0 0.3rem 0;
+  font-weight: bold;
+}
+
+.profile-theme-role {
+  background: #32cd32;
+  color: #fff;
+  display: inline-block;
+  padding: 0.3rem 1.1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.profile-theme-details {
+  margin-top: 1.5rem;
+  font-size: 1.15rem;
+  color: #333;
+}
+
+.profile-theme-details div {
+  margin-bottom: 1.1rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-theme-details strong {
+  color: #4a6cd1;
+  font-weight: 600;
+  min-width: 150px;
+  display: inline-block;
+}
+
+.profile-theme-loading {
+  text-align: center;
+  color: #888;
+  margin-top: 2.5rem;
+  font-size: 1.2rem;
+}
+
+/* Formulaire d'édition */
+.edit-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 50px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  color: #4a6cd1;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.edit-button:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.edit-form {
+  margin-top: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #4a6cd1;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #4a6cd1;
+}
+
+.form-group input:disabled {
+  background-color: #f9f9f9;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #ff5252;
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.save-button, .cancel-button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.save-button {
+  background: #4a6cd1;
+  color: white;
+}
+
+.save-button:hover:not([disabled]) {
+  background: #3a5cbf;
+  transform: translateY(-2px);
+}
+
+.save-button:disabled {
+  background: #a5b1d9;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background: #f0f0f0;
+  color: #555;
+}
+
+.cancel-button:hover {
+  background: #e0e0e0;
+}
+
+@media (max-width: 600px) {
+  .profile-theme-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .profile-theme-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .edit-button {
+    position: relative;
+    margin-top: 1rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+}

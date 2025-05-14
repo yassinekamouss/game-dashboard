@@ -7,11 +7,13 @@
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="profile-section">
+    <div class="profile-section" *ngIf="currentUser$ | async as currentUser">
       <div class="profile-image">
-        <img src="assets/images/avatar.jpg" alt="Profile" />
+        <a [routerLink]="['/', currentUser.role.toLocaleLowerCase(), 'profile']">
+          <img src="assets/images/avatar.jpg" alt="Profile">
+        </a>
       </div>
-      <h3 class="teacher-name">M. Dupont</h3>
+      <h3 class="teacher-name">{{ currentUser.firstName }} {{ currentUser.lastName }}</h3>
       <p class="teacher-subject">Mathématiques</p>
     </div>
 

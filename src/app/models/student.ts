@@ -1,6 +1,8 @@
 import { UserRole } from "./user-role";
 import { User } from "./user";
 import { GradeLevel } from "./grade-level";
+import { PlayerProfile } from "./player-profile";
+import { GameProgress } from "./game-progress";
 
 export interface Student extends User {
 
@@ -9,7 +11,6 @@ export interface Student extends User {
     parentId: string; 
     teacherId: string;
     gender: string
-    dateOfBirth: Date;
     
     playerProfile: PlayerProfile;
     achievements: string[];
