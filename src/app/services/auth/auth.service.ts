@@ -79,7 +79,7 @@ export class AuthService {
   }
 
   // Ajouter cette méthode dans auth.service.ts
-  updateCurrentUser(user: User): void {
+  setCurrentUser(user: User): void {
     // Met à jour le BehaviorSubject, ce qui notifie tous les abonnés
     this.currentUserSubject.next(user);
   }

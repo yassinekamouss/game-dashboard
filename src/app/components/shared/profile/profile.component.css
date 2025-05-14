@@ -1,32 +1,62 @@
 :host {
   display: block;
   font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+  --primary-color: #4a6cd1;
+  --secondary-color: #ff7e5f;
+  --accent-color: #32cd32;
+  --border-radius: 18px;
 }
 
 .profile-theme-container {
-  max-width: 500px;
+  max-width: 550px;
   margin: 40px auto;
-  padding: 2.5rem 2rem;
+  padding: 2.8rem 2.5rem;
   background: #fff;
-  border-radius: 18px;
+  border-radius: var(--border-radius);
   box-shadow: 0 8px 16px rgba(74, 108, 209, 0.08);
   border: 2px solid #f0f0f0;
   position: relative;
+  overflow: hidden;
+}
+
+/* Symboles mathématiques décoratifs */
+.profile-theme-container::before {
+  content: "∑";
+  position: absolute;
+  top: -15px;
+  right: 20px;
+  font-size: 80px;
+  color: rgba(74, 108, 209, 0.05);
+  z-index: 0;
+  font-weight: bold;
+}
+
+.profile-theme-container::after {
+  content: "π";
+  position: absolute;
+  bottom: -20px;
+  left: 15px;
+  font-size: 70px;
+  color: rgba(255, 126, 95, 0.05);
+  z-index: 0;
+  font-weight: bold;
 }
 
 .profile-theme-header {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  gap: 1.8rem;
+  margin-bottom: 2.5rem;
   position: relative;
+  z-index: 1;
 }
 
+/* Avatar stylisé en forme de cercle avec cadre coloré */
 .profile-theme-avatar {
-  width: 90px;
-  height: 90px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #4a6cd1 60%, #ff7e5f 100%);
+  background: linear-gradient(135deg, #4a6cd1 40%, #ff7e5f 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,141 +64,240 @@
   color: #fff;
   font-weight: bold;
   box-shadow: 0 4px 12px rgba(74, 108, 209, 0.15);
-  border: 3px solid #fff;
+  border: 4px solid #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ajouter une règle mathématique dans l'avatar */
+.profile-theme-avatar::after {
+  content: "+";
+  position: absolute;
+  top: -10px;
+  right: -5px;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.7);
+  transform: rotate(15deg);
 }
 
 .profile-theme-name {
-  color: #4a6cd1;
-  font-size: 2rem;
-  margin: 0 0 0.3rem 0;
+  color: var(--primary-color);
+  font-size: 2.2rem;
+  margin: 0 0 0.4rem 0;
   font-weight: bold;
+  line-height: 1.1;
 }
 
+/* Badge de rôle avec animation subtile */
 .profile-theme-role {
-  background: #32cd32;
+  background: var(--accent-color);
   color: #fff;
   display: inline-block;
-  padding: 0.3rem 1.1rem;
+  padding: 0.4rem 1.2rem;
   border-radius: 20px;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 6px rgba(50, 205, 50, 0.2);
+  animation: pulse 3s infinite;
 }
 
 .profile-theme-details {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
   font-size: 1.15rem;
   color: #333;
+  position: relative;
+  z-index: 1;
 }
 
 .profile-theme-details div {
-  margin-bottom: 1.1rem;
-  padding: 0.5rem;
-  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 1.3rem;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  background-color: rgba(249, 249, 255, 0.7);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.profile-theme-details div:hover {
+  transform: translateX(5px);
+  background-color: rgba(74, 108, 209, 0.05);
 }
 
 .profile-theme-details strong {
-  color: #4a6cd1;
+  color: var(--primary-color);
   font-weight: 600;
   min-width: 150px;
   display: inline-block;
 }
 
-.profile-theme-loading {
-  text-align: center;
-  color: #888;
-  margin-top: 2.5rem;
-  font-size: 1.2rem;
-}
-
-/* Formulaire d'édition */
+/* Style pour le bouton d'édition */
 .edit-button {
   position: absolute;
   right: 0;
-  top: 0;
+  top: 5px;
   background: #f0f0f0;
   border: none;
   border-radius: 50px;
-  padding: 0.6rem 1rem;
+  padding: 0.7rem 1.2rem;
   cursor: pointer;
-  color: #4a6cd1;
+  color: var(--primary-color);
   font-weight: 600;
-  transition: all 0.2s;
+  transition: all 0.3s;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  box-shadow: 0 2px 8px rgba(74, 108, 209, 0.1);
 }
 
 .edit-button:hover {
-  background: #e0e0e0;
-  transform: translateY(-2px);
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-3px);
 }
 
+/* Style amélioré pour le formulaire */
 .edit-form {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.8rem;
+  position: relative;
+}
+
+/* Icônes dans le formulaire pour les champs */
+.form-group::before {
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: var(--primary-color);
+  opacity: 0.5;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+}
+
+.form-group:nth-child(1)::before {
+  content: "∝";
+}
+
+.form-group:nth-child(2)::before {
+  content: "∞";
+}
+
+.form-group:nth-child(3)::before {
+  content: "⊕";
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.4rem;
-  color: #4a6cd1;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
   font-weight: 600;
+  font-size: 1.05rem;
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.8rem;
+  padding: 1rem;
   border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 10px;
   font-family: inherit;
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  font-size: 1.05rem;
+  transition: all 0.3s;
+  background-color: #f9f9ff;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #4a6cd1;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 108, 209, 0.1);
+  background-color: white;
 }
 
 .form-group input:disabled {
-  background-color: #f9f9f9;
+  background-color: #f0f0f0;
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
+/* Message d'erreur stylisé */
 .error-message {
   color: #ff5252;
-  font-size: 0.85rem;
-  margin-top: 0.4rem;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.error-message::before {
+  content: "!";
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background: #ff5252;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 18px;
+  margin-right: 8px;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 .form-actions {
   display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: 1.2rem;
+  margin-top: 2.5rem;
 }
 
 .save-button, .cancel-button {
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
+  padding: 0.9rem 1.8rem;
+  border-radius: 10px;
   border: none;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 1.05rem;
 }
 
 .save-button {
-  background: #4a6cd1;
+  background: var(--primary-color);
   color: white;
+  flex: 2;
+  position: relative;
+  overflow: hidden;
+}
+
+.save-button::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 50%;
+  transform: scale(1);
+  opacity: 0;
+}
+
+.save-button:hover:not([disabled])::before {
+  animation: ripple 1s;
 }
 
 .save-button:hover:not([disabled]) {
-  background: #3a5cbf;
-  transform: translateY(-2px);
+  background: #3955b0;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(74, 108, 209, 0.2);
 }
 
 .save-button:disabled {
@@ -179,28 +308,77 @@
 .cancel-button {
   background: #f0f0f0;
   color: #555;
+  flex: 1;
 }
 
 .cancel-button:hover {
   background: #e0e0e0;
+  transform: translateY(-2px);
 }
 
-@media (max-width: 600px) {
+/* Animation pour le badge de rôle */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* Animation pour le bouton de sauvegarde */
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(60); opacity: 0; }
+}
+
+/* Responsive design */
+@media (max-width: 650px) {
   .profile-theme-container {
-    padding: 1.5rem 1rem;
+    padding: 1.8rem 1.2rem;
+    margin: 20px auto;
   }
   
   .profile-theme-header {
     flex-direction: column;
     text-align: center;
+    gap: 1rem;
+  }
+  
+  .profile-theme-name {
+    font-size: 1.8rem;
   }
   
   .edit-button {
     position: relative;
-    margin-top: 1rem;
+    right: unset;
+    top: unset;
+    margin: 1rem auto 0;
   }
   
   .form-actions {
     flex-direction: column;
   }
+}
+
+/* État de chargement stylisé */
+.profile-theme-loading {
+  text-align: center;
+  color: #666;
+  margin: 4rem auto;
+  font-size: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-theme-loading::before {
+  content: "∞";
+  font-size: 3rem;
+  color: var(--primary-color);
+  animation: rotate 2s infinite linear;
+  display: block;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

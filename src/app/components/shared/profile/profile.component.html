@@ -1,7 +1,7 @@
 <div class="profile-theme-container" *ngIf="user; else loading">
   <div class="profile-theme-header">
     <div class="profile-theme-avatar">
-      <span>{{ user.firstName }}{{ user.lastName }}</span>
+      <span>{{ user.firstName }}{{ user.lastName[0] }}</span>
     </div>
     <div>
       <h2 class="profile-theme-name">{{ !isEditing ? (user.firstName + ' ' + user.lastName) : 'Modifier le profil' }}</h2>
@@ -54,12 +54,18 @@
     </div>
     
     <div class="form-actions">
-      <button type="submit" class="save-button" [disabled]="profileForm.invalid">Enregistrer</button>
-      <button type="button" class="cancel-button" (click)="cancelEditing()">Annuler</button>
+      <button type="submit" class="save-button" [disabled]="profileForm.invalid">
+        <i class="fas fa-check-circle"></i> Enregistrer
+      </button>
+      <button type="button" class="cancel-button" (click)="cancelEditing()">
+        <i class="fas fa-times-circle"></i> Annuler
+      </button>
     </div>
   </form>
 </div>
 
 <ng-template #loading>
-  <div class="profile-theme-loading">Chargement du profil...</div>
+  <div class="profile-theme-loading">
+    Chargement du profil...
+  </div>
 </ng-template>

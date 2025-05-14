@@ -34,8 +34,6 @@ export class UserService {
       map(snapshot => {
         if (snapshot.exists()) {
           const updatedUser = snapshot.val() as User;
-          
-          this.authService.updateCurrentUser(updatedUser);
           return updatedUser;
         }
         return null;

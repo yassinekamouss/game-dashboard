@@ -4,6 +4,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { User } from '../../../models/user';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/users/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +21,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private router : Router
   ) {
     this.profileForm = this.fb.group({
       firstName: ['', [Validators.required]],
@@ -73,8 +75,12 @@ export class ProfileComponent implements OnInit {
       this.userService.updateUserProfile(updatedUser).subscribe({
         next : (user) => {
           if (user) {
-            console.log('Profil mis à jour avec succès');
-            this.isEditing = false;
+            this.authService.setCurrentUser(user);
+
+            this.router.navigateByUrl(this.router.url, { replaceUrl: true }).then(() => {
+              this.isEditing = false; 
+              this.resetForm();
+            });
           }
         },
         error: (error) => {
