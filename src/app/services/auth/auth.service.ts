@@ -37,7 +37,6 @@ export class AuthService {
 
   // Récupération des données utilisateur avec son rôle
   private fetchUserWithRole(uid: string): Observable<User | null> {
-    console.log('fetchUserWithRole called with uid:', uid);
     const userRef = ref(this.db, `users/${uid}`);
     
     return from(get(userRef)).pipe(

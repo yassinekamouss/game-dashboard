@@ -1,0 +1,183 @@
+<div class="students-container">
+  <!-- En-tête avec titre et compteur -->
+  <div class="students-header">
+    <div class="title-section">
+      <h1 class="students-title">Gestion des élèves</h1>
+      <div class="students-counter">{{ students.length }} élèves</div>
+    </div>
+    <div class="actions-section">
+      <button class="add-student-btn">
+        <i class="fas fa-plus-circle"></i> Ajouter un élève
+      </button>
+    </div>
+  </div>
+
+  <!-- Panneau de filtres -->
+  <div class="filters-panel">
+    <div class="filter-title">
+      <i class="fas fa-filter"></i>
+      <span>Filtres</span>
+    </div>
+    
+    <div class="filters-grid">
+      <!-- Filtre par niveau -->
+      <div class="filter-group">
+        <label for="gradeFilter">Niveau</label>
+        <select id="gradeFilter" [(ngModel)]="filters.grade" (change)="applyFilters()">
+          <option value="">Tous les niveaux</option>
+          <option value="one">one</option>
+          <option value="two">two</option>
+          <option value="three">three</option>
+          <option value="four">four</option>
+          <option value="CM2">CM2</option>
+          <option value="6EME">6ème</option>
+          <option value="5EME">5ème</option>
+        </select>
+        <div class="filter-icon">∝</div>
+      </div>
+
+      <!-- Filtre par genre -->
+      <div class="filter-group">
+        <label for="genderFilter">Genre</label>
+        <select id="genderFilter" [(ngModel)]="filters.gender" (change)="applyFilters()">
+          <option value="">Tous</option>
+          <option value="M">Garçon</option>
+          <option value="F">Fille</option>
+        </select>
+        <div class="filter-icon">∇</div>
+      </div>
+
+      <!-- Filtre par âge -->
+      <div class="filter-group">
+        <label for="ageFilter">Âge</label>
+        <div class="age-range">
+          <input type="number" id="ageMinFilter" [(ngModel)]="filters.ageMin" placeholder="Min" (change)="applyFilters()">
+          <span>à</span>
+          <input type="number" id="ageMaxFilter" [(ngModel)]="filters.ageMax" placeholder="Max" (change)="applyFilters()">
+        </div>
+        <div class="filter-icon">∑</div>
+      </div>
+
+      <!-- Filtre par enseignant -->
+      <div class="filter-group">
+        <label for="teacherFilter">Enseignant</label>
+        <select id="teacherFilter" [(ngModel)]="filters.teacherId" (change)="applyFilters()">
+          <option value="">Tous les enseignants</option>
+          <option *ngFor="let teacher of teachers" [value]="teacher.id">{{ teacher.firstName }} {{ teacher.lastName }}</option>
+        </select>
+        <div class="filter-icon">∞</div>
+      </div>
+
+      <!-- Barre de recherche -->
+      <div class="search-group">
+        <label for="searchInput">Rechercher</label>
+        <div class="search-input-wrapper">
+          <input type="text" id="searchInput" [(ngModel)]="filters.search" placeholder="Nom, prénom..." (input)="applyFilters()">
+          <i class="fas fa-search"></i>
+        </div>
+      </div>
+
+      <!-- Bouton de réinitialisation -->
+      <div class="reset-filter">
+        <button class="reset-btn" (click)="resetFilters()">
+          <i class="fas fa-undo"></i> Réinitialiser
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- État de chargement -->
+  <div *ngIf="isLoading" class="students-loading">
+    <div class="spinner">∫</div>
+    <p>Chargement des élèves...</p>
+  </div>
+
+  <!-- Aucun résultat -->
+  <div *ngIf="!isLoading && filteredStudents.length === 0" class="no-results">
+    <div class="empty-icon">0</div>
+    <p>Aucun élève ne correspond à vos critères de recherche</p>
+    <button (click)="resetFilters()">Réinitialiser les filtres</button>
+  </div>
+
+  <!-- Grille des élèves -->
+  <div *ngIf="!isLoading && filteredStudents.length > 0" class="students-grid">
+    <div class="student-card" *ngFor="let student of filteredStudents">
+      <!-- Avatar de l'élève -->
+      <div class="student-avatar" [ngClass]="{'female': student.gender === 'F', 'male': student.gender === 'M'}">
+        <span>{{ student.firstName[0] }}{{ student.lastName[0] }}</span>
+        <div class="grade-badge">{{ student.grade }}</div>
+      </div>
+      
+      <!-- Informations de l'élève -->
+      <div class="student-info">
+        <h3 class="student-name">{{ student.firstName }} {{ student.lastName }}</h3>
+        <div class="student-details">
+          <div class="detail-item">
+            <i class="fas fa-birthday-cake"></i>
+            <span>{{ calculateAge(student.dateOfBirth) }} ans</span>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-venus-mars"></i>
+            <span>{{ student.gender === 'M' ? 'Garçon' : 'Fille' }}</span>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Niveau {{ student.grade }}</span>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-gamepad"></i>
+            <span>{{ student.gameProgress.length || 0 }} jeux</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barre de progression et médailles -->
+      <div class="student-progress-section">
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="calculateProgress(student)"></div>
+          <span class="progress-text">{{ calculateProgress(student) }}%</span>
+        </div>
+        <div class="achievements-section">
+          <span class="badge" *ngFor="let badge of getLimitedAchievements(student); let i = index">
+            <i class="fas fa-medal" [ngClass]="getBadgeClass(i)"></i>
+          </span>
+          <span class="more-badge" *ngIf="student.achievements.length > 3">
+            +{{ student.achievements.length - 3 }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="student-actions">
+        <button class="action-btn view-btn" title="Voir le profil">
+          <i class="fas fa-eye"></i>
+        </button>
+        <button class="action-btn edit-btn" title="Modifier">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+        <button class="action-btn delete-btn" title="Supprimer">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination-controls" *ngIf="!isLoading && filteredStudents.length > 0">
+    <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+      <i class="fas fa-chevron-left"></i> Précédent
+    </button>
+    
+    <div class="page-numbers">
+      <button *ngFor="let page of getPageNumbers()" 
+              [class.active]="page === currentPage"
+              (click)="changePage(page)">
+        {{ page }}
+      </button>
+    </div>
+    
+    <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+      Suivant <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>

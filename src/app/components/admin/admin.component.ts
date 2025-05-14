@@ -5,6 +5,7 @@ import { SharedDashboardComponent } from '../shared/shared-dashboard/shared-dash
   imports: [SharedDashboardComponent],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css',
+  standalone: true,
 })
 export class AdminComponent {
   adminLinks: { label: string; path: string; icon: string }[] = [

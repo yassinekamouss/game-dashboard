@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Database, ref, update, get } from '@angular/fire/database';
-import { AuthService } from '../auth/auth.service';
 import { User } from '../../models/user';
 import { from, Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { equalTo, orderByChild, query } from 'firebase/database';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +11,8 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 export class UserService {
 
   constructor(
-    private db: Database,
-    private authService: AuthService
-  ) { }
+    private db: Database
+  ) {}
 
   updateUserProfile(userData: Partial<User>): Observable<User | null> {
     // Créer l'objet de mise à jour (inclut seulement les champs modifiables)
@@ -40,6 +39,33 @@ export class UserService {
       }),
       catchError(error => {
         console.error('Erreur lors de la mise à jour du profil:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  getUsersByRole(role: string): Observable<User[]> {
+    const usersQuery = query(
+      ref(this.db, 'users'),
+      orderByChild('role'),
+      equalTo(role.toLowerCase())
+    )
+    
+    // Récupérer tous les utilisateurs (Profs/Parent/Eleve)
+    return from(get(usersQuery)).pipe(
+      map(snapshot => {
+        if (snapshot.exists()) {
+          const users: User[] = [];
+          snapshot.forEach(childSnapshot => {
+            const user = childSnapshot.val() as User;
+            users.push(user);
+          });
+          return users;
+        }
+        return [];
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la récupération des utilisateurs:', error);
         return throwError(() => error);
       })
     );
