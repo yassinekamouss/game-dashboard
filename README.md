@@ -153,7 +153,7 @@ Pour que l'application puisse se connecter à votre instance Firebase, vous deve
 
 Une brève description de l'organisation des dossiers principaux :
 
-```pgsql
+```bash
 GAME-DASHBOARD/
 ├── .angular/                # Fichiers internes Angular CLI
 ├── .vscode/                 # Paramètres spécifiques à VS Code
