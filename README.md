@@ -20,8 +20,7 @@ Tableau de bord web développé avec Angular 19 et Firebase Realtime Database, c
 8.  [Structure du Projet (optionnel)](#structure-du-projet-optionnel)
 9.  [Interaction avec les Jeux Unity](#interaction-avec-les-jeux-unity)
 10. [Contribution](#contribution)
-11. [Licence](#licence)
-12. [Contact](#contact)
+11. [Contact](#contact)
 
 ## Objectif du Projet
 
@@ -153,7 +152,7 @@ Pour que l'application puisse se connecter à votre instance Firebase, vous deve
 
 Une brève description de l'organisation des dossiers principaux :
 
-```pgsql
+```bash
 GAME-DASHBOARD/
 ├── .angular/                # Fichiers internes Angular CLI
 ├── .vscode/                 # Paramètres spécifiques à VS Code
