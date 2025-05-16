@@ -1,0 +1,573 @@
+/* Variables */
+:host {
+  display: block;
+  font-family: 'Fira Sans', 'Roboto', sans-serif;
+  --primary-color: #3b67c5;
+  --secondary-color: #e63946;
+  --accent-color: #00b050;
+  --light-gray: #f5f7fa;
+  --dark-gray: #4a5568;
+  --border-radius: 8px;
+  --math-font: 'Cambria Math', 'STIX Two Math', serif;
+  --female-color: #e83e8c;
+  --male-color: #3b67c5;
+  --parent-color: #ff9800;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-container {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Header avec titre */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e9f2;
+  position: relative;
+}
+
+.dashboard-header::after {
+  content: "∞";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 100px;
+  font-family: var(--math-font);
+  color: rgba(59, 103, 197, 0.04);
+  z-index: -1;
+  transform: translateY(40%);
+}
+
+.title-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  color: var(--dark-gray);
+  margin: 0;
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+}
+
+.dashboard-title::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+.dashboard-date {
+  font-size: 0.9rem;
+  color: #667788;
+  margin-top: 0.7rem;
+}
+
+.refresh-btn {
+  background-color: var(--light-gray);
+  border: 1px solid #d0d7e2;
+  border-radius: var(--border-radius);
+  padding: 0.7rem 1rem;
+  color: var(--dark-gray);
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover {
+  background-color: #e0e5f0;
+  color: var(--primary-color);
+  transform: rotate(15deg);
+}
+
+/* Chargement */
+.dashboard-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 0;
+  color: var(--dark-gray);
+}
+
+.spinner {
+  font-family: var(--math-font);
+  font-size: 4rem;
+  color: var(--primary-color);
+  animation: spin 2s infinite linear;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Cartes de statistiques */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon {
+  background: rgba(59, 103, 197, 0.1);
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+.stat-icon i {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}
+
+.students-card .stat-icon {
+  background-color: rgba(59, 103, 197, 0.1);
+}
+
+.students-card .stat-icon i {
+  color: var(--primary-color);
+}
+
+.teachers-card .stat-icon {
+  background-color: rgba(39, 174, 96, 0.1);
+}
+
+.teachers-card .stat-icon i {
+  color: var(--accent-color);
+}
+
+.parents-card .stat-icon {
+  background-color: rgba(255, 152, 0, 0.1);
+}
+
+.parents-card .stat-icon i {
+  color: var(--parent-color);
+}
+
+.games-card .stat-icon {
+  background-color: rgba(232, 62, 140, 0.1);
+}
+
+.games-card .stat-icon i {
+  color: var(--female-color);
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--dark-gray);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #667788;
+}
+
+.stat-chart {
+  margin-left: auto;
+  position: relative;
+}
+
+.math-symbol {
+  font-family: var(--math-font);
+  font-size: 3.5rem;
+  opacity: 0.15;
+  color: var(--primary-color);
+  position: absolute;
+  right: -15px;
+  top: -25px;
+}
+
+.students-card .math-symbol {
+  color: var(--primary-color);
+}
+
+.teachers-card .math-symbol {
+  color: var(--accent-color);
+}
+
+.parents-card .math-symbol {
+  color: var(--parent-color);
+}
+
+.games-card .math-symbol {
+  color: var(--female-color);
+}
+
+/* Rangées de cartes */
+.dashboard-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  color: var(--dark-gray);
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #e5e9f2;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.card-title i {
+  color: var(--primary-color);
+}
+
+/* Carte de répartition par niveau */
+.grade-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.grade-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.grade-label {
+  width: 60px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+  padding: 0.3rem 0.5rem;
+  background-color: var(--light-gray);
+  border-radius: 4px;
+}
+
+.grade-bar-container {
+  flex: 1;
+  height: 25px;
+  background-color: var(--light-gray);
+  border-radius: var(--border-radius);
+  position: relative;
+  overflow: hidden;
+}
+
+.grade-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--primary-color), #4e7be2);
+  border-radius: var(--border-radius);
+}
+
+.grade-count {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Carte Top Étudiants */
+.student-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.top-student-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem;
+  border-radius: var(--border-radius);
+  background-color: var(--light-gray);
+  transition: all 0.2s ease;
+}
+
+.top-student-item:hover {
+  background-color: #e0e5f0;
+  transform: translateX(5px);
+}
+
+.rank {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.student-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+}
+
+.student-avatar.male {
+  background: linear-gradient(135deg, var(--male-color) 0%, #254393 100%);
+}
+
+.student-avatar.female {
+  background: linear-gradient(135deg, var(--female-color) 0%, #d33077 100%);
+}
+
+.student-info {
+  flex: 1;
+}
+
+.student-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--dark-gray);
+}
+
+.student-grade {
+  font-size: 0.8rem;
+  color: #667788;
+}
+
+.student-score {
+  text-align: right;
+}
+
+.score-value {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+.score-label {
+  font-size: 0.75rem;
+  color: #667788;
+}
+
+/* Carte d'activité récente */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.8rem;
+  border-radius: var(--border-radius);
+  background-color: var(--light-gray);
+  transition: all 0.2s ease;
+}
+
+.activity-item:hover {
+  background-color: #e0e5f0;
+}
+
+.activity-time {
+  font-size: 0.8rem;
+  color: #667788;
+  min-width: 50px;
+}
+
+.activity-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.activity-icon.login {
+  background-color: #4299e1;
+}
+
+.activity-icon.game {
+  background-color: var(--female-color);
+}
+
+.activity-icon.achievement {
+  background-color: #ecc94b;
+}
+
+.activity-icon.update {
+  background-color: var(--accent-color);
+}
+
+.activity-content {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+}
+
+.activity-date {
+  font-size: 0.75rem;
+  color: #667788;
+  margin-top: 0.3rem;
+}
+
+/* Statistiques par genre */
+.gender-chart {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.gender-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gender-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.male .gender-icon {
+  background-color: rgba(59, 103, 197, 0.2);
+  color: var(--male-color);
+}
+
+.female .gender-icon {
+  background-color: rgba(232, 62, 140, 0.2);
+  color: var(--female-color);
+}
+
+.gender-bar {
+  flex: 1;
+  height: 20px;
+  background-color: var(--light-gray);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.gender-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 1s ease-out;
+}
+
+.male .gender-bar-fill {
+  background: linear-gradient(to right, var(--male-color), #4e7be2);
+}
+
+.female .gender-bar-fill {
+  background: linear-gradient(to right, var(--female-color), #e05da3);
+}
+
+.gender-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 80px;
+}
+
+.gender-count {
+  font-weight: 700;
+  color: var(--dark-gray);
+}
+
+.gender-percent {
+  font-size: 0.9rem;
+  color: #667788;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .dashboard-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .refresh-section {
+    align-self: flex-end;
+  }
+}

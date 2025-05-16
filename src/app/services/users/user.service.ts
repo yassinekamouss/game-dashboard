@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Database, ref, update, get, child } from '@angular/fire/database';
+import { Database, ref, update, get } from '@angular/fire/database';
 import { User } from '../../models/user';
-import { from, Observable, throwError } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { forkJoin, from, Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { equalTo, orderByChild, query } from 'firebase/database';
+import { Student } from '../../models/student';
+import { Parent } from '../../models/parent';
+
 
 @Injectable({
   providedIn: 'root'
@@ -72,5 +75,57 @@ export class UserService {
   addStudentToParent(parentId: string, studentId: string): Promise<void> {
     const parentChildrenRef = ref(this.db, `parents/${parentId}/children`);
     return update(parentChildrenRef, { [studentId]: true });
+  }
+
+    getUserById(childId: string): Observable<User | null> {
+    const childRef = ref(this.db, `users/${childId}`);
+
+    return from(get(childRef)).pipe(
+      map((snapshot) => {
+        if (snapshot.exists()) {
+          return snapshot.val() as User;
+        }
+        return null;
+      }),
+      catchError((error) => {
+        console.error("Erreur lors de la récupération de l'enfant:", error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  getParentWithChildren(): Observable<Parent[]> {
+    return this.getUsersByRole('parent').pipe(
+      switchMap((users: User[]) => {
+        const parents = users as Parent[];
+        if (parents.length === 0) return of([]);
+
+        const parentRequests = parents.map((parent) => {
+          const childIds = parent.children as unknown as string[];
+          const childObservables = childIds.map((childId) =>
+            this.getUserById(childId)
+          );
+
+          return forkJoin(childObservables).pipe(
+            map((students) => {
+              parent.children = students.filter(
+                (s): s is Student => s !== null
+              );
+              return parent;
+            })
+          );
+        });
+
+        return forkJoin(parentRequests).pipe(
+          tap((parentsWithChildren) => {
+            console.log('Parents avec leurs enfants :', parentsWithChildren);
+          })
+        );
+      }),
+      catchError((error) => {
+        console.error('Erreur lors de la récupération des parents:', error);
+        return throwError(() => error);
+      })
+    );
   }
 }

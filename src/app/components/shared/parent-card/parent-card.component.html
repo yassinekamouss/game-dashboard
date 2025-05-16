@@ -1,0 +1,59 @@
+<div class="parent-card" *ngIf="parent">
+  <!-- Avatar du parent -->
+  <div class="parent-avatar">
+    <span>{{ parent.firstName[0] }}{{ parent.lastName[0] }}</span>
+    <div class="children-badge">{{ parent.children.length }}</div>
+  </div>
+
+  <!-- Informations du parent -->
+  <div class="parent-info">
+    <h3 class="parent-name">{{ parent.firstName }} {{ parent.lastName }}</h3>
+    <div class="parent-details">
+      <div class="detail-item">
+        <i class="fas fa-envelope"></i>
+        <span>{{ parent.email }}</span>
+      </div>
+      <div class="detail-item">
+        <i class="fas fa-child"></i>
+        <span>{{ parent.children.length }} enfant(s)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section enfants -->
+  <div class="children-section">
+    <h4 class="section-title">Enfants</h4>
+    <div class="children-container">
+      <div class="child-item" *ngFor="let child of parent.children | slice:0:3; let i = index">
+        <div class="child-avatar"
+             [ngClass]="{
+               'female': child.gender === 'female',
+               'male': child.gender === 'male'
+             }">
+          <span>{{ child.firstName[0] }}{{ child.lastName[0] }}</span>
+          <div class="grade-badge">{{ child.grade }}</div>
+        </div>
+        <div class="child-info">
+          <div class="child-name">{{ child.firstName }} {{ child.lastName }}</div>
+          <div class="child-grade">{{ child.grade }}</div>
+        </div>
+      </div>
+      <div class="more-children" *ngIf="parent.children.length > 3">
+        <span>+{{ parent.children.length - 3 }} autres enfants</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="parent-actions">
+    <button class="action-btn view-btn" title="Voir le profil">
+      <i class="fas fa-eye"></i>
+    </button>
+    <button class="action-btn edit-btn" title="Modifier" >
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+    <button class="action-btn delete-btn" title="Supprimer">
+      <i class="fas fa-trash-alt"></i>
+    </button>
+  </div>
+</div>

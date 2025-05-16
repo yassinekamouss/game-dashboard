@@ -27,7 +27,7 @@ export class AdminComponent {
     },
     {
       label: 'Gestion des profs',
-      path: '/admin/professeurs',
+      path: '/admin/teachers',
       icon: 'fas fa-chalkboard-teacher',
     },
     {

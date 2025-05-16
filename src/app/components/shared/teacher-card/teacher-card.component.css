@@ -1,0 +1,281 @@
+/* Variables */
+:host {
+  display: block;
+  font-family: 'Fira Sans', 'Roboto', sans-serif;
+  --primary-color: #3b67c5;
+  --teacher-color: #27ae60;
+  --secondary-color: #e63946;
+  --light-gray: #f5f7fa;
+  --dark-gray: #4a5568;
+  --border-radius: 8px;
+  --math-font: 'Cambria Math', 'STIX Two Math', serif;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.teacher-card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 1px solid #eaedf3;
+  height: 100%;
+}
+
+.teacher-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(39, 174, 96, 0.1);
+}
+
+/* Avatar du professeur */
+.teacher-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, var(--teacher-color) 0%, #1d8348 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #fff;
+  font-weight: bold;
+  position: relative;
+  align-self: center;
+  transform: rotate(2deg);
+}
+
+.teacher-avatar::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle at 10px 10px, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 8px 8px;
+  border-radius: 15px;
+  z-index: 1;
+}
+
+.grade-badge {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  background: white;
+  border: 2px solid var(--teacher-color);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.75rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: var(--teacher-color);
+}
+
+/* Informations du professeur */
+.teacher-info {
+  text-align: center;
+}
+
+.teacher-name {
+  font-size: 1.3rem;
+  margin: 0 0 1rem 0;
+  color: var(--dark-gray);
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
+}
+
+.teacher-name::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: var(--teacher-color);
+  border-radius: 2px;
+}
+
+.teacher-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+  justify-content: center;
+}
+
+.detail-item i {
+  color: var(--teacher-color);
+  opacity: 0.8;
+  font-size: 0.8rem;
+}
+
+/* Section compétences */
+.skills-section {
+  background-color: rgba(39, 174, 96, 0.05);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  position: relative;
+}
+
+.section-title {
+  font-size: 1rem;
+  color: var(--dark-gray);
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.section-title::before {
+  content: "∫";
+  font-family: var(--math-font);
+  color: var(--teacher-color);
+  font-size: 1.2rem;
+  margin-right: 0.3rem;
+}
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-tag {
+  background: white;
+  border: 1px solid rgba(39, 174, 96, 0.3);
+  border-radius: 50px;
+  padding: 0.4rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.skill-tag:hover {
+  background-color: var(--teacher-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(39, 174, 96, 0.2);
+}
+
+.skill-tag i {
+  color: var(--teacher-color);
+  font-size: 0.8rem;
+}
+
+.skill-tag:hover i {
+  color: white;
+}
+
+/* Section statistiques */
+.stats-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.stat-item {
+  background-color: var(--light-gray);
+  padding: 0.8rem 0.5rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.stat-item:hover {
+  background-color: rgba(39, 174, 96, 0.1);
+  transform: translateY(-3px);
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--teacher-color);
+  margin-bottom: 0.2rem;
+  font-family: var(--math-font);
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: var(--dark-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Actions */
+.teacher-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.view-btn {
+  background-color: #4299e1;
+}
+
+.edit-btn {
+  background-color: var(--teacher-color);
+}
+
+.delete-btn {
+  background-color: #e53e3e;
+}
+
+.action-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .teacher-details {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-section {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.3rem;
+  }
+  
+  .stat-value {
+    font-size: 1.2rem;
+  }
+  
+  .stat-label {
+    font-size: 0.65rem;
+  }
+}

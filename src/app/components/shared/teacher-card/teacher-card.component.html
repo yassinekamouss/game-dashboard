@@ -1,0 +1,61 @@
+<div class="teacher-card" *ngIf="teacher">
+  <!-- Avatar du professeur -->
+  <div class="teacher-avatar">
+    <span>{{ teacher.firstName[0] }}{{ teacher.lastName[0] }}</span>
+    <div class="grade-badge">{{ teacher.grade }}</div>
+  </div>
+
+  <!-- Informations du professeur -->
+  <div class="teacher-info">
+    <h3 class="teacher-name">{{ teacher.firstName }} {{ teacher.lastName }}</h3>
+    <div class="teacher-details">
+      <div class="detail-item">
+        <i class="fas fa-envelope"></i>
+        <span>{{ teacher.email }}</span>
+      </div>
+      <div class="detail-item">
+        <i class="fas fa-graduation-cap"></i>
+        <span>Niveau {{ teacher.grade }}</span>
+      </div>
+      <div class="detail-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>{{ calculateAge(teacher.dateOfBirth) }} ans</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section statistiques -->
+  <div class="stats-section">
+    <div class="stat-item">
+      <div class="stat-icon">
+        <i class="fas fa-chalkboard-teacher"></i>
+      </div>
+      <div class="stat-label">Enseignant</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-icon">
+        <div class="math-symbol">∑</div>
+      </div>
+      <div class="stat-label">Mathématiques</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-icon">
+        <div class="grade-circle">{{ teacher.grade }}</div>
+      </div>
+      <div class="stat-label">Classe</div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="teacher-actions">
+    <button class="action-btn view-btn" title="Voir le profil">
+      <i class="fas fa-eye"></i>
+    </button>
+    <button class="action-btn edit-btn" title="Modifier">
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+    <button class="action-btn delete-btn" title="Supprimer">
+      <i class="fas fa-trash-alt"></i>
+    </button>
+  </div>
+</div>

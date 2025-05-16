@@ -1,0 +1,294 @@
+/* Variables */
+:host {
+  display: block;
+  font-family: 'Fira Sans', 'Roboto', sans-serif;
+  --primary-color: #3b67c5;
+  --secondary-color: #e63946;
+  --accent-color: #ff9800;
+  --light-gray: #f5f7fa;
+  --dark-gray: #4a5568;
+  --border-radius: 8px;
+  --math-font: 'Cambria Math', 'STIX Two Math', serif;
+  --female-color: #e83e8c;
+  --male-color: #3b67c5;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.parent-card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 1px solid #eaedf3;
+  height: 100%;
+}
+
+.parent-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(255, 152, 0, 0.1);
+}
+
+/* Avatar du parent */
+.parent-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, var(--accent-color) 0%, #ff5722 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #fff;
+  font-weight: bold;
+  position: relative;
+  align-self: center;
+  transform: rotate(-2deg);
+}
+
+.parent-avatar::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle at 10px 10px, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 8px 8px;
+  border-radius: 15px;
+  z-index: 1;
+}
+
+.children-badge {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  background: white;
+  border: 2px solid var(--accent-color);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.75rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: var(--accent-color);
+}
+
+/* Informations du parent */
+.parent-info {
+  text-align: center;
+}
+
+.parent-name {
+  font-size: 1.3rem;
+  margin: 0 0 1rem 0;
+  color: var(--dark-gray);
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
+}
+
+.parent-name::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: var(--accent-color);
+  border-radius: 2px;
+}
+
+.parent-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+  justify-content: center;
+}
+
+.detail-item i {
+  color: var(--accent-color);
+  opacity: 0.8;
+  font-size: 0.8rem;
+}
+
+/* Section enfants */
+.children-section {
+  background-color: rgba(255, 152, 0, 0.05);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  position: relative;
+}
+
+.section-title {
+  font-size: 1rem;
+  color: var(--dark-gray);
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.section-title::before {
+  content: "∑";
+  font-family: var(--math-font);
+  color: var(--accent-color);
+  font-size: 1.2rem;
+  margin-right: 0.3rem;
+}
+
+.children-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.child-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: white;
+  padding: 0.5rem;
+  border-radius: var(--border-radius);
+  transition: all 0.2s ease;
+}
+
+.child-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.child-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: bold;
+  position: relative;
+}
+
+.child-avatar.male {
+  background: linear-gradient(135deg, var(--male-color) 0%, #254393 100%);
+}
+
+.child-avatar.female {
+  background: linear-gradient(135deg, var(--female-color) 0%, #d33077 100%);
+}
+
+.grade-badge {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background: white;
+  border: 1px solid;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.6rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.male .grade-badge {
+  color: var(--male-color);
+  border-color: var(--male-color);
+}
+
+.female .grade-badge {
+  color: var(--female-color);
+  border-color: var(--female-color);
+}
+
+.child-info {
+  flex: 1;
+}
+
+.child-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+}
+
+.child-grade {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.more-children {
+  background: #e0e5f0;
+  color: var(--dark-gray);
+  border-radius: var(--border-radius);
+  padding: 0.7rem;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Actions */
+.parent-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.view-btn {
+  background-color: #4299e1;
+}
+
+.edit-btn {
+  background-color: var(--accent-color);
+}
+
+.delete-btn {
+  background-color: #e53e3e;
+}
+
+.action-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .parent-details {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

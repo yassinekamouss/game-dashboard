@@ -1,0 +1,81 @@
+<div class="dashboard-container">
+  <!-- En-tête avec titre -->
+  <div class="dashboard-header">
+    <div class="title-section">
+      <h1 class="dashboard-title">Tableau de Bord</h1>
+      <div class="dashboard-date">{{ currentDate | date : "longDate" }}</div>
+    </div>
+    <div class="refresh-section">
+      <button class="refresh-btn" (click)="refreshData()">
+        <i class="fas fa-sync-alt"></i> Rafraîchir
+      </button>
+    </div>
+  </div>
+
+  <!-- Chargement -->
+  <div *ngIf="isLoading" class="dashboard-loading">
+    <div class="spinner">∞</div>
+    <p>Chargement des données...</p>
+  </div>
+
+  <!-- Statistiques globales -->
+  <div class="stats-cards" *ngIf="!isLoading">
+    <div class="stat-card students-card">
+      <div class="stat-icon">
+        <i class="fas fa-user-graduate"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ statistics.studentCount }}</div>
+        <div class="stat-label">Élèves</div>
+      </div>
+      <div class="stat-chart">
+        <div class="math-symbol">∫</div>
+      </div>
+    </div>
+
+    <div class="stat-card teachers-card">
+      <div class="stat-icon">
+        <i class="fas fa-chalkboard-teacher"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ statistics.teacherCount }}</div>
+        <div class="stat-label">Enseignants</div>
+      </div>
+      <div class="stat-chart">
+        <div class="math-symbol">π</div>
+      </div>
+    </div>
+
+    <div class="stat-card parents-card">
+      <div class="stat-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ statistics.parentCount }}</div>
+        <div class="stat-label">Parents</div>
+      </div>
+      <div class="stat-chart">
+        <div class="math-symbol">√</div>
+      </div>
+    </div>
+
+    <div class="stat-card games-card">
+      <div class="stat-icon">
+        <i class="fas fa-gamepad"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ statistics.totalGamesPlayed }}</div>
+        <div class="stat-label">Parties jouées</div>
+      </div>
+      <div class="stat-chart">
+        <div class="math-symbol">∞</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphiques -->
+  <div class="chart-container">
+    <h2>Évolution des élèves</h2>
+    <app-line-chart [data]="studentGrowthData"></app-line-chart>
+  </div>
+</div>

@@ -1,0 +1,129 @@
+<div class="teachers-container">
+  <!-- En-tête avec titre et compteur -->
+  <div class="teachers-header">
+    <div class="title-section">
+      <h1 class="teachers-title">Gestion des Professeurs</h1>
+      <div class="teachers-counter">{{ teachers.length }} Professeurs</div>
+    </div>
+    <div class="actions-section">
+      <button class="add-teacher-btn">
+        <i class="fas fa-plus-circle"></i> Ajouter un Professeurs
+      </button>
+    </div>
+  </div>
+
+  <!-- Panneau de filtres -->
+  <div class="filters-panel">
+    <div class="filter-title">
+      <i class="fas fa-filter"></i>
+      <span>Filtres</span>
+    </div>
+
+    <div class="filters-grid">
+
+      <!-- Barre de recherche -->
+      <div class="search-group">
+        <label for="searchInput">Rechercher</label>
+        <div class="search-input-wrapper">
+          <input
+            type="text"
+            id="searchInput"
+            [(ngModel)]="filters.search"
+            placeholder="Nom, Prénom ou Email du professeurs..."
+            (input)="applyFilters()"
+          />
+          <i class="fas fa-search"></i>
+        </div>
+      </div>
+
+      <!-- Filtre par niveau -->
+      <div class="filter-group">
+        <label for="gradeFilter">Niveau</label>
+        <select
+          id="gradeFilter"
+          [(ngModel)]="filters.grade"
+          (change)="applyFilters()"
+        >
+          <option value="">Tous les niveaux</option>
+          <option value="one">one</option>
+          <option value="two">two</option>
+          <option value="three">three</option>
+          <option value="four">four</option>
+          <option value="five">five</option>
+          <option value="six">six</option>
+        </select>
+        <div class="filter-icon">∝</div>
+      </div>
+
+      <!-- Bouton de réinitialisation -->
+      <div class="reset-filter">
+        <button class="reset-btn" (click)="resetFilters()">
+          <i class="fas fa-undo"></i> Réinitialiser
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- État de chargement -->
+  <div *ngIf="isLoading" class="teachers-loading">
+    <div class="spinner">∞</div>
+    <p>Chargement des élèves...</p>
+  </div>
+
+  <!-- Aucun résultat -->
+  <div *ngIf="!isLoading && filteredTeachers.length === 0" class="no-results">
+    <div class="empty-icon">0</div>
+    <p>Aucun professeurs ne correspond à vos critères de recherche</p>
+    <button (click)="resetFilters()">Réinitialiser les filtres</button>
+  </div>
+
+  <!-- Grille des élèves -->
+  <div
+    *ngIf="!isLoading && filteredTeachers.length > 0"
+    class="teachers-grid"
+  ></div>
+
+ <!-- loade les cards professeurs -->
+  <div *ngIf="!isLoading && filteredTeachers.length > 0" class="teachers-grid">
+    <app-teacher-card
+      *ngFor="
+        let teacher of filteredTeachers.slice(
+          (currentPage - 1) * itemsPerPage,
+          currentPage * itemsPerPage
+        )
+      "
+      [teacher]="teacher"
+    >
+    </app-teacher-card>
+  </div>
+
+  <!-- Pagination -->
+  <div
+    class="pagination-controls"
+    *ngIf="!isLoading && filteredTeachers.length > 0"
+  >
+    <button
+      [disabled]="currentPage === 1"
+      (click)="changePage(currentPage - 1)"
+    >
+      <i class="fas fa-chevron-left"></i> Précédent
+    </button>
+
+    <div class="page-numbers">
+      <button
+        *ngFor="let page of getPageNumbers()"
+        [class.active]="page === currentPage"
+        (click)="changePage(page)"
+      >
+        {{ page }}
+      </button>
+    </div>
+
+    <button
+      [disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage + 1)"
+    >
+      Suivant <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>
