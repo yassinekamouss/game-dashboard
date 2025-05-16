@@ -18,7 +18,7 @@ export class StudentCardComponent {
     if (!student.gameProgress || student.gameProgress.length === 0) {
       return 0;
     }
-    
+
     const completedGames = student.gameProgress.filter(game => game.completedAt).length;
     return Math.round((completedGames / student.gameProgress.length) * 100);
   }
@@ -26,7 +26,7 @@ export class StudentCardComponent {
   getLimitedAchievements(student: Student): string[] {
     return student.achievements ? student.achievements.slice(0, 4) : [];
   }
-  
+
   getBadgeClass(index: number): string {
     const classes = ['gold', 'silver', 'bronze'];
     return classes[index] || '';

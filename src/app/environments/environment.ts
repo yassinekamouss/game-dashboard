@@ -1,12 +1,13 @@
 export const environment = {
     production: false,
     firebaseConfig : {
-        apiKey: "AIzaSyBzkHzuJhwEuhTepuYtSjUdDK6Xn2wycs0",
-        authDomain: "web-dashboard-project.firebaseapp.com",
-        databaseURL: "https://web-dashboard-project-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "web-dashboard-project",
-        storageBucket: "web-dashboard-project.firebasestorage.app",
-        messagingSenderId: "1010089448515",
-        appId: "1:1010089448515:web:d7dac092ed2f0222cc70f6"
+      apiKey: "AIzaSyBiMBj-Lu5nC7jLkLe-eGDpCNG9WO9jQpA",
+      authDomain: "math-web-8da8a.firebaseapp.com",
+      databaseURL: "https://math-web-8da8a-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "math-web-8da8a",
+      storageBucket: "math-web-8da8a.firebasestorage.app",
+      messagingSenderId: "736223252055",
+      appId: "1:736223252055:web:5bf0b3755f2b945bcb5d12",
+      measurementId: "G-HJBE5175M1"
     }
 };

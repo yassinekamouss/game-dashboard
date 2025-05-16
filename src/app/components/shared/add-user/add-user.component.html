@@ -1,0 +1,176 @@
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">Ajouter un {{ getRoleLabel() }}</h2>
+      <button class="close-button" (click)="closeModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Message d'erreur Firebase -->
+      <div *ngIf="showError" class="error-message global-error">
+        {{ errorMessage }}
+      </div>
+
+      <form [formGroup]="userForm" class="form-step">
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            class="input-field"
+            formControlName="email"
+            type="email"
+            placeholder="exemple@domaine.com"
+          />
+          <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="error-message">
+            Email invalide
+          </div>
+        </div>
+
+        <!-- Mot de passe -->
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input
+            id="password"
+            class="input-field"
+            formControlName="password"
+            type="password"
+            placeholder="Minimum 6 caractères"
+          />
+          <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="error-message">
+            Mot de passe requis (min. 6 caractères)
+          </div>
+        </div>
+
+        <!-- Nom et Prénom -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="lastName">Nom</label>
+            <input
+              id="lastName"
+              class="input-field"
+              formControlName="lastName"
+              type="text"
+            />
+            <div *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched" class="error-message">
+              Nom requis
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="firstName">Prénom</label>
+            <input
+              id="firstName"
+              class="input-field"
+              formControlName="firstName"
+              type="text"
+            />
+            <div *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched" class="error-message">
+              Prénom requis
+            </div>
+          </div>
+        </div>
+
+        <!-- Date de naissance et Genre -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dateOfBirth">Date de naissance</label>
+            <input
+              id="dateOfBirth"
+              class="input-field"
+              formControlName="dateOfBirth"
+              type="date"
+            />
+            <div *ngIf="userForm.get('dateOfBirth')?.invalid && userForm.get('dateOfBirth')?.touched" class="error-message">
+              Date de naissance requise
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="gender">Genre</label>
+            <select
+              id="gender"
+              class="input-field"
+              formControlName="gender"
+            >
+              <option value="" disabled>Choisir</option>
+              <option value="male">Masculin</option>
+              <option value="female">Féminin</option>
+            </select>
+            <div *ngIf="userForm.get('gender')?.invalid && userForm.get('gender')?.touched" class="error-message">
+              Genre requis
+            </div>
+          </div>
+        </div>
+
+        <!-- Rôle (readonly) -->
+        <div class="form-group">
+          <label for="role">Rôle</label>
+          <input
+            id="role"
+            class="input-field disabled"
+            [value]="getRoleLabel()"
+            disabled
+          />
+        </div>
+
+        <!-- Étudiant -->
+        <ng-container *ngIf="role === UserRole.STUDENT">
+          <div class="form-group">
+            <label for="student-grade">Niveau</label>
+
+            <!-- ADMIN: champ sélectionnable -->
+            <select
+              *ngIf="currentUser?.role === UserRole.ADMIN"
+              id="student-grade"
+              class="input-field"
+              formControlName="grade"
+            >
+              <option value="" disabled>Choisir un niveau</option>
+              <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+            </select>
+
+            <!-- TEACHER: champ désactivé avec sa propre valeur -->
+            <input
+              *ngIf="currentUser?.role === UserRole.TEACHER"
+              id="student-grade"
+              class="input-field"
+              [value]="teacherGrade"
+              disabled
+            >
+
+
+            <div *ngIf="userForm.get('grade')?.invalid && userForm.get('grade')?.touched" class="error-message">
+              Niveau requis
+            </div>
+          </div>
+        </ng-container>
+
+
+        <!-- Enseignant -->
+        <ng-container *ngIf="role === UserRole.TEACHER">
+          <div class="form-group">
+            <label for="teacher-grade">Niveau d'enseignement</label>
+            <select
+              id="teacher-grade"
+              class="input-field"
+              formControlName="grade"
+            >
+              <option value="" disabled>Choisir un niveau</option>
+              <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+            </select>
+            <div *ngIf="userForm.get('grade')?.invalid && userForm.get('grade')?.touched" class="error-message">
+              Niveau requis
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button class="btn btn-secondary" type="button" (click)="closeModal()">Annuler</button>
+          <button class="btn btn-success" type="button" (click)="onSaveUser()">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -21,7 +21,7 @@
       </div>
       <div class="detail-item">
         <i class="fas fa-venus-mars"></i>
-        <span>{{ student.gender === "M" ? "Garçon" : "Fille" }}</span>
+        <span>{{ student.gender === 'M' ? 'Garçon' : 'Fille' }}</span>
       </div>
       <div class="detail-item">
         <i class="fas fa-chart-line"></i>
@@ -29,7 +29,12 @@
       </div>
       <div class="detail-item">
         <i class="fas fa-gamepad"></i>
-        <span>{{ student.gameProgress.length || 0 }} jeux</span>
+        <span *ngIf="student.gameProgress && student.gameProgress.length > 0; else noGames">
+          {{ student.gameProgress.length }} jeux
+        </span>
+        <ng-template #noGames>
+          <span>Aucun jeu</span>
+        </ng-template>
       </div>
     </div>
   </div>
@@ -43,16 +48,22 @@
       ></div>
       <span class="progress-text">{{ calculateProgress(student) }}%</span>
     </div>
+
     <div class="achievements-section">
-      <span
-        class="badge"
-        *ngFor="let badge of getLimitedAchievements(student); let i = index"
-      >
-        <i class="fas fa-medal" [ngClass]="getBadgeClass(i)"></i>
-      </span>
-      <span class="more-badge" *ngIf="student.achievements.length > 3">
-        +{{ student.achievements.length - 3 }}
-      </span>
+      <ng-container *ngIf="student.achievements && student.achievements.length > 0; else noAchievements">
+        <span
+          class="badge"
+          *ngFor="let badge of getLimitedAchievements(student); let i = index"
+        >
+          <i class="fas fa-medal" [ngClass]="getBadgeClass(i)"></i>
+        </span>
+        <span class="more-badge" *ngIf="student.achievements.length > 3">
+          +{{ student.achievements.length - 3 }}
+        </span>
+      </ng-container>
+      <ng-template #noAchievements>
+        <span class="no-data-message">Aucun achievement</span>
+      </ng-template>
     </div>
   </div>
 

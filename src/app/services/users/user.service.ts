@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Database, ref, update, get } from '@angular/fire/database';
+import { Database, ref, update, get, child } from '@angular/fire/database';
 import { User } from '../../models/user';
-import { from, Observable, of, throwError } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { from, Observable, throwError } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { equalTo, orderByChild, query } from 'firebase/database';
 
 @Injectable({
@@ -10,35 +10,30 @@ import { equalTo, orderByChild, query } from 'firebase/database';
 })
 export class UserService {
 
-  constructor(
-    private db: Database
-  ) {}
+  constructor(private db: Database) {}
 
   updateUserProfile(userData: Partial<User>): Observable<User | null> {
-    // Créer l'objet de mise à jour (inclut seulement les champs modifiables)
+    if (!userData.id) {
+      return throwError(() => new Error('ID utilisateur manquant pour la mise à jour.'));
+    }
+
     const updates: Partial<User> = {};
-    
-    // Vérifier chaque champ modifiable
     if (userData.firstName !== undefined) updates.firstName = userData.firstName;
     if (userData.lastName !== undefined) updates.lastName = userData.lastName;
     if (userData.dateOfBirth !== undefined) updates.dateOfBirth = userData.dateOfBirth;
-    
-    // Référence à l'utilisateur dans la base de données
+
     const userRef = ref(this.db, `users/${userData.id}`);
-    
-    // Effectuer la mise à jour dans Firebase
+
     return from(update(userRef, updates)).pipe(
-      // Après la mise à jour réussie, récupérer l'utilisateur complet
       switchMap(() => from(get(userRef))),
       map(snapshot => {
         if (snapshot.exists()) {
-          const updatedUser = snapshot.val() as User;
-          return updatedUser;
+          return snapshot.val() as User;
         }
         return null;
       }),
       catchError(error => {
-        console.error('Erreur lors de la mise à jour du profil:', error);
+        console.error('Erreur lors de la mise à jour du profil :', error);
         return throwError(() => error);
       })
     );
@@ -49,25 +44,33 @@ export class UserService {
       ref(this.db, 'users'),
       orderByChild('role'),
       equalTo(role.toLowerCase())
-    )
-    
-    // Récupérer tous les utilisateurs (Profs/Parent/Eleve)
+    );
+
     return from(get(usersQuery)).pipe(
       map(snapshot => {
+        const users: User[] = [];
         if (snapshot.exists()) {
-          const users: User[] = [];
           snapshot.forEach(childSnapshot => {
             const user = childSnapshot.val() as User;
             users.push(user);
           });
-          return users;
         }
-        return [];
+        return users;
       }),
       catchError(error => {
-        console.error('Erreur lors de la récupération des utilisateurs:', error);
+        console.error('Erreur lors de la récupération des utilisateurs :', error);
         return throwError(() => error);
       })
     );
+  }
+
+  addStudentToTeacher(teacherId: string, studentId: string): Promise<void> {
+    const teacherStudentsRef = ref(this.db, `teachers/${teacherId}/students`);
+    return update(teacherStudentsRef, { [studentId]: true });
+  }
+
+  addStudentToParent(parentId: string, studentId: string): Promise<void> {
+    const parentChildrenRef = ref(this.db, `parents/${parentId}/children`);
+    return update(parentChildrenRef, { [studentId]: true });
   }
 }

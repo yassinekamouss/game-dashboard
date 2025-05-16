@@ -6,7 +6,7 @@
       <div class="students-counter">{{ students.length }} élèves</div>
     </div>
     <div class="actions-section">
-      <button class="add-student-btn">
+      <button (click)="onAddStudent()" class="add-student-btn">
         <i class="fas fa-plus-circle"></i> Ajouter un élève
       </button>
     </div>
@@ -73,11 +73,6 @@
   </div>
 
   <!-- Grille des élèves -->
-  <div
-    *ngIf="!isLoading && filteredStudents.length > 0"
-    class="students-grid"
-  ></div>
-
   <div *ngIf="!isLoading && filteredStudents.length > 0" class="students-grid">
     <app-student-card
       *ngFor="
@@ -121,3 +116,11 @@
     </button>
   </div>
 </div>
+
+<!-- Modal pour ajouter un élève -->
+<app-add-user
+  *ngIf="showAddUserModal"
+  [role]="UserRole.STUDENT"
+  (close)="showAddUserModal = false"
+  (userCreated)="onUserAdded()"
+></app-add-user>

@@ -165,7 +165,7 @@
 .progress-text {
   position: absolute;
   right: 5px;
-  top: -5px;
+  top: -3px;
   font-size: 0.75rem;
   color: var(--dark-gray);
   font-weight: 600;
@@ -247,8 +247,15 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  
+
   .student-details {
     grid-template-columns: 1fr;
   }
+}
+
+.no-data-message {
+  font-style: italic;
+  color: #888;       /* gris clair */
+  font-size: 0.9em;
+  margin-left: 5px;
 }

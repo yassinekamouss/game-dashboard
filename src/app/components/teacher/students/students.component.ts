@@ -6,6 +6,8 @@ import { StudentService } from '../../../services/students/student.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Teacher } from '../../../models/teacher';
 import { Student } from '../../../models/student';
+import { UserRole } from '../../../models/user-role';
+import { AddUserComponent } from '../../shared/add-user/add-user.component';
 
 @Component({
   selector: 'app-students',
@@ -14,7 +16,8 @@ import { Student } from '../../../models/student';
     FormsModule,
     NgForOf,
     NgIf,
-    StudentCardComponent
+    StudentCardComponent,
+    AddUserComponent
   ],
   templateUrl: './students.component.html',
   styleUrls: ['./students.component.css']
@@ -37,6 +40,10 @@ export class StudentsComponent implements OnInit {
     search: ''
   };
 
+  // Ajout d'élève
+  showAddUserModal = false;
+
+
   constructor(
     private studentService: StudentService,
     private authService: AuthService
@@ -47,17 +54,7 @@ export class StudentsComponent implements OnInit {
       next: (teacher) => {
         this.teacher = teacher as Teacher;
         if (this.teacher?.grade) {
-          this.studentService.getStudentsByGrade(this.teacher.grade).subscribe({
-            next: (students) => {
-              this.students = students;
-              this.applyFilters();
-              this.isLoading = false;
-            },
-            error: (error) => {
-              console.error('Erreur lors de la récupération des étudiants :', error);
-              this.isLoading = false;
-            }
-          });
+          this.loadStudents();
         } else {
           console.warn('Aucun grade trouvé pour l\'enseignant');
           this.isLoading = false;
@@ -65,6 +62,22 @@ export class StudentsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Erreur lors de la récupération de l\'enseignant :', error);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  loadStudents(): void {
+    if (!this.teacher?.grade) return;
+
+    this.studentService.getStudentsByGrade(this.teacher.grade).subscribe({
+      next: (students) => {
+        this.students = students;
+        this.applyFilters();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Erreur lors de la récupération des étudiants :', error);
         this.isLoading = false;
       }
     });
@@ -115,4 +128,16 @@ export class StudentsComponent implements OnInit {
     }
     return pages;
   }
+
+  onAddStudent() {
+    this.showAddUserModal = true;
+  }
+
+  onUserAdded() {
+    this.showAddUserModal = false;
+    // Recharger la liste des étudiants après l'ajout
+    this.loadStudents();
+  }
+
+  protected readonly UserRole = UserRole;
 }

@@ -8,10 +8,9 @@ export interface Student extends User {
 
     grade: GradeLevel;
     role: UserRole.STUDENT;
-    parentId: string; 
+    parentId: string;
     teacherId: string;
     gender: string
-    
     playerProfile: PlayerProfile;
     achievements: string[];
     gameProgress:  GameProgress[];
