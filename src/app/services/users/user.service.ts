@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Database, ref, update, get } from '@angular/fire/database';
 import { User } from '../../models/user';
-import { forkJoin, from, Observable, of, throwError } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { from, Observable, Subject, throwError} from 'rxjs';
+import { catchError, map, switchMap  } from 'rxjs/operators';
 import { equalTo, orderByChild, query } from 'firebase/database';
-import { Student } from '../../models/student';
-import { Parent } from '../../models/parent';
+import {UserRole} from '../../models/user-role';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+
+
+  private usersSubject$ = new Subject<User[]>();
+
+  users$ = this.usersSubject$.asObservable();
 
   constructor(private db: Database) {}
 
@@ -67,15 +71,6 @@ export class UserService {
     );
   }
 
-  addStudentToTeacher(teacherId: string, studentId: string): Promise<void> {
-    const teacherStudentsRef = ref(this.db, `teachers/${teacherId}/students`);
-    return update(teacherStudentsRef, { [studentId]: true });
-  }
-
-  addStudentToParent(parentId: string, studentId: string): Promise<void> {
-    const parentChildrenRef = ref(this.db, `parents/${parentId}/children`);
-    return update(parentChildrenRef, { [studentId]: true });
-  }
 
     getUserById(childId: string): Observable<User | null> {
     const childRef = ref(this.db, `users/${childId}`);
@@ -94,38 +89,16 @@ export class UserService {
     );
   }
 
-  getParentWithChildren(): Observable<Parent[]> {
-    return this.getUsersByRole('parent').pipe(
-      switchMap((users: User[]) => {
-        const parents = users as Parent[];
-        if (parents.length === 0) return of([]);
-
-        const parentRequests = parents.map((parent) => {
-          const childIds = parent.children as unknown as string[];
-          const childObservables = childIds.map((childId) =>
-            this.getUserById(childId)
-          );
-
-          return forkJoin(childObservables).pipe(
-            map((students) => {
-              parent.children = students.filter(
-                (s): s is Student => s !== null
-              );
-              return parent;
-            })
-          );
-        });
-
-        return forkJoin(parentRequests).pipe(
-          tap((parentsWithChildren) => {
-            console.log('Parents avec leurs enfants :', parentsWithChildren);
-          })
-        );
-      }),
-      catchError((error) => {
-        console.error('Erreur lors de la récupération des parents:', error);
-        return throwError(() => error);
-      })
-    );
+  // Charge les users et push dans le subject
+  loadUsers(role: UserRole): void {
+    this.getUsersByRole(role).subscribe(users => {
+      this.usersSubject$.next(users);
+    });
   }
+
+  // Méthode pour mettre à jour la liste (après ajout, filtre, etc.)
+  setUsers(users: User[]): void {
+    this.usersSubject$.next(users);
+  }
+
 }

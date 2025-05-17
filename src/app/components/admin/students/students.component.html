@@ -3,10 +3,10 @@
   <div class="students-header">
     <div class="title-section">
       <h1 class="students-title">Gestion des élèves</h1>
-      <div class="students-counter">{{ students.length }} élèves</div>
+      <div class="students-counter">{{ filteredStudents.length }} élèves</div>
     </div>
     <div class="actions-section">
-      <button class="add-student-btn">
+      <button (click)="onAddStudentClick()" class="add-student-btn">
         <i class="fas fa-plus-circle"></i> Ajouter un élève
       </button>
     </div>
@@ -96,12 +96,12 @@
 
   <!-- État de chargement -->
   <div *ngIf="isLoading" class="students-loading">
-    <div class="spinner">∫</div>
+    <div class="spinner">∞</div>
     <p>Chargement des élèves...</p>
   </div>
 
   <!-- Aucun résultat -->
-  <div *ngIf="!isLoading && filteredStudents.length === 0" class="no-results">
+  <div *ngIf="!isLoading   && filteredStudents.length === 0" class="no-results">
     <div class="empty-icon">0</div>
     <p>Aucun élève ne correspond à vos critères de recherche</p>
     <button (click)="resetFilters()">Réinitialiser les filtres</button>
@@ -156,3 +156,11 @@
     </button>
   </div>
 </div>
+
+<!-- Modal pour ajouter un élève -->
+<app-add-user
+  *ngIf="showAddUserModal"
+  [role]="UserRole.STUDENT"
+  (close)="showAddUserModal = false"
+  (userCreated)="onUserAdded($event)"
+></app-add-user>

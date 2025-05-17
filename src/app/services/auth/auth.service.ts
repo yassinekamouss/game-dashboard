@@ -1,20 +1,21 @@
-import { Injectable } from "@angular/core";
-import { Auth, user, getAuth } from "@angular/fire/auth";
-import { FirebaseApp, initializeApp } from '@angular/fire/app';
+import {Injectable} from "@angular/core";
+import {Auth, getAuth, user} from "@angular/fire/auth";
+import {FirebaseApp, initializeApp} from '@angular/fire/app';
 import {
   browserSessionPersistence,
+  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   setPersistence,
   signInWithEmailAndPassword,
   signOut,
-  createUserWithEmailAndPassword,
   User as FirebaseUser,
 } from "firebase/auth";
-import { Database, ref, set, get } from '@angular/fire/database';
-import { BehaviorSubject, from, Observable, of, throwError } from "rxjs";
-import { catchError, map, switchMap, tap, finalize } from "rxjs/operators";
-import { User } from "../../models/user";
-import { environment } from '../../environments/environment';
+import {Database, get, ref, set} from '@angular/fire/database';
+import {BehaviorSubject, from, Observable, of, throwError} from "rxjs";
+import {catchError, finalize, map, switchMap, tap} from "rxjs/operators";
+import {User} from "../../models/user";
+import {environment} from '../../environments/environment';
+import {UserRole} from '../../models/user-role';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -159,6 +160,7 @@ export class AuthService {
 
   saveUserToDatabase(user: User): Observable<void> {
     const userRef = ref(this.db, `users/${user.id}`);
+
 
     console.log('Saving user to database:', user);
 

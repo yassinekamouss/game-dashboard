@@ -7,10 +7,12 @@ import { UserRole } from '../../../models/user-role';
 import { Parent } from '../../../models/parent';
 import { GradeLevel } from '../../../models/grade-level';
 import {catchError, finalize, switchMap, take, tap} from 'rxjs/operators';
-import {throwError} from 'rxjs';
+import {of, throwError} from 'rxjs';
 import {UserFactory} from '../../../factories/user.factory';
 import {Teacher} from '../../../models/teacher';
 import {Administrator} from '../../../models/administrator';
+import {Student} from '../../../models/student';
+import {StudentService} from '../../../services/students/student.service';
 
 @Component({
   selector: 'app-add-user',
@@ -21,7 +23,7 @@ import {Administrator} from '../../../models/administrator';
 })
 export class AddUserComponent implements OnInit {
   userForm: FormGroup;
-  currentUser: User | Teacher | Administrator | null = null;
+  currentUser: User  | null = null;
   successMessage: string = '';
   showSuccess: boolean = false;
   isSubmitting: boolean = false;
@@ -29,6 +31,9 @@ export class AddUserComponent implements OnInit {
   showError: boolean = false;
   grades = Object.values(GradeLevel);
   teacherGrade: string = '';
+  availableStudents:Student[] = [];
+  selectedStudents:string[] =[];
+
 
   @Input() role!: UserRole;
   @Output() close = new EventEmitter<void>();
@@ -38,7 +43,8 @@ export class AddUserComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private studentService:StudentService
   ) {
     console.log('AddUserComponent initialized');
 
@@ -46,7 +52,6 @@ export class AddUserComponent implements OnInit {
     this.userForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       gender: ['', Validators.required],
@@ -75,9 +80,30 @@ export class AddUserComponent implements OnInit {
         this.userForm.get('grade')?.setValue(this.teacherGrade);
       }
 
+      if (this.role === UserRole.PARENT && this.currentUser?.role === UserRole.ADMIN) {
+        this.studentService.getStudentsWithoutParent().subscribe(students =>{
+          this.availableStudents = students;
+        })
+        this.userForm.get('children')?.setValidators([Validators.required]);
+      }
 
       this.userForm.updateValueAndValidity();
     });
+  }
+
+  onStudentSelectionChange(event: Event, studentId: string) {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      // Ajouter l'étudiant à la liste des sélectionnés
+      this.selectedStudents.push(studentId);
+    } else {
+      // Retirer l'étudiant de la liste des sélectionnés
+      const index = this.selectedStudents.indexOf(studentId);
+      if (index !== -1) {
+        this.selectedStudents.splice(index, 1);
+      }
+    }
+    this.userForm.patchValue({ children: this.selectedStudents });
   }
 
   onSaveUser() {
@@ -93,6 +119,10 @@ export class AddUserComponent implements OnInit {
     const formValues = this.userForm.getRawValue();
     const { email, password } = formValues;
 
+    if (this.role === UserRole.PARENT) {
+      formValues.children = this.selectedStudents;
+    }
+
     this.authService.registerUser(email, password)
       .pipe(
         switchMap((cred) => {
@@ -100,10 +130,18 @@ export class AddUserComponent implements OnInit {
           const userData = UserFactory.createUser(firebaseUID,this.role,formValues);
 
           return this.authService.saveUserToDatabase(userData).pipe(
-            tap(() => {
-              this.showSuccessMessage(userData);
-              this.userCreated.emit(userData);
-              this.userForm.reset();
+            switchMap(() => {
+              if (this.role === UserRole.PARENT && this.selectedStudents.length > 0) {
+                // APPEL au service student ici
+                return this.studentService.updateParentIdForStudents(userData.id, this.selectedStudents);
+              } else {
+                return of(void 0);
+              }
+            }),
+              tap(() => {
+                this.showSuccessMessage(userData);
+                this.userCreated.emit(userData);
+                this.userForm.reset();
             }),
             catchError((err) => {
               console.error('Database save failed, rolling back Firebase user creation.');

@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Student} from '../../models/student';
-import {from, Observable, throwError} from 'rxjs';
+import {forkJoin, from, Observable, of, throwError} from 'rxjs';
 import {equalTo, orderByChild, query} from 'firebase/database';
-import {Database, get, ref} from '@angular/fire/database';
+import {Database, get, ref, update} from '@angular/fire/database';
 import {catchError, map} from 'rxjs/operators';
 import {GradeLevel} from '../../models/grade-level';
 import {UserRole} from '../../models/user-role';
+import {UserService} from '../users/user.service';
 
 @Injectable({
    providedIn: 'root'
@@ -13,8 +14,8 @@ import {UserRole} from '../../models/user-role';
  export class StudentService {
 
 
-   constructor(private db:Database) {}
-   
+   constructor(private db:Database , private  userService :UserService) {}
+
    getStudentsByGrade(grade:GradeLevel): Observable<Student[]> {
      const usersQuery = query(
        ref(this.db, 'users'),
@@ -41,4 +42,29 @@ import {UserRole} from '../../models/user-role';
        })
      );
    }
- }
+
+
+
+  getStudentsWithoutParent(): Observable<Student[]> {
+    return this.userService.getUsersByRole(UserRole.STUDENT).pipe(
+      map(students => (students as Student[]).filter(s => !s.parentId || s.parentId === '') as Student[])
+    );
+  }
+
+  updateParentIdForStudents(parentId: string, studentIds: string[]): Observable<null | void> {
+    if (!parentId || studentIds.length === 0) {
+      return of(void 0);
+    }
+
+    const updateCalls = studentIds.map(studentId => {
+      const studentRef = ref(this.db, `users/${studentId}`);
+      return from(update(studentRef, { parentId }));
+    });
+
+    return forkJoin(updateCalls).pipe(
+      // forkJoin renvoie un tableau de résultats, on mappe vers void
+      map(() => void 0)
+    );
+  }
+
+}

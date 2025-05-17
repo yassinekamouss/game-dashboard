@@ -3,10 +3,10 @@
   <div class="parents-header">
     <div class="title-section">
       <h1 class="parents-title">Gestion des Parents</h1>
-      <div class="parents-counter">{{ parents.length }} Parents</div>
+      <div class="parents-counter">{{ filteredparent.length }} Parents</div>
     </div>
     <div class="actions-section">
-      <button class="add-parent-btn">
+      <button (click)="onAddParentClick()" class="add-parent-btn">
         <i class="fas fa-plus-circle"></i> Ajouter un parent
       </button>
     </div>
@@ -48,7 +48,7 @@
   <!-- État de chargement -->
   <div *ngIf="isLoading" class="parents-loading">
     <div class="spinner">∞</div>
-    <p>Chargement des élèves...</p>
+    <p>Chargement des parents...</p>
   </div>
 
   <!-- Aucun résultat -->
@@ -108,3 +108,12 @@
     </button>
   </div>
 </div>
+
+
+<!-- Modal pour ajouter un parent -->
+<app-add-user
+  *ngIf="showAddUserModal"
+  [role]="UserRole.PARENT"
+  (close)="showAddUserModal = false"
+  (userCreated)="onUserAdded($event)"
+></app-add-user>
