@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Student } from '../../../models/student';
+import {QRCodeService} from '../../../services/qrcode/qrcode.service';
 
 @Component({
   selector: 'app-student-card',
@@ -11,8 +12,9 @@ import { Student } from '../../../models/student';
 })
 export class StudentCardComponent {
   @Input() student: Student | null = null;
+  isGeneratingQR: boolean = false;
 
-
+  constructor(private qrCodeService: QRCodeService) {}
   calculateProgress(student: Student): number {
     // Simuler un calcul de progression basé sur les jeux complétés
     if (!student.gameProgress || student.gameProgress.length === 0) {
@@ -30,5 +32,20 @@ export class StudentCardComponent {
   getBadgeClass(index: number): string {
     const classes = ['gold', 'silver', 'bronze'];
     return classes[index] || '';
+  }
+
+
+  downloadStudentQRCode(): void {
+    this.isGeneratingQR = true;
+
+    this.qrCodeService.downloadStudentPDF(this.student as Student).subscribe({
+      next: () => {
+        this.isGeneratingQR = false;
+      },
+      error: (err) => {
+        console.error('Erreur lors du téléchargement du PDF:', err);
+        this.isGeneratingQR = false;
+      }
+    });
   }
 }

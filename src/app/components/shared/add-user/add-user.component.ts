@@ -13,6 +13,7 @@ import {Teacher} from '../../../models/teacher';
 import {Administrator} from '../../../models/administrator';
 import {Student} from '../../../models/student';
 import {StudentService} from '../../../services/students/student.service';
+import {QRCodeService} from '../../../services/qrcode/qrcode.service';
 
 @Component({
   selector: 'app-add-user',
@@ -44,7 +45,8 @@ export class AddUserComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private studentService:StudentService
+    private studentService:StudentService,
+    private qrCodeService:QRCodeService
   ) {
     console.log('AddUserComponent initialized');
 
@@ -65,31 +67,37 @@ export class AddUserComponent implements OnInit {
 
 
   ngOnInit() {
-    this.userForm.patchValue({role: this.role});
+    this.userForm.patchValue({ role: this.role });
 
     this.authService.currentUser$.pipe(take(1)).subscribe(user => {
       this.currentUser = user;
 
-      // Définir les validateurs conditionnels en fonction du rôle
+      this.userForm.get('gender')?.setValidators([Validators.required]);
+      this.userForm.get('gender')?.updateValueAndValidity();
+
       if (this.role === UserRole.STUDENT || this.role === UserRole.TEACHER) {
         this.userForm.get('grade')?.setValidators([Validators.required]);
+        this.userForm.get('grade')?.updateValueAndValidity();
       }
 
+      // Si l'utilisateur actuel est un TEACHER qui crée un STUDENT
       if (this.currentUser?.role === UserRole.TEACHER && this.role === UserRole.STUDENT) {
         this.teacherGrade = (this.currentUser as Teacher).grade;
         this.userForm.get('grade')?.setValue(this.teacherGrade);
       }
 
+      // Cas PARENT : rendre le champ 'children' requis + charger les étudiants sans parents
       if (this.role === UserRole.PARENT && this.currentUser?.role === UserRole.ADMIN) {
-        this.studentService.getStudentsWithoutParent().subscribe(students =>{
-          this.availableStudents = students;
-        })
         this.userForm.get('children')?.setValidators([Validators.required]);
-      }
+        this.userForm.get('children')?.updateValueAndValidity();
 
-      this.userForm.updateValueAndValidity();
+        this.studentService.getStudentsWithoutParent().subscribe(students => {
+          this.availableStudents = students;
+        });
+      }
     });
   }
+
 
   onStudentSelectionChange(event: Event, studentId: string) {
     const checkbox = event.target as HTMLInputElement;
@@ -107,6 +115,11 @@ export class AddUserComponent implements OnInit {
   }
 
   onSaveUser() {
+    if (this.userForm.invalid) {
+      this.showErrorMessage("Veuillez remplir tous les champs requis.");
+      this.userForm.markAllAsTouched(); // Pour afficher les erreurs visuelles
+      return;
+    }
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
       this.showErrorMessage("Vous n'êtes plus connecté. Veuillez vous reconnecter avant de continuer.");
@@ -134,6 +147,9 @@ export class AddUserComponent implements OnInit {
               if (this.role === UserRole.PARENT && this.selectedStudents.length > 0) {
                 // APPEL au service student ici
                 return this.studentService.updateParentIdForStudents(userData.id, this.selectedStudents);
+              } else if (this.role === UserRole.STUDENT) {
+                // Si c'est un étudiant, générer et stocker le QR code et le PDF
+                return this.generateQRCodeAndPDF(userData as Student);
               } else {
                 return of(void 0);
               }
@@ -166,6 +182,25 @@ export class AddUserComponent implements OnInit {
 
   }
 
+  private generateQRCodeAndPDF(student: Student) {
+    return this.qrCodeService.generateQRCode(student.id).pipe(
+      tap(qrCodeUrl => {
+        console.log('QR Code généré avec succès pour l\'étudiant:', student.id);
+        // Déclencher la génération du PDF et son téléchargement
+        setTimeout(() => {
+          this.qrCodeService.downloadStudentPDF(student).subscribe({
+            next: () => console.log('PDF téléchargé avec succès'),
+            error: (err) => console.error('Erreur lors du téléchargement du PDF:', err)
+          });
+        }, 1000); // Délai pour s'assurer que tout est prêt
+      }),
+      catchError(err => {
+        console.error('Erreur lors de la génération du QR code:', err);
+        // On renvoie quand même un Observable valide pour ne pas bloquer le processus
+        return of(void 0);
+      })
+    );
+  }
 
   handleFirebaseError(err: any) {
     console.error('Firebase error:', err);
