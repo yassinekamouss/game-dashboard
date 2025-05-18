@@ -44,9 +44,9 @@ export class ParentsComponent implements OnInit{
     this.isLoading = true;
     this.parentService.loadParents();
 
-    this.parentSub = this.parentService.getParentWithChildren().subscribe({
-      next: (parentsWithChildren: ParentWithChildren[]) => {
-        this.parents = parentsWithChildren;
+    this.parentSub = this.parentService.parent$.subscribe({
+      next: (parents:ParentWithChildren[]) => {
+        this.parents = parents as ParentWithChildren[];
         this.filteredparent = [...this.parents];
         this.applyFilters();
         this.isLoading = false;

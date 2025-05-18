@@ -116,7 +116,7 @@ export class TeachersComponent implements OnInit {
   onUserAdded(user:User) {
     const teacher : Teacher =user as Teacher ;
     this.showAddUserModal = false;
-    this.teachers.push(teacher);
+    this.teachers.unshift(teacher);
     this.userService.setUsers([...this.teachers]);
     this.applyFilters();
   }
