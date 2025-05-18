@@ -7,6 +7,7 @@ import {catchError, map} from 'rxjs/operators';
 import {GradeLevel} from '../../models/grade-level';
 import {UserRole} from '../../models/user-role';
 import {UserService} from '../users/user.service';
+import {QRCodeService} from '../qrcode/qrcode.service';
 
 @Injectable({
    providedIn: 'root'
@@ -14,7 +15,10 @@ import {UserService} from '../users/user.service';
  export class StudentService {
 
 
-   constructor(private db:Database , private  userService :UserService) {}
+   constructor(private db:Database ,
+               private  userService :UserService,
+               private qrCodeService:QRCodeService
+   ) {}
 
    getStudentsByGrade(grade:GradeLevel): Observable<Student[]> {
      const usersQuery = query(
@@ -64,6 +68,16 @@ import {UserService} from '../users/user.service';
     return forkJoin(updateCalls).pipe(
       // forkJoin renvoie un tableau de résultats, on mappe vers void
       map(() => void 0)
+    );
+  }
+
+  generateAndDownloadQRCode(studentId: string): Observable<boolean> {
+    return this.userService.getUserById(studentId).pipe(
+      map(user  => {
+        const student = user as Student;
+        this.qrCodeService.downloadStudentPDF(student).subscribe();
+        return true;
+      })
     );
   }
 
