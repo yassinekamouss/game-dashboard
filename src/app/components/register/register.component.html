@@ -1,0 +1,65 @@
+<div class="page-wrapper">
+  <!-- Header section -->
+  <header class="header">
+    <h1 class="app-title">MathéMagique</h1>
+    <p class="tagline">Apprendre les maths est un jeu d'enfant !</p>
+  </header>
+
+  <!-- Main section -->
+  <section class="main-section">
+    <!-- Floating math elements -->
+    <div class="math-element">+</div>
+    <div class="math-element">÷</div>
+    <div class="math-element">×</div>
+    <div class="math-element">=</div>
+    <div class="math-element">π</div>
+    <div class="math-element">-</div>
+
+    <!-- Register container -->
+    <div class="register-container">
+      <h2>Inscription</h2>
+      <p class="register-description">
+        Créez votre compte pour commencer à apprendre avec MathéMagique !
+      </p>
+           <form (submit)="onRegister()">
+        <div class="name-row">
+          <input type="text" [(ngModel)]="firstName" name="firstName" placeholder="Nom" required>
+          <input type="text" [(ngModel)]="lastName" name="lastName" placeholder="Prénom" required>
+        </div>
+        <input type="email" [(ngModel)]="email" name="email" placeholder="Email" required>
+        <div class="password-row">
+          <input type="password" [(ngModel)]="password" name="password" placeholder="Mot de passe" required>
+          <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="Confirmez le mot de passe" required>
+        </div>
+        <input type="date" [(ngModel)]="dateOfBirth" name="dateOfBirth" placeholder="Date de naissance" required>
+        <select [(ngModel)]="gender" name="gender" required>
+          <option value="" disabled selected>Choisir </option>
+          <option value="male">homme</option>
+          <option value="female">femme</option>
+        </select>
+        <button type="submit">S'inscrire</button>
+      </form>
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <div class="additional-links">
+        <a routerLink="/login">Déjà un compte ? <strong>Connectez-vous</strong></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer section -->
+  <footer class="footer">
+    <p>MathéMagique © 2025 - Où les Maths deviennent <span>magiques</span> !</p>
+  </footer>
+</div>
+
+
+<div class="modal-backdrop" *ngIf="showSuccessModal">
+  <div class="modal-content">
+    <h3>🎉 Inscription réussie !</h3>
+    <p>Merci de vous être inscrit sur <strong>MathéMagique</strong>.</p>
+    <p>Votre compte est en cours de validation. Un administrateur vous attribuera un rôle très bientôt.</p>
+    <p>🕒 Veuillez patienter, vous serez notifié dès que votre accès sera activé.</p>
+    <button (click)="closeModal()">Fermer</button>
+  </div>
+</div>

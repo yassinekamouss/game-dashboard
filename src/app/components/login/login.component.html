@@ -4,7 +4,8 @@
       <h1 class="app-title">MathéMagique</h1>
       <p class="tagline">Apprendre les maths est un jeu d'enfant !</p>
     </header>
-  
+
+
     <!-- Main section -->
     <section class="main-section">
       <!-- Floating math elements -->
@@ -14,7 +15,7 @@
       <div class="math-element">=</div>
       <div class="math-element">π</div>
       <div class="math-element">-</div>
-      
+
       <!-- Login container -->
       <div class="login-container">
         <h2>Connexion</h2>
@@ -27,12 +28,18 @@
           <button type="submit">Se connecter</button>
         </form>
         <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
-        
+
         <div class="additional-links">
           <a routerLink="/reset-password">Mot de passe oublié ?</a>
         </div>
+        <div class="additional-links">
+          <a routerLink="/register">Pas encore de compte ? <strong>Inscrivez-vous</strong></a>
+        </div>
+
       </div>
     </section>
+
+
 
   <!-- Footer section -->
   <footer class="footer">
@@ -40,3 +47,14 @@
   </footer>
 
   </div>
+
+<div *ngIf="isVisible" class="modal-overlay">
+  <div class="modal-content">
+    <h2>Validation de votre compte en cours</h2>
+    <p>
+      Merci pour votre inscription ! Votre compte est actuellement en cours de validation.
+      Pour finaliser votre accès, merci de bien vouloir contacter un administrateur qui attribuera votre rôle.
+    </p>
+    <button (click)="close()">Compris</button>
+  </div>
+</div>

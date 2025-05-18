@@ -14,6 +14,7 @@ import {Administrator} from '../../../models/administrator';
 import {Student} from '../../../models/student';
 import {StudentService} from '../../../services/students/student.service';
 import {QRCodeService} from '../../../services/qrcode/qrcode.service';
+import {FirebaseErrorsService} from '../../../services/firebase-errors.service';
 
 @Component({
   selector: 'app-add-user',
@@ -46,7 +47,8 @@ export class AddUserComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private studentService:StudentService,
-    private qrCodeService:QRCodeService
+    private qrCodeService:QRCodeService,
+    private firebaseErrors:FirebaseErrorsService
   ) {
     console.log('AddUserComponent initialized');
 
@@ -176,7 +178,8 @@ export class AddUserComponent implements OnInit {
           console.log('User successfully created and saved.');
         },
         error: (err) => {
-          this.handleFirebaseError(err);
+        this.errorMessage =  this.firebaseErrors.getErrorMessage(err);
+        this.showErrorMessage(this.errorMessage);
         }
       });
 
@@ -202,29 +205,6 @@ export class AddUserComponent implements OnInit {
     );
   }
 
-  handleFirebaseError(err: any) {
-    console.error('Firebase error:', err);
-
-    const code = err.code || '';
-
-    switch (code) {
-      case 'auth/email-already-in-use':
-        this.showErrorMessage("Cet email est déjà utilisé. Veuillez en choisir un autre.");
-        break;
-      case 'auth/invalid-email':
-        this.showErrorMessage("L'email saisi n'est pas valide.");
-        break;
-      case 'auth/weak-password':
-        this.showErrorMessage("Le mot de passe est trop faible. Minimum 6 caractères.");
-        break;
-      case 'auth/network-request-failed':
-        this.showErrorMessage("Erreur réseau. Vérifiez votre connexion.");
-        break;
-      default:
-        this.showErrorMessage("Une erreur inattendue est survenue : " + err.message);
-        break;
-    }
-  }
 
   showSuccessMessage(userData: User) {
     const roleName = this.getRoleLabel().toLowerCase();

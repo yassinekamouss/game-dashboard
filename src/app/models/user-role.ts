@@ -4,4 +4,5 @@ export enum UserRole {
     STUDENT = 'student',
     PARENT = 'parent',
     PRINCIPAL = 'principal',
-}
+    PENDING = 'pending'
+ }
