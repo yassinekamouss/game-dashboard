@@ -3,21 +3,11 @@ import { User } from '../models/user';
 import { Teacher } from '../models/teacher';
 import { Student } from '../models/student';
 import { Parent } from '../models/parent';
-import { GradeLevel } from '../models/grade-level';
 import { PlayerProfile } from '../models/player-profile';
 import { GameProgress } from '../models/game-progress';
+import {FormValues} from '../models/form-values';
 
-interface FormValues {
-  email: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-  gender: string;
-  grade?: GradeLevel;
-  teacherId?: string;
-  parentId?: string;
-  children?: string[];
-}
+
 
 export class UserFactory {
   static createUser(

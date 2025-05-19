@@ -14,7 +14,7 @@ import {Administrator} from '../../../models/administrator';
 import {Student} from '../../../models/student';
 import {StudentService} from '../../../services/students/student.service';
 import {QRCodeService} from '../../../services/qrcode/qrcode.service';
-import {FirebaseErrorsService} from '../../../services/firebase-errors.service';
+import {FirebaseErrorsService} from '../../../services/firebaseErrors/firebase-errors.service';
 
 @Component({
   selector: 'app-add-user',

@@ -101,4 +101,27 @@ export class UserService {
     this.usersSubject$.next(users);
   }
 
+
+  updateFullUser(user: User): Observable<User | null> {
+    if (!user.id) {
+      return throwError(() => new Error('ID utilisateur manquant pour la mise à jour.'));
+    }
+
+    const userRef = ref(this.db, `users/${user.id}`);
+
+    return from(update(userRef, { ...user })).pipe(
+      switchMap(() => from(get(userRef))),
+      map(snapshot => {
+        if (snapshot.exists()) {
+          return snapshot.val() as User;
+        }
+        return null;
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la mise à jour complète de l’utilisateur :', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
 }

@@ -24,6 +24,8 @@ export class FirebaseErrorsService {
         return "Mot de passe incorrect.";
       case 'auth/network-request-failed':
         return "Erreur réseau. Vérifiez votre connexion.";
+      case 'auth/invalid-credential':
+        return "Utilisateur non trouvé.";
       default:
         return "Une erreur inattendue est survenue : " + (error?.message || 'Erreur inconnue.');
     }

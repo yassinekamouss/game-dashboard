@@ -5,7 +5,7 @@ import {CommonModule} from '@angular/common';
 import {UserRole} from '../../models/user-role';
 import {AuthService} from '../../services/auth/auth.service';
 import {User} from '../../models/user';
-import {FirebaseErrorsService} from '../../services/firebase-errors.service';
+import {FirebaseErrorsService} from '../../services/firebaseErrors/firebase-errors.service';
 
 @Component({
   selector: 'app-register',

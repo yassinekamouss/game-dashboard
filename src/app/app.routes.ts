@@ -10,6 +10,7 @@ import { TeachersComponent as AdminTeachersComponent } from './components/admin/
 import { TeacherComponent } from './components/teacher/teacher.component';
 import { StudentsComponent as TeacherStudentComponent } from './components/teacher/students/students.component';
 import {RegisterComponent} from './components/register/register.component';
+import {PendingUsersComponent} from './components/admin/pending-users/pending-users.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -22,6 +23,7 @@ export const routes: Routes = [
         {path: 'students', component: AdminStudentComponent},
         {path: 'parents', component: AdminParentComponent },
         {path: 'teachers', component: AdminTeachersComponent },
+        {path: 'pending-users' , component: PendingUsersComponent}
     ]},
   {path:'teacher', component : TeacherComponent , children:[
       {path: 'profile' , component: ProfileComponent},

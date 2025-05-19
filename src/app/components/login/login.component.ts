@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import {UserRole} from '../../models/user-role';
-import {FirebaseErrorsService} from '../../services/firebase-errors.service';
+import {FirebaseErrorsService} from '../../services/firebaseErrors/firebase-errors.service';
 @Component({
   selector: 'app-login',
   standalone: true,
