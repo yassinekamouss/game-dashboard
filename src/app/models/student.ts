@@ -10,7 +10,6 @@ export interface Student extends User {
     role: UserRole.STUDENT;
     parentId: string;
     teacherId: string;
-    gender: string
     playerProfile: PlayerProfile;
     achievements: string[];
     gameProgress:  GameProgress[];

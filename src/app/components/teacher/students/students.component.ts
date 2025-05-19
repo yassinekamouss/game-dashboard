@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
-import { StudentCardComponent } from '../../shared/student-card/student-card.component';
-import { StudentService } from '../../../services/students/student.service';
-import { AuthService } from '../../../services/auth/auth.service';
-import { Teacher } from '../../../models/teacher';
-import { Student } from '../../../models/student';
-import { UserRole } from '../../../models/user-role';
-import { AddUserComponent } from '../../shared/add-user/add-user.component';
+import {Component, OnInit} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {NgForOf, NgIf} from '@angular/common';
+import {StudentCardComponent} from '../../shared/student-card/student-card.component';
+import {StudentService} from '../../../services/students/student.service';
+import {AuthService} from '../../../services/auth/auth.service';
+import {Teacher} from '../../../models/teacher';
+import {Student} from '../../../models/student';
+import {UserRole} from '../../../models/user-role';
+import {AddUserComponent} from '../../shared/add-user/add-user.component';
+import {UserService} from '../../../services/users/user.service';
+import {Subscription} from 'rxjs';
+import {User} from '../../../models/user';
 
 @Component({
   selector: 'app-students',
@@ -31,7 +34,7 @@ export class StudentsComponent implements OnInit {
 
   // Pagination
   currentPage = 1;
-  itemsPerPage = 8;
+  itemsPerPage = 6;
   totalPages = 1;
 
   // Filtres
@@ -43,22 +46,28 @@ export class StudentsComponent implements OnInit {
   // Ajout d'élève
   showAddUserModal = false;
 
+  private studentSub!:Subscription;
 
   constructor(
     private studentService: StudentService,
+    private userService:UserService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
+    this.userService.loadUsers(UserRole.STUDENT);
+    this.studentSub = this.userService.users$.subscribe({
+      next:(students:User[])=>{
+        this.students = students as Student[];
+        this.applyFilters();
+        this.isLoading = false;
+      }
+    })
     this.authService.currentUser$.subscribe({
       next: (teacher) => {
         this.teacher = teacher as Teacher;
-        if (this.teacher?.grade) {
-          this.loadStudents();
-        } else {
-          console.warn('Aucun grade trouvé pour l\'enseignant');
-          this.isLoading = false;
-        }
+
       },
       error: (error) => {
         console.error('Erreur lors de la récupération de l\'enseignant :', error);
@@ -67,21 +76,14 @@ export class StudentsComponent implements OnInit {
     });
   }
 
-  loadStudents(): void {
-    if (!this.teacher?.grade) return;
-
-    this.studentService.getStudentsByGrade(this.teacher.grade).subscribe({
-      next: (students) => {
-        this.students = students;
-        this.applyFilters();
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Erreur lors de la récupération des étudiants :', error);
-        this.isLoading = false;
-      }
-    });
+  ngOnDestroy(): void {
+    if (this.studentSub) {
+      this.studentSub.unsubscribe();
+    }
   }
+
+
+
 
   applyFilters(): void {
     let filtered = [...this.students];
@@ -133,10 +135,11 @@ export class StudentsComponent implements OnInit {
     this.showAddUserModal = true;
   }
 
-  onUserAdded() {
+  onUserAdded(user:User) {
     this.showAddUserModal = false;
-    // Recharger la liste des étudiants après l'ajout
-    this.loadStudents();
+    const student = user as Student;
+    this.students.unshift(student);
+    this.userService.setUsers([...this.students]);
   }
 
   protected readonly UserRole = UserRole;

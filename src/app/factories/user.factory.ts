@@ -3,21 +3,11 @@ import { User } from '../models/user';
 import { Teacher } from '../models/teacher';
 import { Student } from '../models/student';
 import { Parent } from '../models/parent';
-import { GradeLevel } from '../models/grade-level';
 import { PlayerProfile } from '../models/player-profile';
 import { GameProgress } from '../models/game-progress';
+import {FormValues} from '../models/form-values';
 
-interface FormValues {
-  email: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-  gender: string;
-  grade?: GradeLevel;
-  teacherId?: string;
-  parentId?: string;
-  children?: string[];
-}
+
 
 export class UserFactory {
   static createUser(
@@ -30,6 +20,7 @@ export class UserFactory {
       email: form.email,
       firstName: form.firstName,
       lastName: form.lastName,
+      gender:form.gender,
       dateOfBirth: form.dateOfBirth,
       role
     };
@@ -40,7 +31,7 @@ export class UserFactory {
       case UserRole.TEACHER:
         return this.createTeacher(baseData, form);
       case UserRole.PARENT:
-        return this.createParent(baseData);
+        return this.createParent(baseData,form);
       case UserRole.ADMIN:
         return baseData;
       default:
@@ -50,7 +41,7 @@ export class UserFactory {
 
   private static createStudent(base: User, form: FormValues): Student {
     const playerProfile: PlayerProfile = {
-      playerName: `${form.firstName[0]}${form.lastName}`.toLowerCase(),
+      playerName: `${form.firstName} ${form.lastName}`.toLowerCase(),
       gameLevel: 1,
       mathLevel: 1,
       coins: 0,
@@ -73,7 +64,6 @@ export class UserFactory {
       grade: form.grade!,
       teacherId: form.teacherId || '',
       parentId: form.parentId || '',
-      gender: form.gender,
       playerProfile,
       achievements: [],
       gameProgress
@@ -88,11 +78,11 @@ export class UserFactory {
     };
   }
 
-  private static createParent(base: User): Parent {
+  private static createParent(base: User , form: FormValues): Parent {
     return {
       ...base,
       role: UserRole.PARENT,
-      children: []
+      children: form.children || []
     };
   }
 }

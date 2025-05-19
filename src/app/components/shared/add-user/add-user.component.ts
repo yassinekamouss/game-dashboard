@@ -7,10 +7,14 @@ import { UserRole } from '../../../models/user-role';
 import { Parent } from '../../../models/parent';
 import { GradeLevel } from '../../../models/grade-level';
 import {catchError, finalize, switchMap, take, tap} from 'rxjs/operators';
-import {throwError} from 'rxjs';
+import {of, throwError} from 'rxjs';
 import {UserFactory} from '../../../factories/user.factory';
 import {Teacher} from '../../../models/teacher';
 import {Administrator} from '../../../models/administrator';
+import {Student} from '../../../models/student';
+import {StudentService} from '../../../services/students/student.service';
+import {QRCodeService} from '../../../services/qrcode/qrcode.service';
+import {FirebaseErrorsService} from '../../../services/firebaseErrors/firebase-errors.service';
 
 @Component({
   selector: 'app-add-user',
@@ -21,7 +25,7 @@ import {Administrator} from '../../../models/administrator';
 })
 export class AddUserComponent implements OnInit {
   userForm: FormGroup;
-  currentUser: User | Teacher | Administrator | null = null;
+  currentUser: User  | null = null;
   successMessage: string = '';
   showSuccess: boolean = false;
   isSubmitting: boolean = false;
@@ -29,6 +33,9 @@ export class AddUserComponent implements OnInit {
   showError: boolean = false;
   grades = Object.values(GradeLevel);
   teacherGrade: string = '';
+  availableStudents:Student[] = [];
+  selectedStudents:string[] =[];
+
 
   @Input() role!: UserRole;
   @Output() close = new EventEmitter<void>();
@@ -38,7 +45,10 @@ export class AddUserComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private studentService:StudentService,
+    private qrCodeService:QRCodeService,
+    private firebaseErrors:FirebaseErrorsService
   ) {
     console.log('AddUserComponent initialized');
 
@@ -46,7 +56,6 @@ export class AddUserComponent implements OnInit {
     this.userForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       gender: ['', Validators.required],
@@ -60,27 +69,59 @@ export class AddUserComponent implements OnInit {
 
 
   ngOnInit() {
-    this.userForm.patchValue({role: this.role});
+    this.userForm.patchValue({ role: this.role });
 
     this.authService.currentUser$.pipe(take(1)).subscribe(user => {
       this.currentUser = user;
 
-      // Définir les validateurs conditionnels en fonction du rôle
+      this.userForm.get('gender')?.setValidators([Validators.required]);
+      this.userForm.get('gender')?.updateValueAndValidity();
+
       if (this.role === UserRole.STUDENT || this.role === UserRole.TEACHER) {
         this.userForm.get('grade')?.setValidators([Validators.required]);
+        this.userForm.get('grade')?.updateValueAndValidity();
       }
 
+      // Si l'utilisateur actuel est un TEACHER qui crée un STUDENT
       if (this.currentUser?.role === UserRole.TEACHER && this.role === UserRole.STUDENT) {
         this.teacherGrade = (this.currentUser as Teacher).grade;
         this.userForm.get('grade')?.setValue(this.teacherGrade);
       }
 
+      // Cas PARENT : rendre le champ 'children' requis + charger les étudiants sans parents
+      if (this.role === UserRole.PARENT && this.currentUser?.role === UserRole.ADMIN) {
+        this.userForm.get('children')?.setValidators([Validators.required]);
+        this.userForm.get('children')?.updateValueAndValidity();
 
-      this.userForm.updateValueAndValidity();
+        this.studentService.getStudentsWithoutParent().subscribe(students => {
+          this.availableStudents = students;
+        });
+      }
     });
   }
 
+
+  onStudentSelectionChange(event: Event, studentId: string) {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      // Ajouter l'étudiant à la liste des sélectionnés
+      this.selectedStudents.push(studentId);
+    } else {
+      // Retirer l'étudiant de la liste des sélectionnés
+      const index = this.selectedStudents.indexOf(studentId);
+      if (index !== -1) {
+        this.selectedStudents.splice(index, 1);
+      }
+    }
+    this.userForm.patchValue({ children: this.selectedStudents });
+  }
+
   onSaveUser() {
+    if (this.userForm.invalid) {
+      this.showErrorMessage("Veuillez remplir tous les champs requis.");
+      this.userForm.markAllAsTouched(); // Pour afficher les erreurs visuelles
+      return;
+    }
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
       this.showErrorMessage("Vous n'êtes plus connecté. Veuillez vous reconnecter avant de continuer.");
@@ -93,6 +134,10 @@ export class AddUserComponent implements OnInit {
     const formValues = this.userForm.getRawValue();
     const { email, password } = formValues;
 
+    if (this.role === UserRole.PARENT) {
+      formValues.children = this.selectedStudents;
+    }
+
     this.authService.registerUser(email, password)
       .pipe(
         switchMap((cred) => {
@@ -100,10 +145,21 @@ export class AddUserComponent implements OnInit {
           const userData = UserFactory.createUser(firebaseUID,this.role,formValues);
 
           return this.authService.saveUserToDatabase(userData).pipe(
-            tap(() => {
-              this.showSuccessMessage(userData);
-              this.userCreated.emit(userData);
-              this.userForm.reset();
+            switchMap(() => {
+              if (this.role === UserRole.PARENT && this.selectedStudents.length > 0) {
+                // APPEL au service student ici
+                return this.studentService.updateParentIdForStudents(userData.id, this.selectedStudents);
+              } else if (this.role === UserRole.STUDENT) {
+                // Si c'est un étudiant, générer et stocker le QR code et le PDF
+                return this.generateQRCodeAndPDF(userData as Student);
+              } else {
+                return of(void 0);
+              }
+            }),
+              tap(() => {
+                this.showSuccessMessage(userData);
+                this.userCreated.emit(userData);
+                this.userForm.reset();
             }),
             catchError((err) => {
               console.error('Database save failed, rolling back Firebase user creation.');
@@ -122,36 +178,33 @@ export class AddUserComponent implements OnInit {
           console.log('User successfully created and saved.');
         },
         error: (err) => {
-          this.handleFirebaseError(err);
+        this.errorMessage =  this.firebaseErrors.getErrorMessage(err);
+        this.showErrorMessage(this.errorMessage);
         }
       });
 
   }
 
-
-  handleFirebaseError(err: any) {
-    console.error('Firebase error:', err);
-
-    const code = err.code || '';
-
-    switch (code) {
-      case 'auth/email-already-in-use':
-        this.showErrorMessage("Cet email est déjà utilisé. Veuillez en choisir un autre.");
-        break;
-      case 'auth/invalid-email':
-        this.showErrorMessage("L'email saisi n'est pas valide.");
-        break;
-      case 'auth/weak-password':
-        this.showErrorMessage("Le mot de passe est trop faible. Minimum 6 caractères.");
-        break;
-      case 'auth/network-request-failed':
-        this.showErrorMessage("Erreur réseau. Vérifiez votre connexion.");
-        break;
-      default:
-        this.showErrorMessage("Une erreur inattendue est survenue : " + err.message);
-        break;
-    }
+  private generateQRCodeAndPDF(student: Student) {
+    return this.qrCodeService.generateQRCode(student.id).pipe(
+      tap(qrCodeUrl => {
+        console.log('QR Code généré avec succès pour l\'étudiant:', student.id);
+        // Déclencher la génération du PDF et son téléchargement
+        setTimeout(() => {
+          this.qrCodeService.downloadStudentPDF(student).subscribe({
+            next: () => console.log('PDF téléchargé avec succès'),
+            error: (err) => console.error('Erreur lors du téléchargement du PDF:', err)
+          });
+        }, 1000); // Délai pour s'assurer que tout est prêt
+      }),
+      catchError(err => {
+        console.error('Erreur lors de la génération du QR code:', err);
+        // On renvoie quand même un Observable valide pour ne pas bloquer le processus
+        return of(void 0);
+      })
+    );
   }
+
 
   showSuccessMessage(userData: User) {
     const roleName = this.getRoleLabel().toLowerCase();

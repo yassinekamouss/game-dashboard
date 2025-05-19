@@ -3,10 +3,10 @@
   <div class="teachers-header">
     <div class="title-section">
       <h1 class="teachers-title">Gestion des Professeurs</h1>
-      <div class="teachers-counter">{{ teachers.length }} Professeurs</div>
+      <div class="teachers-counter">{{ filteredTeachers.length }} Professeurs</div>
     </div>
     <div class="actions-section">
-      <button class="add-teacher-btn">
+      <button (click)="onAddTeacherClick()" class="add-teacher-btn">
         <i class="fas fa-plus-circle"></i> Ajouter un Professeurs
       </button>
     </div>
@@ -67,7 +67,7 @@
   <!-- État de chargement -->
   <div *ngIf="isLoading" class="teachers-loading">
     <div class="spinner">∞</div>
-    <p>Chargement des élèves...</p>
+    <p>Chargement des professeurs...</p>
   </div>
 
   <!-- Aucun résultat -->
@@ -127,3 +127,11 @@
     </button>
   </div>
 </div>
+
+<!-- Modal pour ajouter un élève -->
+<app-add-user
+  *ngIf="showAddUserModal"
+  [role]="UserRole.TEACHER"
+  (close)="showAddUserModal = false"
+  (userCreated)="onUserAdded($event)"
+></app-add-user>

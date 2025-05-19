@@ -21,7 +21,7 @@
       </div>
       <div class="detail-item">
         <i class="fas fa-venus-mars"></i>
-        <span>{{ student.gender === 'M' ? 'Garçon' : 'Fille' }}</span>
+        <span>{{ student.gender === 'male' ? 'Garçon' : 'Fille' }}</span>
       </div>
       <div class="detail-item">
         <i class="fas fa-chart-line"></i>
@@ -79,4 +79,10 @@
       <i class="fas fa-trash-alt"></i>
     </button>
   </div>
+
+  <button class="qrcode-btn" (click)="downloadStudentQRCode()" [disabled]="isGeneratingQR">
+    <i class="fas fa-qrcode"></i>
+    <span *ngIf="!isGeneratingQR">QR Code</span>
+    <span *ngIf="isGeneratingQR">Génération...</span>
+  </button>
 </div>

@@ -32,7 +32,7 @@ export class AdminComponent {
     },
     {
       label: 'Utilisateurs en attente',
-      path: '/admin/professeurs',
+      path: '/admin/pending-users',
       icon: 'fas fa-user-clock',
     },
     { label: 'Rapports', path: '/admin/reports', icon: 'fas fa-chart-line' },

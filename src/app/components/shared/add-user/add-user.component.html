@@ -139,7 +139,6 @@
               disabled
             >
 
-
             <div *ngIf="userForm.get('grade')?.invalid && userForm.get('grade')?.touched" class="error-message">
               Niveau requis
             </div>
@@ -161,6 +160,31 @@
             </select>
             <div *ngIf="userForm.get('grade')?.invalid && userForm.get('grade')?.touched" class="error-message">
               Niveau requis
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Parent -->
+        <ng-container *ngIf="role === UserRole.PARENT">
+          <div class="form-group">
+            <label for="children">Enfants</label>
+            <div *ngIf="availableStudents.length > 0" class="children-selection">
+              <div class="child-options">
+                <div *ngFor="let student of availableStudents" class="child-option">
+                  <input
+                    type="checkbox"
+                    [id]="'child-' + student.id"
+                    [value]="student.id"
+                    (change)="onStudentSelectionChange($event, student.id)"
+                  />
+                  <label [for]="'child-' + student.id">
+                    {{ student.firstName }} {{ student.lastName }} ({{ student.grade }})
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="availableStudents.length === 0" class="no-students-message">
+              Aucun étudiant disponible à associer
             </div>
           </div>
         </ng-container>

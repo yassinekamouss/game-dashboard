@@ -1,8 +1,14 @@
 import { CommonModule } from '@angular/common';
+<<<<<<< HEAD
 import { Component, Input, input, OnInit } from '@angular/core';
 import { Student } from '../../../models/student';
 import { ref } from 'firebase/database';
 import { Database, onValue } from '@angular/fire/database';
+=======
+import { Component, Input } from '@angular/core';
+import { Student } from '../../../models/student';
+import {QRCodeService} from '../../../services/qrcode/qrcode.service';
+>>>>>>> 936c681f3ffd24a69d8d4b9f90bc9386f5d71a9c
 
 @Component({
   selector: 'app-student-card',
@@ -13,7 +19,9 @@ import { Database, onValue } from '@angular/fire/database';
 })
 export class StudentCardComponent implements OnInit {
   @Input() student: Student | null = null;
+  isGeneratingQR: boolean = false;
 
+<<<<<<< HEAD
   constructor(private db: Database) {}
   
   ngOnInit(): void {
@@ -22,6 +30,9 @@ export class StudentCardComponent implements OnInit {
     });
   }
 
+=======
+  constructor(private qrCodeService: QRCodeService) {}
+>>>>>>> 936c681f3ffd24a69d8d4b9f90bc9386f5d71a9c
   calculateProgress(student: Student): number {
     // Simuler un calcul de progression basé sur les jeux complétés
     if (!student.gameProgress || student.gameProgress.length === 0) {
@@ -41,5 +52,20 @@ export class StudentCardComponent implements OnInit {
   getBadgeClass(index: number): string {
     const classes = ['gold', 'silver', 'bronze'];
     return classes[index] || '';
+  }
+
+
+  downloadStudentQRCode(): void {
+    this.isGeneratingQR = true;
+
+    this.qrCodeService.downloadStudentPDF(this.student as Student).subscribe({
+      next: () => {
+        this.isGeneratingQR = false;
+      },
+      error: (err) => {
+        console.error('Erreur lors du téléchargement du PDF:', err);
+        this.isGeneratingQR = false;
+      }
+    });
   }
 }

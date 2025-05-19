@@ -1,0 +1,183 @@
+<!-- En-tête avec titre et compteur -->
+<div class="pending-header">
+  <div class="title-section">
+    <h1 class="pending-title">Gestion des Utilisateurs en Attente</h1>
+    <div class="pending-counter">{{ filteredUsers.length }} Utilisateurs</div>
+  </div>
+</div>
+
+<!-- Panneau de filtres -->
+<div class="filters-panel">
+  <div class="filter-title">
+    <i class="fas fa-filter"></i>
+    <span>Filtres</span>
+  </div>
+
+  <div class="filters-grid">
+    <!-- Barre de recherche -->
+    <div class="search-group">
+      <label for="searchInput">Rechercher</label>
+      <div class="search-input-wrapper">
+        <input
+          type="text"
+          id="searchInput"
+          [(ngModel)]="searchText"
+          placeholder="Nom ou prénom de l'utilisateur..."
+          (input)="applyFilters()"
+        />
+        <i class="fas fa-search"></i>
+      </div>
+    </div>
+
+    <!-- Bouton de réinitialisation -->
+    <div class="reset-filter">
+      <button class="reset-btn" (click)="resetFilters()">
+        <i class="fas fa-undo"></i> Réinitialiser
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- État de chargement -->
+<div *ngIf="isLoading" class="pending-loading">
+  <div class="spinner"></div>
+  <p>Chargement des utilisateurs...</p>
+</div>
+
+<!-- Aucun résultat -->
+<div *ngIf="!isLoading && filteredUsers.length === 0" class="no-results">
+  <div class="empty-icon"><i class="fas fa-user-slash"></i></div>
+  <p>Aucun utilisateur ne correspond à vos critères de recherche</p>
+  <button (click)="resetFilters()">Réinitialiser les filtres</button>
+</div>
+
+<!-- Grille des utilisateurs en attente -->
+<div *ngIf="!isLoading && filteredUsers.length > 0" class="pending-grid">
+  <div *ngFor="let user of filteredUsers" class="pending-user-card">
+    <div class="user-card-header">
+      <div class="user-avatar">
+        {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+      </div>
+      <div class="user-status">En attente</div>
+    </div>
+    <div class="user-card-body">
+      <h3 class="user-name">{{ user.firstName }} {{ user.lastName }}</h3>
+      <div class="user-info">
+        <div class="info-item">
+          <i class="fas fa-envelope"></i>
+          <span>{{ user.email }}</span>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-calendar-alt"></i>
+          <span>{{ user.dateOfBirth | date: 'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-venus-mars"></i>
+          <span>{{ user.gender }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="user-card-footer">
+      <h4>Attribuer un rôle:</h4>
+      <div class="role-buttons">
+        <button class="role-btn teacher-btn" (click)="openRoleModal(user, UserRole.TEACHER)">
+          <i class="fas fa-chalkboard-teacher"></i> Enseignant
+        </button>
+        <button class="role-btn student-btn" (click)="openRoleModal(user, UserRole.STUDENT)">
+          <i class="fas fa-user-graduate"></i> Étudiant
+        </button>
+        <button class="role-btn parent-btn" (click)="openRoleModal(user, UserRole.PARENT)">
+          <i class="fas fa-user-friends"></i> Parent
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal pour les informations supplémentaires -->
+<div class="role-modal-backdrop" *ngIf="showRoleModal" (click)="closeRoleModal()"></div>
+<div class="role-modal" *ngIf="showRoleModal">
+  <div class="role-modal-header">
+    <h2>Informations supplémentaires</h2>
+    <button class="close-btn" (click)="closeRoleModal()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div class="role-modal-body">
+    <div class="user-info-summary" *ngIf="selectedUser">
+      <p><strong>Utilisateur:</strong> {{ selectedUser.firstName }} {{ selectedUser.lastName }}</p>
+      <p><strong>Rôle sélectionné:</strong> {{ selectedRole }}</p>
+    </div>
+
+    <!-- Champs spécifiques selon le rôle -->
+    <div *ngIf="selectedRole === UserRole.TEACHER || selectedRole === UserRole.STUDENT" class="grade-selection">
+      <label for="gradeSelect">Niveau scolaire:</label>
+      <select id="gradeSelect" [(ngModel)]="selectedGrade" required>
+        <option [ngValue]="null">-- Sélectionnez un niveau --</option>
+        <option *ngFor="let grade of availableGrades" [value]="grade">{{ grade }}</option>
+      </select>
+    </div>
+
+    <div *ngIf="selectedRole === UserRole.PARENT" class="children-selection">
+      <h3>Sélectionnez les enfants:</h3>
+      <div *ngIf="studentsWithoutParent.length === 0" class="no-students">
+        <p>Aucun étudiant sans parent n'est disponible</p>
+      </div>
+      <div *ngIf="studentsWithoutParent.length > 0" class="students-list">
+        <div
+          *ngFor="let student of studentsWithoutParent"
+          class="student-item"
+          [class.selected]="isChildSelected(student.id)"
+          (click)="toggleChildSelection(student.id)"
+        >
+          <div class="student-avatar">
+            {{ student.firstName.charAt(0) }}{{ student.lastName.charAt(0) }}
+          </div>
+          <div class="student-details">
+            <p class="student-name">{{ student.firstName }} {{ student.lastName }}</p>
+            <p class="student-grade">{{ student.grade }}</p>
+          </div>
+          <div class="selection-indicator">
+            <i class="fas" [class.fa-check-circle]="isChildSelected(student.id)" [class.fa-circle]="!isChildSelected(student.id)"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="role-modal-footer">
+    <button class="cancel-btn" (click)="closeRoleModal()">Annuler</button>
+    <button class="submit-btn" (click)="submitRoleAssignment()">Confirmer</button>
+  </div>
+</div>
+
+<!-- Pagination -->
+<div
+  class="pagination-controls"
+  *ngIf="!isLoading && filteredUsers.length > 0"
+>
+  <button
+    [disabled]="currentPage === 1"
+    (click)="changePage(currentPage - 1)"
+  >
+    <i class="fas fa-chevron-left"></i> Précédent
+  </button>
+
+  <div class="page-numbers">
+    <button
+      *ngFor="let page of getPageNumbers()"
+      [class.active]="page === currentPage"
+      (click)="changePage(page)"
+    >
+      {{ page === -1 || page === -2 ? '...' : page }}
+    </button>
+  </div>
+
+  <button
+    [disabled]="currentPage === totalPages"
+    (click)="changePage(currentPage + 1)"
+  >
+    Suivant <i class="fas fa-chevron-right"></i>
+  </button>
+</div>

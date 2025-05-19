@@ -1,28 +1,30 @@
-import { Component } from '@angular/core';
-import { Parent } from '../../../models/parent';
-import { User } from '../../../models/user';
+import {Component, OnInit} from '@angular/core';
 import { UserService } from '../../../services/users/user.service';
-import { ParentService } from '../../../services/parents/parent.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ParentCardComponent } from '../../shared/parent-card/parent-card.component';
-import { Student } from '../../../models/student';
-import { forkJoin, map } from 'rxjs';
+import {UserRole} from '../../../models/user-role';
+import {AddUserComponent} from '../../shared/add-user/add-user.component';
+import {ParentWithChildren} from '../../../models/parentWithChildreen';
+import {ParentService} from '../../../services/parents/parent.service';
+import {Subscription} from 'rxjs';
+import {User} from '../../../models/user';
 
 @Component({
   selector: 'app-parents',
-  imports: [CommonModule, FormsModule, ParentCardComponent],
+  imports: [CommonModule, FormsModule, ParentCardComponent, AddUserComponent],
   templateUrl: './parents.component.html',
   styleUrl: './parents.component.css',
+  standalone:true
 })
-export class ParentsComponent {
-  parents: Parent[] = [];
-  filteredparent: Parent[] = [];
+export class ParentsComponent implements OnInit{
+  parents: ParentWithChildren[] = [];
+  filteredparent: ParentWithChildren[] = [];
   isLoading = true;
 
   // Pagination
   currentPage = 1;
-  itemsPerPage = 3;
+  itemsPerPage = 6;
   totalPages = 1;
 
   // Filtres
@@ -31,16 +33,20 @@ export class ParentsComponent {
     search: '',
   };
 
+  showAddUserModal: boolean = false;
+  private parentSub!:Subscription;
+
   constructor(
-    private userService: UserService
+    private userService: UserService,private parentService:ParentService
   ) {}
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.parentService.loadParents();
 
-    this.userService.getParentWithChildren().subscribe({
-      next: (parentsWithChildren: Parent[]) => {
-        this.parents = parentsWithChildren;
+    this.parentSub = this.parentService.parent$.subscribe({
+      next: (parents:ParentWithChildren[]) => {
+        this.parents = parents as ParentWithChildren[];
         this.filteredparent = [...this.parents];
         this.applyFilters();
         this.isLoading = false;
@@ -50,6 +56,13 @@ export class ParentsComponent {
         this.isLoading = false;
       },
     });
+  }
+
+
+  ngOnDestroy(): void {
+    if (this.parentSub) {
+      this.parentSub.unsubscribe();
+    }
   }
 
   applyFilters(): void {
@@ -101,4 +114,19 @@ export class ParentsComponent {
     }
     return pages;
   }
+
+  onAddParentClick() {
+    this.showAddUserModal=true;
+  }
+  onUserAdded(user: User) {
+    this.showAddUserModal = false;
+    this.parentService.getParentWithChildrenFromUser(user).subscribe((parent) => {
+      this.parents.unshift(parent);
+      this.parentService.setParents([...this.parents]);
+      this.applyFilters();
+    });
+  }
+
+
+  protected readonly UserRole = UserRole;
 }

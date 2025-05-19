@@ -20,7 +20,7 @@ Tableau de bord web développé avec Angular 19 et Firebase Realtime Database, c
 8.  [Structure du Projet (optionnel)](#structure-du-projet-optionnel)
 9.  [Interaction avec les Jeux Unity](#interaction-avec-les-jeux-unity)
 10. [Contribution](#contribution)
-11. [Contact](#contact)
+11. [Contributeurs](#contributeurs)
 
 ## Objectif du Projet
 
@@ -206,8 +206,12 @@ Les contributions sont les bienvenues ! Si vous souhaitez contribuer :
 
 Veuillez vous assurer que votre code respecte les conventions de style et que les tests (si présents) passent.
 
-## Contact
+## Contributeurs
 
-Yassine Kamouss - [@yassinekamouss](mailto:yassinekamouss76@gmail.com)
+Merci à toutes les personnes ayant contribué à ce projet !
+
+- [Yassine Kamouss](https://github.com/yassinekamouss) – Créateur principal
+- [Yahya Ahmane](https://github.com/ahyahya1616) – Contributeur principal
+
 
 Lien du Projet : [https://github.com/yassinekamouss/game-dashboard](https://github.com/yassinekamouss/game-dashboard)

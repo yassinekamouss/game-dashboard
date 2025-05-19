@@ -3,7 +3,7 @@
   <div class="students-header">
     <div class="title-section">
       <h1 class="students-title">Gestion des élèves</h1>
-      <div class="students-counter">{{ students.length }} élèves</div>
+      <div class="students-counter">{{ filteredStudents.length }} élèves</div>
     </div>
     <div class="actions-section">
       <button (click)="onAddStudent()" class="add-student-btn">
@@ -122,5 +122,5 @@
   *ngIf="showAddUserModal"
   [role]="UserRole.STUDENT"
   (close)="showAddUserModal = false"
-  (userCreated)="onUserAdded()"
+  (userCreated)="onUserAdded($event)"
 ></app-add-user>
