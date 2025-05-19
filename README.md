@@ -206,8 +206,12 @@ Les contributions sont les bienvenues ! Si vous souhaitez contribuer :
 
 Veuillez vous assurer que votre code respecte les conventions de style et que les tests (si présents) passent.
 
-## Contact
+## Contributeurs
 
-Yassine Kamouss - [@yassinekamouss](mailto:yassinekamouss76@gmail.com)
+Merci à toutes les personnes ayant contribué à ce projet !
+
+- [Yassine Kamouss](https://github.com/yassinekamouss) – Créateur principal
+- [Yahya Ahmane](https://github.com/ahyahya1616) – Contributeur principal
+
 
 Lien du Projet : [https://github.com/yassinekamouss/game-dashboard](https://github.com/yassinekamouss/game-dashboard)
