@@ -36,6 +36,8 @@ export class AuthService {
     this.secondaryApp = initializeApp(environment.firebaseConfig, 'secondary');
   }
 
+  
+
   private setSessionStoragePersistence(): void {
     setPersistence(this.auth, browserSessionPersistence).catch(error => {
       console.error('Error setting persistence:', error);
