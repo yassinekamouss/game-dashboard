@@ -1,59 +1,68 @@
 <div class="page-wrapper">
-    <!-- Header section -->
-    <header class="header">
-      <h1 class="app-title">MathéMagique</h1>
-      <p class="tagline">Apprendre les maths est un jeu d'enfant !</p>
-    </header>
+  <!-- Header section -->
+  <header class="header">
+    <h1 class="app-title">MathéMagique</h1>
+    <p class="tagline">Apprendre les maths est un jeu d'enfant !</p>
+  </header>
 
+  <!-- Main section -->
+  <section class="main-section">
+    <!-- Floating math elements -->
+    <div class="math-element">+</div>
+    <div class="math-element">÷</div>
+    <div class="math-element">×</div>
+    <div class="math-element">=</div>
+    <div class="math-element">π</div>
+    <div class="math-element">-</div>
 
-    <!-- Main section -->
-    <section class="main-section">
-      <!-- Floating math elements -->
-      <div class="math-element">+</div>
-      <div class="math-element">÷</div>
-      <div class="math-element">×</div>
-      <div class="math-element">=</div>
-      <div class="math-element">π</div>
-      <div class="math-element">-</div>
+    <!-- Login container -->
+    <div class="login-container">
+      <h2>Connexion</h2>
+      <p class="login-description">
+        Bienvenue sur l'espace de connexion. Entrez vos identifiants pour
+        accéder à votre compte.
+      </p>
+      <form (submit)="onLogin()">
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Email"
+        />
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Mot de passe"
+        />
+        <button type="submit">Se connecter</button>
+      </form>
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
 
-      <!-- Login container -->
-      <div class="login-container">
-        <h2>Connexion</h2>
-        <p class="login-description">
-            Bienvenue sur l'espace de connexion. Entrez vos identifiants pour accéder à votre compte.
-        </p>
-        <form (submit)="onLogin()">
-          <input type="email" [(ngModel)]="email" name="email" placeholder="Email">
-          <input type="password" [(ngModel)]="password" name="password" placeholder="Mot de passe">
-          <button type="submit">Se connecter</button>
-        </form>
-        <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
-
-        <div class="additional-links">
-          <a routerLink="/reset-password">Mot de passe oublié ?</a>
-        </div>
-        <div class="additional-links">
-          <a routerLink="/register">Pas encore de compte ? <strong>Inscrivez-vous</strong></a>
-        </div>
-
+      <div class="additional-links">
+        <a routerLink="/reset-password">Mot de passe oublié ?</a>
       </div>
-    </section>
-
-
+      <div>
+        <a routerLink="/register" class="register-link"
+          >Pas encore de compte ? <strong>Inscrivez-vous</strong></a
+        >
+      </div>
+    </div>
+  </section>
 
   <!-- Footer section -->
   <footer class="footer">
     <p>MathéMagique © 2025 - Où les Maths deviennent <span>magiques</span> !</p>
   </footer>
-
-  </div>
+</div>
 
 <div *ngIf="isVisible" class="modal-overlay">
   <div class="modal-content">
     <h2>Validation de votre compte en cours</h2>
     <p>
-      Merci pour votre inscription ! Votre compte est actuellement en cours de validation.
-      Pour finaliser votre accès, merci de bien vouloir contacter un administrateur qui attribuera votre rôle.
+      Merci pour votre inscription ! Votre compte est actuellement en cours de
+      validation. Pour finaliser votre accès, merci de bien vouloir contacter un
+      administrateur qui attribuera votre rôle.
     </p>
     <button (click)="close()">Compris</button>
   </div>
