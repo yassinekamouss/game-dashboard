@@ -1,15 +1,13 @@
-/* Variables pour les couleurs mathématiques */
-:root {
-  --primary-color: #3498db;      /* Bleu pour les nombres */
-  --secondary-color: #e74c3c;    /* Rouge pour les opérations */
-  --tertiary-color: #2ecc71;     /* Vert pour les résultats */
-  --accent-color: #f39c12;       /* Orange pour accent */
-  --dark-color: #2c3e50;         /* Bleu foncé pour le texte */
-  --light-color: #ecf0f1;        /* Gris clair pour fond */
-  --error-color: #c0392b;        /* Rouge pour erreurs */
-  --border-radius: 8px;
-  --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  --transition: all 0.3s ease;
+/* Variables pour le composant */
+:host {
+  --primary-color: #4a6cd1;
+  --secondary-color: #ff7e5f;
+  --accent-color: #32cd32;
+  --background-color: #f9f9ff;
+  --error-color: #ff4c4c;
+  --shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  display: block;
+  font-family: "Comic Sans MS", "Chalkboard SE", sans-serif;
 }
 
 /* Style global du modal */
@@ -19,60 +17,92 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(44, 62, 80, 0.85);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease forwards;
 }
 
 .modal-container {
   position: relative;
   width: 90%;
-  max-width: 600px;
-  background: var(--light-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  max-width: 700px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
   overflow: hidden;
-  animation: slideIn 0.4s ease-out;
+  animation: slideInUp 0.4s ease forwards;
   border: 2px solid var(--primary-color);
+}
+
+/* Éléments mathématiques flottants pour le modal */
+.modal-container::before {
+  content: "+";
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  font-size: 70px;
+  color: var(--primary-color);
+  opacity: 0.1;
+  transform: rotate(15deg);
+}
+
+.modal-container::after {
+  content: "=";
+  position: absolute;
+  bottom: -30px;
+  left: -25px;
+  font-size: 70px;
+  color: var(--secondary-color);
+  opacity: 0.1;
+  transform: rotate(-10deg);
 }
 
 /* En-tête du modal */
 .modal-header {
   background: var(--primary-color);
-  padding: 15px 20px;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 3px solid var(--accent-color);
+  border-bottom: 3px solid var(--secondary-color);
   position: relative;
   overflow: hidden;
 }
 
 /* Motif mathématique pour l'en-tête */
 .modal-header::before {
-  content: "";
+  content: "123...";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image:
-    linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.1) 55%, transparent 55%),
-    linear-gradient(-45deg, transparent 45%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.1) 55%, transparent 55%);
-  background-size: 20px 20px;
-  opacity: 0.4;
+  bottom: 5px;
+  left: 15px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.3);
+  transform: rotate(-10deg);
 }
 
 .modal-title {
   color: white;
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 24px;
   font-weight: 700;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
   position: relative;
+  display: inline-block;
+}
+
+.modal-title::after {
+  content: "123";
+  position: absolute;
+  top: -10px;
+  right: -35px;
+  font-size: 14px;
+  color: var(--secondary-color);
+  opacity: 0.7;
+  transform: rotate(20deg);
 }
 
 .close-button {
@@ -83,39 +113,37 @@
   cursor: pointer;
   padding: 0;
   line-height: 1;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   position: relative;
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
 }
 
 .close-button:hover {
-  transform: rotate(90deg);
+  transform: scale(1.2) rotate(90deg);
   color: var(--secondary-color);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Corps du modal */
 .modal-body {
-  padding: 20px;
+  padding: 30px;
   max-height: 70vh;
   overflow-y: auto;
-  background-image:
-    radial-gradient(circle, rgba(52, 152, 219, 0.1) 2px, transparent 2px),
-    radial-gradient(circle, rgba(46, 204, 113, 0.1) 2px, transparent 2px);
-  background-size: 30px 30px, 40px 40px;
-  background-position: 0 0, 15px 15px;
+  position: relative;
 }
 
 /* Message d'erreur global */
 .error-message.global-error {
-  background-color: var(--error-color);
-  color: white;
-  padding: 10px 15px;
-  border-radius: var(--border-radius);
-  margin-bottom: 15px;
+  background-color: rgba(255, 76, 76, 0.1);
+  color: var(--error-color);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -124,28 +152,28 @@
 .error-message.global-error::before {
   content: "!";
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  background: white;
-  color: var(--error-color);
+  width: 24px;
+  height: 24px;
+  background: var(--error-color);
+  color: white;
   border-radius: 50%;
   text-align: center;
   font-weight: bold;
-  margin-right: 10px;
-  line-height: 20px;
+  margin-right: 12px;
+  line-height: 24px;
 }
 
 /* Formulaire */
 .form-step {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 }
 
 .form-row {
@@ -161,49 +189,67 @@
 
 /* Labels */
 label {
-  color: var(--dark-color);
+  color: #333;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
-  transition: var(--transition);
+  transition: all 0.3s ease;
 }
 
 /* Ajouter des icônes mathématiques aux labels */
 label::before {
   content: "∙";
-  margin-right: 5px;
+  margin-right: 8px;
   color: var(--primary-color);
   font-size: 1.2em;
   font-weight: bold;
 }
 
-label[for="email"]::before { content: "@"; }
-label[for="password"]::before { content: "⚿"; }
-label[for="lastName"]::before { content: "α"; }
-label[for="firstName"]::before { content: "β"; }
-label[for="dateOfBirth"]::before { content: "⏲"; }
-label[for="gender"]::before { content: "⚥"; }
-label[for="role"]::before { content: "⊕"; }
+label[for="email"]::before {
+  content: "@";
+}
+label[for="password"]::before {
+  content: "✱";
+}
+label[for="lastName"]::before {
+  content: "α";
+}
+label[for="firstName"]::before {
+  content: "β";
+}
+label[for="dateOfBirth"]::before {
+  content: "📅";
+}
+label[for="gender"]::before {
+  content: "⚥";
+}
+label[for="role"]::before {
+  content: "⭐";
+}
 label[for="student-grade"]::before,
-label[for="teacher-grade"]::before { content: "Σ"; }
-label[for="children"]::before { content: "∞"; }
+label[for="teacher-grade"]::before {
+  content: "📚";
+}
+label[for="children"]::before {
+  content: "👪";
+}
 
 /* Champs de saisie */
 .input-field {
-  padding: 12px 15px;
-  border: 2px solid #bdc3c7;
-  border-radius: var(--border-radius);
-  font-size: 1rem;
-  transition: var(--transition);
-  background: white;
-  color: var(--dark-color);
+  padding: 15px;
+  border: 2px solid #e0e0ff;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: #f7f7ff;
+  outline: none;
+  font-family: inherit;
 }
 
 .input-field:focus {
-  outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+  box-shadow: 0 0 0 3px rgba(74, 108, 209, 0.2);
 }
 
 .input-field.disabled {
@@ -217,67 +263,70 @@ select.input-field {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--dark-color) 50%),
-    linear-gradient(135deg, var(--dark-color) 50%, transparent 50%);
-  background-position:
-    calc(100% - 20px) calc(1em + 2px),
-    calc(100% - 15px) calc(1em + 2px);
-  background-size:
-    5px 5px,
-    5px 5px;
-  background-repeat: no-repeat;
   padding-right: 35px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234a6cd1'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 15px;
 }
 
 /* Messages d'erreur sous les champs */
 .error-message {
   color: var(--error-color);
-  font-size: 0.85rem;
-  margin-top: 3px;
+  font-size: 14px;
+  margin-top: 5px;
   font-weight: 500;
   display: flex;
   align-items: center;
 }
 
 .error-message::before {
-  content: "×";
+  content: "!";
   font-weight: bold;
-  margin-right: 5px;
+  margin-right: 8px;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-color: var(--error-color);
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 18px;
+  font-size: 12px;
 }
 
 /* Section pour les enfants */
 .children-selection {
-  border: 1px solid #ddd;
-  border-radius: var(--border-radius);
-  padding: 10px;
+  border: 2px solid #e0e0ff;
+  border-radius: 12px;
+  padding: 15px;
   max-height: 150px;
   overflow-y: auto;
-  background: white;
+  background: #f7f7ff;
 }
 
 .child-options {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .child-option {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 5px;
-  border-radius: 4px;
-  transition: var(--transition);
+  gap: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 .child-option:hover {
-  background-color: rgba(52, 152, 219, 0.1);
+  background-color: rgba(74, 108, 209, 0.1);
 }
 
 .child-option input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   accent-color: var(--primary-color);
   cursor: pointer;
 }
@@ -295,10 +344,11 @@ select.input-field {
 .no-students-message {
   padding: 15px;
   text-align: center;
-  color: #7f8c8d;
+  color: #666;
   font-style: italic;
   background-color: #f8f9fa;
-  border-radius: var(--border-radius);
+  border-radius: 12px;
+  border: 2px dashed #e0e0ff;
 }
 
 /* Boutons d'action */
@@ -306,26 +356,41 @@ select.input-field {
   display: flex;
   justify-content: flex-end;
   gap: 15px;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .btn {
-  padding: 10px 20px;
-  border-radius: var(--border-radius);
+  padding: 12px 20px;
+  border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   border: none;
-  font-size: 1rem;
+  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 120px;
+  position: relative;
+  overflow: hidden;
+  font-family: inherit;
 }
 
 .btn::before {
-  margin-right: 8px;
-  font-weight: bold;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.5s;
 }
 
 .btn-secondary {
@@ -333,53 +398,68 @@ select.input-field {
   color: white;
 }
 
-.btn-secondary::before {
-  content: "÷";
+.btn-secondary::after {
+  content: "✖";
+  margin-left: 8px;
 }
 
 .btn-secondary:hover {
   background-color: #7f8c8d;
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary:hover::before {
+  transform: translateX(100%);
+}
+
+.btn-secondary:active {
+  transform: translateY(1px);
 }
 
 .btn-success {
-  background-color: var(--tertiary-color);
+  background-color: var(--accent-color);
   color: white;
 }
 
-.btn-success::before {
-  content: "=";
+.btn-success::after {
+  content: "✓";
+  margin-left: 8px;
 }
 
 .btn-success:hover {
-  background-color: #27ae60;
+  background-color: #28a745;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Animation */
-@keyframes slideIn {
+.btn-success:hover::before {
+  transform: translateX(100%);
+}
+
+.btn-success:active {
+  transform: translateY(1px);
+}
+
+/* Animations */
+@keyframes slideInUp {
   from {
-    transform: translateY(-30px);
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
     opacity: 0;
   }
   to {
-    transform: translateY(0);
     opacity: 1;
   }
-}
-
-/* Style pour les éléments actifs et en focus */
-.input-field:focus,
-.input-field:active {
-  border-color: var(--primary-color);
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4); }
-  70% { box-shadow: 0 0 0 6px rgba(52, 152, 219, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
 }
 
 /* Style responsive */
@@ -387,19 +467,32 @@ select.input-field {
   .modal-container {
     width: 95%;
     max-width: none;
+    margin: 10px;
   }
 
   .form-row {
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
   }
 
   .form-row .form-group {
     min-width: unset;
   }
 
+  .btn {
+    padding: 12px 15px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-body {
+    padding: 20px;
+  }
+
   .form-actions {
     flex-direction: column-reverse;
+    gap: 12px;
   }
 
   .btn {
