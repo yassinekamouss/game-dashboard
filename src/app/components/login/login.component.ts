@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import {UserRole} from '../../models/user-role';
 import {FirebaseErrorsService} from '../../services/firebaseErrors/firebase-errors.service';
+import { count } from 'rxjs';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -21,7 +22,6 @@ export class LoginComponent {
   isVisible = false;
 
 
-  // constructor(private authService: AuthService, private router: Router, private db: Database) {}
 
   constructor(private authService: AuthService,
               private router: Router ,
