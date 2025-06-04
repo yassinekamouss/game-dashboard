@@ -1,0 +1,100 @@
+<div class="tests-container">
+  <!-- En-tête -->
+  <div class="tests-header">
+    <div class="title-section">
+      <h1 class="tests-title">Gestion des tests</h1>
+      <div class="tests-counter">{{ filteredTests.length }} tests</div>
+    </div>
+    <div class="actions-section">
+      <button (click)="onAddTest()" class="add-test-btn">
+        <i class="fas fa-plus-circle"></i> Ajouter un test
+      </button>
+    </div>
+  </div>
+
+  <!-- Panneau de filtres -->
+  <div class="filters-panel">
+    <div class="filter-title">
+      <i class="fas fa-filter"></i>
+      <span>Filtres</span>
+    </div>
+
+    <div class="filters-grid">
+
+
+      <!-- Recherche par titre -->
+      <div class="search-group">
+        <label for="searchInput">Rechercher</label>
+        <div class="search-input-wrapper">
+          <input
+            type="text"
+            id="searchInput"
+            [(ngModel)]="filters.search"
+            placeholder="Titre du test"
+            (input)="applyFilters()"
+          />
+          <i class="fas fa-search"></i>
+        </div>
+      </div>
+
+      <!-- Réinitialisation -->
+      <div class="reset-filter">
+        <button class="reset-btn" (click)="resetFilters()">
+          <i class="fas fa-undo"></i> Réinitialiser
+        </button>
+      </div>
+    </div>
+  </div>
+<div *ngIf="isLoading" class="tests-loading">
+  <div class="spinner">
+    <i class="fas fa-spinner fa-spin"></i>
+  </div>
+  <p>Chargement des tests...</p>
+</div>
+
+
+  <div *ngIf="!isLoading  && initialLoaded && filteredTests.length === 0" class="no-results">
+    <p>Aucun test ne correspond à vos critères</p>
+    <button (click)="resetFilters()">Réinitialiser les filtres</button>
+  </div>
+
+
+  <!-- Liste des tests -->
+  <div *ngIf="!isLoading && filteredTests.length > 0" class="tests-grid">
+    <app-test-card
+      *ngFor="let test of filteredTests.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      )"
+      [test]="test"
+    ></app-test-card>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination-controls" *ngIf="!isLoading && filteredTests.length > 0">
+    <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+      <i class="fas fa-chevron-left"></i> Précédent
+    </button>
+
+    <div class="page-numbers">
+      <button
+        *ngFor="let page of getPageNumbers()"
+        [class.active]="page === currentPage"
+        (click)="changePage(page)"
+      >
+        {{ page }}
+      </button>
+    </div>
+
+    <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+      Suivant <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>
+
+<app-add-test
+  *ngIf="showAddTestModal"
+  (close)="showAddTestModal = false"
+  (testCreated)="onTestAdded($event)"
+  [grade] = "grade"
+></app-add-test>

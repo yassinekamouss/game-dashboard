@@ -11,6 +11,7 @@ import { TeacherComponent } from './components/teacher/teacher.component';
 import { StudentsComponent as TeacherStudentComponent } from './components/teacher/students/students.component';
 import {RegisterComponent} from './components/register/register.component';
 import {PendingUsersComponent} from './components/admin/pending-users/pending-users.component';
+import {TestsComponent} from './components/teacher/tests/tests.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -27,6 +28,7 @@ export const routes: Routes = [
     ]},
   {path:'teacher', component : TeacherComponent , children:[
       {path: 'profile' , component: ProfileComponent},
-      {path: 'students' ,component: TeacherStudentComponent}
+      {path: 'students' ,component: TeacherStudentComponent},
+      {path: 'tests' , component: TestsComponent}
     ]}
 ];

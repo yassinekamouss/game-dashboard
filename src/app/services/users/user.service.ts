@@ -72,7 +72,7 @@ export class UserService {
   }
 
 
-    getUserById(childId: string): Observable<User | null> {
+  getUserById(childId: string): Observable<User | null> {
     const childRef = ref(this.db, `users/${childId}`);
 
     return from(get(childRef)).pipe(

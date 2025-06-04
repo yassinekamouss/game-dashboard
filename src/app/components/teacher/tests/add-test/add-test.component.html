@@ -1,0 +1,263 @@
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">Créer un Test - {{ grade }}</h2>
+      <button class="close-button" (click)="closeModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Message de succès -->
+      <div *ngIf="showSuccess" class="success-message global-success">
+        {{ successMessage }}
+      </div>
+
+      <!-- Message d'erreur -->
+      <div *ngIf="showError" class="error-message global-error">
+        {{ errorMessage }}
+      </div>
+
+      <form [formGroup]="testForm" class="form-step">
+        <!-- Informations générales du test -->
+        <div class="form-section" >
+          <h3 class="section-title">Informations Générales</h3>
+
+          <!-- Titre du test -->
+          <div class="form-group">
+            <label for="title">Titre du Test</label>
+            <input
+              id="title"
+              class="input-field"
+              formControlName="title"
+              type="text"
+              placeholder="Ex: Test de mathématiques - Devision"
+            />
+            <div *ngIf="testForm.get('title')?.invalid && testForm.get('title')?.touched" class="error-message">
+              Titre requis (minimum 3 caractères)
+            </div>
+          </div>
+
+
+
+          <!-- Langue et Niveau -->
+          <div class="form-row">
+           <div class="form-group">
+            <label for="duration">Durée du Test (en minutes)</label>
+            <input
+              id="duration"
+              class="input-field"
+              formControlName="duration"
+              type="number"
+              min="1"
+              max="120"
+              placeholder="Ex: 30"
+            />
+            <div *ngIf="testForm.get('duration')?.invalid && testForm.get('duration')?.touched" class="error-message">
+              Durée requise (entre 1 et 120 minutes)
+            </div>
+          </div>
+
+            <div class="form-group">
+              <label for="grade">Niveau</label>
+              <input
+                id="grade"
+                class="input-field disabled"
+                [value]="grade"
+                disabled
+              />
+            </div>
+          </div>
+
+        <div>
+
+        </div>
+        </div>
+
+
+        <!-- Section des groupes -->
+        <div class="form-section">
+          <div class="section-header">
+            <h3 class="section-title">Configuration des Groupes</h3>
+            <button type="button" class="btn btn-add-group" (click)="addGroup()">
+              + Ajouter un Groupe
+            </button>
+          </div>
+
+          <!-- Liste des groupes -->
+          <div formArrayName="groups" class="groups-container">
+            <div
+              *ngFor="let group of groupsFormArray.controls; let groupIndex = index"
+              [formGroupName]="groupIndex"
+              class="group-card"
+            >
+              <div class="group-header">
+                <h4 class="group-title">Groupe {{ groupIndex + 1 }}</h4>
+                <button
+                  type="button"
+                  class="btn btn-remove-group"
+                  (click)="removeGroup(groupIndex)"
+                  [disabled]="groupsFormArray.length === 1"
+                >
+                  ✕
+                </button>
+              </div>
+              <!-- Nom du groupe -->
+              <div class="form-group">
+                <label [for]="'groupName-' + groupIndex">Nom du Groupe</label>
+                <input
+                  [id]="'groupName-' + groupIndex"
+                  class="input-field"
+                  formControlName="groupName"
+                  type="text"
+                  placeholder="Ex: Groupe A, Débutants, etc."
+                />
+                <div *ngIf="getGroupFormGroup(groupIndex).get('groupName')?.invalid && getGroupFormGroup(groupIndex).get('groupName')?.touched" class="error-message">
+                  Nom du groupe requis
+                </div>
+              </div>
+
+              <!-- Attribution des étudiants -->
+              <div class="form-group">
+                <label>Étudiants du Groupe
+                   <span class="student-count-badge">
+                    <i class="fa fa-user"></i>
+                    {{ getSelectedStudentsCount(groupIndex) }}
+                  </span>
+                </label>
+
+                  <div class="student-tools">
+                    <input
+                      type="text"
+                      class="student-search"
+                      [(ngModel)]="studentSearch[groupIndex]"
+                       [ngModelOptions]="{standalone: true}"
+                      placeholder="Rechercher un étudiant..."
+                    />
+                    <label class="select-all-label">
+                      <input
+                        type="checkbox"
+                        [checked]="areAllStudentsSelected(groupIndex)"
+                        (change)="toggleSelectAllStudents(groupIndex, $event)"
+                      />
+                      Tout sélectionner
+                    </label>
+                    <button type="button" class="btn btn-toggle-list" (click)="toggleStudentList(groupIndex)">
+                      <i class="fa" [ngClass]="{'fa-eye': !showStudentList[groupIndex], 'fa-eye-slash': showStudentList[groupIndex]}"></i>
+                      {{ showStudentList[groupIndex] ? 'Masquer' : 'Voir' }} la liste
+                    </button>
+                  </div>
+
+                  <div class="students-selection" *ngIf="showStudentList[groupIndex]">
+                    <div *ngFor="let student of getFilteredStudentsForGroup(groupIndex)" class="student-item">
+                      <input
+                        type="checkbox"
+                        [id]="'student-' + groupIndex + '-' + student.id"
+                        [value]="student.id"
+                        (change)="onStudentSelectionChange(groupIndex, student.id, $event)"
+                        [checked]="isStudentSelected(groupIndex, student.id)"
+                        class="student-checkbox"
+                      />
+                      <label [for]="'student-' + groupIndex + '-' + student.id" class="student-label">
+                        {{ student.firstName }} {{ student.lastName }}
+                      </label>
+                    </div>
+                    <div *ngIf="getFilteredStudentsForGroup(groupIndex).length === 0" class="no-students">
+                      Aucun étudiant trouvé
+                    </div>
+                  </div>
+             
+              </div>
+
+              <!-- Configuration des jeux -->
+              <div formGroupName="configuredGames" class="games-config">
+                <h5 class="games-title">Configuration des Jeux</h5>
+
+                <div *ngFor="let gameType of gameTypes" class="game-config-card">
+                  <div [formGroupName]="gameType.key" class="game-config">
+                    <div class="game-header">
+                      <label class="game-label">
+                        {{ gameType.label }}
+                      </label>
+                    </div>
+                    <div class="game-details">
+                      <div class="game-config-row">
+                        <div class="form-group">
+                          <label [for]="'order-' + groupIndex + '-' + gameType.key">Ordre</label>
+                          <input
+                            [id]="'order-' + groupIndex + '-' + gameType.key"
+                            class="input-field small"
+                            formControlName="order"
+                            type="number"
+                            min="1"
+                            max="3"
+                          />
+                          <div *ngIf="getGameConfigFormGroup(groupIndex, gameType.key).get('order')?.invalid && getGameConfigFormGroup(groupIndex, gameType.key).get('order')?.touched" class="error-message">
+                            Ordre unique entre 1 et 3
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label [for]="'numOp-' + groupIndex + '-' + gameType.key">Nombre d'Opérations</label>
+                          <input
+                            [id]="'numOp-' + groupIndex + '-' + gameType.key"
+                            class="input-field small"
+                            formControlName="numOperations"
+                            type="number"
+                            min="1"
+                            max="50"
+                          />
+                          <div *ngIf="getGameConfigFormGroup(groupIndex, gameType.key).get('numOperations')?.invalid && getGameConfigFormGroup(groupIndex, gameType.key).get('numOperations')?.touched" class="error-message">
+                            Entre 1 et 50
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label [for]="'maxRange-' + groupIndex + '-' + gameType.key">Plage Maximum</label>
+                          <input
+                            [id]="'maxRange-' + groupIndex + '-' + gameType.key"
+                            class="input-field small"
+                            formControlName="maxNumberRange"
+                            type="number"
+                            min="10"
+                            max="1000"
+                          />
+                          <div *ngIf="getGameConfigFormGroup(groupIndex, gameType.key).get('maxNumberRange')?.invalid && getGameConfigFormGroup(groupIndex, gameType.key).get('maxNumberRange')?.touched" class="error-message">
+                            Entre 10 et 1000
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label [for]="'minPercent-' + groupIndex + '-' + gameType.key">% Minimum de Réussite</label>
+                          <input
+                            [id]="'minPercent-' + groupIndex + '-' + gameType.key"
+                            class="input-field small"
+                            formControlName="requiredCorrectAnswersMinimumPercent"
+                            type="number"
+                            min="0"
+                            max="100"
+                          />
+                          <div *ngIf="getGameConfigFormGroup(groupIndex, gameType.key).get('requiredCorrectAnswersMinimumPercent')?.invalid && getGameConfigFormGroup(groupIndex, gameType.key).get('requiredCorrectAnswersMinimumPercent')?.touched" class="error-message">
+                            Entre 0 et 100%
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button class="btn btn-secondary" type="button" (click)="closeModal()">Annuler</button>
+          <button
+            class="btn btn-success"
+            type="button"
+            (click)="onSaveTest()"
+            [disabled]="isSubmitting"
+          >
+            {{ isSubmitting ? 'Création...' : 'Créer le Test' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

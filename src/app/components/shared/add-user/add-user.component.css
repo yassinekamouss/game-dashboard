@@ -5,7 +5,10 @@
   --accent-color: #32cd32;
   --background-color: #f9f9ff;
   --error-color: #ff4c4c;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
   --shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --soft-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   display: block;
   font-family: "Comic Sans MS", "Chalkboard SE", sans-serif;
 }
@@ -29,7 +32,7 @@
 .modal-container {
   position: relative;
   width: 90%;
-  max-width: 700px;
+  max-width: 800px;
   background: white;
   border-radius: 20px;
   box-shadow: var(--shadow);
@@ -38,32 +41,9 @@
   border: 2px solid var(--primary-color);
 }
 
-/* Éléments mathématiques flottants pour le modal */
-.modal-container::before {
-  content: "+";
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  font-size: 70px;
-  color: var(--primary-color);
-  opacity: 0.1;
-  transform: rotate(15deg);
-}
-
-.modal-container::after {
-  content: "=";
-  position: absolute;
-  bottom: -30px;
-  left: -25px;
-  font-size: 70px;
-  color: var(--secondary-color);
-  opacity: 0.1;
-  transform: rotate(-10deg);
-}
-
 /* En-tête du modal */
 .modal-header {
-  background: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color), #5a7fd8);
   padding: 20px;
   display: flex;
   justify-content: space-between;
@@ -73,36 +53,12 @@
   overflow: hidden;
 }
 
-/* Motif mathématique pour l'en-tête */
-.modal-header::before {
-  content: "123...";
-  position: absolute;
-  bottom: 5px;
-  left: 15px;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.3);
-  transform: rotate(-10deg);
-}
-
 .modal-title {
   color: white;
   margin: 0;
   font-size: 24px;
   font-weight: 700;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-  position: relative;
-  display: inline-block;
-}
-
-.modal-title::after {
-  content: "123";
-  position: absolute;
-  top: -10px;
-  right: -35px;
-  font-size: 14px;
-  color: var(--secondary-color);
-  opacity: 0.7;
-  transform: rotate(20deg);
 }
 
 .close-button {
@@ -114,7 +70,6 @@
   padding: 0;
   line-height: 1;
   transition: all 0.3s ease;
-  position: relative;
   width: 36px;
   height: 36px;
   display: flex;
@@ -134,221 +89,310 @@
   padding: 30px;
   max-height: 70vh;
   overflow-y: auto;
-  position: relative;
 }
 
-/* Message d'erreur global */
-.error-message.global-error {
-  background-color: rgba(255, 76, 76, 0.1);
-  color: var(--error-color);
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  font-weight: 500;
+/* Styles pour les groupes */
+.groups-container {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 25px;
 }
 
-.error-message.global-error::before {
-  content: "!";
-  display: inline-block;
-  width: 24px;
-  height: 24px;
+.group-card {
+  background: #f8f9ff;
+  border: 2px solid #e0e6ff;
+  border-radius: 15px;
+  padding: 20px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.group-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--soft-shadow);
+}
+
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e6ff;
+}
+
+.group-title {
+  color: var(--primary-color);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.group-stats {
+  background: var(--primary-color);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.remove-group-btn {
   background: var(--error-color);
   color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  text-align: center;
-  font-weight: bold;
-  margin-right: 12px;
-  line-height: 24px;
-}
-
-/* Formulaire */
-.form-step {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-row {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.form-row .form-group {
-  flex: 1;
-  min-width: 200px;
-}
-
-/* Labels */
-label {
-  color: #333;
-  font-weight: 600;
-  font-size: 1rem;
+  cursor: pointer;
+  font-size: 16px;
   display: flex;
   align-items: center;
+  justify-content: center;
   transition: all 0.3s ease;
 }
 
-/* Ajouter des icônes mathématiques aux labels */
-label::before {
-  content: "∙";
-  margin-right: 8px;
+.remove-group-btn:hover {
+  background: #d32f2f;
+  transform: scale(1.1);
+}
+
+.remove-group-btn:active {
+  transform: scale(0.95);
+}
+
+/* Section de sélection des étudiants */
+.students-selection {
+  margin-top: 20px;
+}
+
+.students-selection h4 {
   color: var(--primary-color);
-  font-size: 1.2em;
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 2px solid #e0e6ff;
+  border-radius: 12px;
+  background: white;
+}
+
+/* Style amélioré pour les étudiants */
+.student-card {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  border: 2px solid #e8eaff;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffffff, #f8f9ff);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.student-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(74, 108, 209, 0.1), rgba(255, 126, 95, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.student-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 108, 209, 0.2);
+  border-color: var(--primary-color);
+}
+
+.student-card:hover::before {
+  opacity: 1;
+}
+
+.student-card.selected {
+  background: linear-gradient(135deg, var(--primary-color), #5a7fd8);
+  border-color: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 108, 209, 0.3);
+}
+
+.student-card.selected::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  opacity: 1;
+}
+
+.student-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.student-card.selected .student-checkbox {
+  accent-color: white;
+}
+
+.student-info {
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.student-name {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 2px;
+  transition: color 0.3s ease;
+}
+
+.student-grade {
+  font-size: 12px;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.student-card.selected .student-name,
+.student-card.selected .student-grade {
+  color: white;
+}
+
+/* Badge de sélection animé */
+.student-card.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
   font-weight: bold;
+  animation: checkmarkPop 0.3s ease;
 }
 
-label[for="email"]::before {
-  content: "@";
-}
-label[for="password"]::before {
-  content: "✱";
-}
-label[for="lastName"]::before {
-  content: "α";
-}
-label[for="firstName"]::before {
-  content: "β";
-}
-label[for="dateOfBirth"]::before {
-  content: "📅";
-}
-label[for="gender"]::before {
-  content: "⚥";
-}
-label[for="role"]::before {
-  content: "⭐";
-}
-label[for="student-grade"]::before,
-label[for="teacher-grade"]::before {
-  content: "📚";
-}
-label[for="children"]::before {
-  content: "👪";
+@keyframes checkmarkPop {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 1;
+  }
 }
 
-/* Champs de saisie */
-.input-field {
+/* Message quand aucun étudiant disponible */
+.no-students-message {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border: 2px dashed #dee2e6;
+  border-radius: 12px;
+  margin: 10px 0;
+}
+
+/* Bouton d'ajout de groupe */
+.add-group-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
   padding: 15px;
-  border: 2px solid #e0e0ff;
+  background: linear-gradient(135deg, var(--accent-color), #28a745);
+  color: white;
+  border: none;
   border-radius: 12px;
   font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
   transition: all 0.3s ease;
-  background-color: #f7f7ff;
-  outline: none;
-  font-family: inherit;
+  margin-top: 20px;
+}
+
+.add-group-btn:hover {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.add-group-btn:active {
+  transform: translateY(0);
+}
+
+/* Champs de formulaire */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e6ff;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: white;
 }
 
 .input-field:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(74, 108, 209, 0.2);
+  box-shadow: 0 0 0 3px rgba(74, 108, 209, 0.1);
+  outline: none;
 }
 
-.input-field.disabled {
-  background-color: #f0f2f5;
-  cursor: not-allowed;
-  opacity: 0.8;
-}
-
-/* Styles spécifiques pour le select */
-select.input-field {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  padding-right: 35px;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234a6cd1'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 15px center;
-  background-size: 15px;
-}
-
-/* Messages d'erreur sous les champs */
+/* Messages d'erreur et de succès */
 .error-message {
   color: var(--error-color);
   font-size: 14px;
   margin-top: 5px;
-  font-weight: 500;
   display: flex;
   align-items: center;
+  gap: 8px;
 }
 
-.error-message::before {
-  content: "!";
-  font-weight: bold;
-  margin-right: 8px;
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  background-color: var(--error-color);
-  color: white;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 18px;
-  font-size: 12px;
-}
-
-/* Section pour les enfants */
-.children-selection {
-  border: 2px solid #e0e0ff;
-  border-radius: 12px;
-  padding: 15px;
-  max-height: 150px;
-  overflow-y: auto;
-  background: #f7f7ff;
-}
-
-.child-options {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.child-option {
+.success-message {
+  color: var(--success-color);
+  font-size: 14px;
+  margin-top: 5px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.child-option:hover {
-  background-color: rgba(74, 108, 209, 0.1);
-}
-
-.child-option input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  accent-color: var(--primary-color);
-  cursor: pointer;
-}
-
-.child-option label {
-  cursor: pointer;
-  margin: 0;
-  font-weight: normal;
-}
-
-.child-option label::before {
-  display: none;
-}
-
-.no-students-message {
-  padding: 15px;
-  text-align: center;
-  color: #666;
-  font-style: italic;
-  background-color: #f8f9fa;
-  border-radius: 12px;
-  border: 2px dashed #e0e0ff;
+  gap: 8px;
 }
 
 /* Boutons d'action */
@@ -356,11 +400,13 @@ select.input-field {
   display: flex;
   justify-content: flex-end;
   gap: 15px;
-  margin-top: 20px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px solid #e0e6ff;
 }
 
 .btn {
-  padding: 12px 20px;
+  padding: 12px 24px;
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -370,75 +416,40 @@ select.input-field {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   min-width: 120px;
-  position: relative;
-  overflow: hidden;
-  font-family: inherit;
-}
-
-.btn::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    45deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  transform: translateX(-100%);
-  transition: transform 0.5s;
 }
 
 .btn-secondary {
-  background-color: #95a5a6;
+  background: #6c757d;
   color: white;
-}
-
-.btn-secondary::after {
-  content: "✖";
-  margin-left: 8px;
 }
 
 .btn-secondary:hover {
-  background-color: #7f8c8d;
+  background: #5a6268;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
 }
 
-.btn-secondary:hover::before {
-  transform: translateX(100%);
-}
-
-.btn-secondary:active {
-  transform: translateY(1px);
-}
-
-.btn-success {
-  background-color: var(--accent-color);
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color), #5a7fd8);
   color: white;
 }
 
-.btn-success::after {
-  content: "✓";
-  margin-left: 8px;
-}
-
-.btn-success:hover {
-  background-color: #28a745;
+.btn-primary:hover {
+  background: linear-gradient(135deg, #3a5bc1, #4a6cd1);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(74, 108, 209, 0.3);
 }
 
-.btn-success:hover::before {
-  transform: translateX(100%);
+.btn:active {
+  transform: translateY(0);
 }
 
-.btn-success:active {
-  transform: translateY(1px);
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
 }
 
 /* Animations */
@@ -462,26 +473,29 @@ select.input-field {
   }
 }
 
-/* Style responsive */
+/* Responsive */
 @media (max-width: 768px) {
   .modal-container {
     width: 95%;
-    max-width: none;
     margin: 10px;
   }
 
-  .form-row {
-    flex-direction: column;
-    gap: 20px;
+  .students-grid {
+    grid-template-columns: 1fr;
   }
 
-  .form-row .form-group {
-    min-width: unset;
+  .group-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .form-actions {
+    flex-direction: column;
   }
 
   .btn {
-    padding: 12px 15px;
-    font-size: 15px;
+    width: 100%;
   }
 }
 
@@ -490,12 +504,15 @@ select.input-field {
     padding: 20px;
   }
 
-  .form-actions {
-    flex-direction: column-reverse;
-    gap: 12px;
+  .student-card {
+    padding: 10px 12px;
   }
 
-  .btn {
-    width: 100%;
+  .student-name {
+    font-size: 13px;
+  }
+
+  .student-grade {
+    font-size: 11px;
   }
 }

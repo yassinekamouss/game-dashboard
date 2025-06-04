@@ -1,0 +1,82 @@
+:host {
+  --primary-color: #4a6cd1;
+  --secondary-color: #ff7e5f;
+  --accent-color: #32cd32;
+  --background-color: #f9f9ff;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: block;
+  font-family: "Comic Sans MS", "Chalkboard SE", sans-serif;
+}
+
+.test-card {
+  background: white;
+  border: 2px solid #e8ebff;
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  position: relative;
+  padding: 20px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.test-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary-color);
+}
+
+.test-card::before {
+  content: "📝";
+  position: absolute;
+  top: -10px;
+  left: 15px;
+  background: white;
+  padding: 5px 10px;
+  border-radius: 50%;
+  font-size: 18px;
+  border: 2px solid #e8ebff;
+}
+
+.test-card::after {
+  content: "∑";
+  position: absolute;
+  bottom: -20px;
+  right: -15px;
+  font-size: 50px;
+  color: var(--primary-color);
+  opacity: 0.1;
+  transform: rotate(10deg);
+}
+
+.test-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.test-title {
+  color: var(--primary-color);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.test-title::before {
+  content: "●";
+  margin-right: 8px;
+  color: var(--secondary-color);
+  font-size: 1.2em;
+}
+
+@media (max-width: 480px) {
+  .test-card {
+    padding: 15px;
+  }
+
+  .test-title {
+    font-size: 16px;
+  }
+}
