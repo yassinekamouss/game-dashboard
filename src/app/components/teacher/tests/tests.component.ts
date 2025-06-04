@@ -61,18 +61,17 @@ export class TestsComponent implements OnInit, OnDestroy {
       .subscribe();
 
     this.testSub = this.testService.tests$
-     .pipe(delay(1300)) 
       .subscribe(tests => {
         this.tests = tests;
         this.applyFilters();
-  
+
         setTimeout(() => {
           this.initialLoaded = true;
-          this.isLoading = false; 
-        }  , 950); 
+          this.isLoading = false;
+        }  , 950);
       });
   }
-  
+
 
   ngOnDestroy(): void {
     if (this.testSub) this.testSub.unsubscribe();
