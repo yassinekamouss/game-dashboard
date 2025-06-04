@@ -1,5 +1,39 @@
-<div class="test-card">
+<div *ngIf="test"  class="test-card">
+  <div class="test-header">
+    <div class="test-icon">
+      <i class="fas fa-file-alt"></i>
+    </div>
+    <div class="test-meta">
+      <span class="test-grade-badge">
+        <i class="fas fa-graduation-cap"></i>
+        {{ test?.grade }}
+      </span>
+      <span class="test-duration">
+        <i class="fas fa-clock"></i>
+        {{ test?.duration }} min
+      </span>
+    </div>
+  </div>
   <div class="test-card-content">
-    <h3 class="test-title">{{ test?.title }}</h3>
+    <h3 class="test-title">
+      {{ test?.title }}
+    </h3>
+    <div class="test-info">
+      <span class="test-date">
+        <i class="fas fa-calendar-alt"></i>
+        {{ test?.createdAt | date:'shortDate' }}
+      </span>
+      <span class="test-author">
+        <i class="fas fa-user"></i>
+        {{ currentUser?.firstName }} {{ currentUser?.lastName}}
+      </span>
+    </div>
+    <ng-container *ngIf="test?.groups | keyvalue as groupEntries">
+      <div class="test-groups">
+        <i class="fas fa-users"></i>
+        {{ groupEntries.length }} groupes
+      </div>
+    </ng-container>
+
   </div>
 </div>

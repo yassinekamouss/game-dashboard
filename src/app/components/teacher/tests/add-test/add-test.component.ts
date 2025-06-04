@@ -77,7 +77,6 @@ showStudentList: { [groupIndex: number]: boolean } = {};
     });
   }
 
-  // Nouvelle méthode pour obtenir les étudiants disponibles pour un groupe spécifique
   getAvailableStudentsForGroup(groupIndex: number): Student[] {
     const allSelectedStudents = this.getAllSelectedStudents();
     const currentGroupSelected = this.selectedStudents[groupIndex] || [];
@@ -87,7 +86,6 @@ showStudentList: { [groupIndex: number]: boolean } = {};
     );
   }
 
-  // Nouvelle méthode pour obtenir tous les étudiants sélectionnés
   getAllSelectedStudents(): string[] {
     const allSelected: string[] = [];
     Object.values(this.selectedStudents).forEach(studentIds => {
@@ -117,7 +115,7 @@ showStudentList: { [groupIndex: number]: boolean } = {};
       numOperations: [10, [Validators.required, Validators.min(1), Validators.max(50)]],
       maxNumberRange: [100, [Validators.required, Validators.min(10), Validators.max(1000)]],
       requiredCorrectAnswersMinimumPercent: [70, [Validators.required, Validators.min(0), Validators.max(100)]],
-      order: [0, [Validators.required, Validators.min(0), Validators.max(10)]]
+      order: [1, [Validators.required, Validators.min(1), Validators.max(3)]]
    });
   }
 
@@ -163,9 +161,11 @@ showStudentList: { [groupIndex: number]: boolean } = {};
       return;
     }
 
-    if (!this.hasEnabledGamesInAllGroups()) {
-      return;
-    }
+
+  if (!this.hasUniqueOrdersInAllGroups()) {
+    this.showErrorMessage("L'ordre des jeux doit être unique (1, 2, 3) dans chaque groupe.");
+    return;
+  }
 
     if (!this.currentUser) {
       this.showErrorMessage("Vous n'êtes plus connecté. Veuillez vous reconnecter.");
@@ -174,6 +174,24 @@ showStudentList: { [groupIndex: number]: boolean } = {};
 
     this.submitTest();
   }
+
+
+  private hasUniqueOrdersInAllGroups(): boolean {
+  const groups = this.testForm.value.groups;
+  for (let i = 0; i < groups.length; i++) {
+    const group = groups[i];
+    const orders = [
+      group.configuredGames.vertical_operations.order,
+      group.configuredGames.find_compositions.order,
+      group.configuredGames.choose_answer.order
+    ];
+    const uniqueOrders = Array.from(new Set(orders));
+    if (uniqueOrders.length !== 3 || ![1, 2, 3].every(o => uniqueOrders.includes(o))) {
+      return false;
+    }
+  }
+  return true;
+}
 
   private isFormValid(): boolean {
     if (this.testForm.invalid) {
@@ -184,14 +202,6 @@ showStudentList: { [groupIndex: number]: boolean } = {};
     return true;
   }
 
-  private hasEnabledGamesInAllGroups(): boolean {
-    const groups = this.testForm.value.groups;
-    for (let i = 0; i < groups.length; i++) {
-      const group = groups[i];
-
-    }
-    return true;
-  }
 
   private submitTest() {
     this.isSubmitting = true;
@@ -286,10 +296,8 @@ areAllStudentsSelected(groupIndex: number): boolean {
 toggleSelectAllStudents(groupIndex: number, event: any) {
   const filtered = this.getFilteredStudentsForGroup(groupIndex).map(s => s.id);
   if (event.target.checked) {
-    // Ajoute tous les filtrés à la sélection (sans doublons)
     this.selectedStudents[groupIndex] = Array.from(new Set([...(this.selectedStudents[groupIndex] || []), ...filtered]));
   } else {
-    // Retire tous les filtrés de la sélection
     this.selectedStudents[groupIndex] = (this.selectedStudents[groupIndex] || []).filter(id => !filtered.includes(id));
   }
 }
