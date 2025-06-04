@@ -138,7 +138,7 @@ export class StudentsComponent implements OnInit {
   onUserAdded(user:User) {
     this.showAddUserModal = false;
     const student = user as Student;
-    this.students.unshift(student);
+    this.students.push(student);
     this.userService.setUsers([...this.students]);
   }
 
