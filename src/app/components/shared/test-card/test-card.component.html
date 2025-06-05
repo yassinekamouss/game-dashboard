@@ -1,39 +1,67 @@
-<div *ngIf="test"  class="test-card">
+<div *ngIf="test" class="test-card">
   <div class="test-header">
     <div class="test-icon">
       <i class="fas fa-file-alt"></i>
     </div>
+    
     <div class="test-meta">
-      <span class="test-grade-badge">
+      <div class="test-grade-badge">
         <i class="fas fa-graduation-cap"></i>
-        {{ test?.grade }}
-      </span>
-      <span class="test-duration">
+        <span>{{ test?.grade }}</span>
+      </div>
+      <div class="test-duration">
         <i class="fas fa-clock"></i>
-        {{ test?.duration }} min
+        <span>{{ test?.duration }} min</span>
+      </div>
+    </div>
+
+    <div class="test-state-badge" [ngClass]="test?.state">
+      <i
+        *ngIf="test?.state === 'created'"
+        class="fas fa-lightbulb"
+        aria-label="Créé"
+      ></i>
+      <i
+        *ngIf="test?.state === 'published'"
+        class="fas fa-bullhorn"
+        aria-label="Publié"
+      ></i>
+      <i
+        *ngIf="test?.state === 'completed'"
+        class="fas fa-check-circle"
+        aria-label="Terminé"
+      ></i>
+      <span>
+        {{
+          test?.state === 'created'
+            ? 'Créé'
+            : test?.state === 'published'
+            ? 'Publié'
+            : 'Terminé'
+        }}
       </span>
     </div>
   </div>
+
   <div class="test-card-content">
-    <h3 class="test-title">
-      {{ test?.title }}
-    </h3>
+    <h3 class="test-title">{{ test?.title }}</h3>
+
     <div class="test-info">
-      <span class="test-date">
+      <div class="test-date">
         <i class="fas fa-calendar-alt"></i>
-        {{ test?.createdAt | date:'shortDate' }}
-      </span>
-      <span class="test-author">
+        <span>{{ test?.createdAt | date: 'shortDate' }}</span>
+      </div>
+      <div class="test-author">
         <i class="fas fa-user"></i>
-        {{ currentUser?.firstName }} {{ currentUser?.lastName}}
-      </span>
+        <span>{{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+      </div>
     </div>
+
     <ng-container *ngIf="test?.groups | keyvalue as groupEntries">
       <div class="test-groups">
         <i class="fas fa-users"></i>
-        {{ groupEntries.length }} groupes
+        <span>{{ groupEntries.length }} groupes</span>
       </div>
     </ng-container>
-
   </div>
 </div>

@@ -87,8 +87,7 @@ export class QRCodeService {
     doc.text(`Prénom: ${student.firstName}`, 20, currentY); currentY += lineHeight;
     doc.text(`Niveau: ${student.grade}`, 20, currentY); currentY += lineHeight;
     doc.text(`Genre: ${student.gender === 'male' ? 'Masculin' : 'Féminin'}`, 20, currentY); currentY += lineHeight;
-    doc.text(`Date de naissance: ${new Date(student.dateOfBirth).toLocaleDateString('fr-FR')}`, 20, currentY); currentY += lineHeight;
-    doc.text(`ID: ${student.id}`, 20, currentY);
+    doc.text(`Date de naissance: ${new Date(student.dateOfBirth).toLocaleDateString('fr-FR')}`, 20, currentY);
 
     // QR Code + légende
     doc.addImage(qrCodeDataUrl, 'PNG', 130, 50, 60, 60);

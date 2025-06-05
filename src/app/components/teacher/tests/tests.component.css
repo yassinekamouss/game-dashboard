@@ -370,3 +370,72 @@
     flex-wrap: wrap;
   }
 }
+
+
+/* Onglets de filtre d'état */
+.test-state-tabs {
+  display: flex;
+  gap: 1rem;
+  margin: 1.2rem 0 2rem 0;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  background: #f5f7fa;
+  border: none;
+  outline: none;
+  color: #4a5568;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 1px 4px rgba(74, 108, 209, 0.04);
+  position: relative;
+}
+
+.tab-btn i {
+  font-size: 1.1em;
+}
+
+.tab-btn.active,
+.tab-btn:hover {
+  background: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(74, 108, 209, 0.10);
+}
+
+.tab-btn.created.active,
+.tab-btn.created:hover {
+  background: #ffe066;
+  color: #b89c00;
+}
+
+.tab-btn.published.active,
+.tab-btn.published:hover {
+  background: #b2f2ff;
+  color: #087990;
+}
+
+.tab-btn.completed.active,
+.tab-btn.completed:hover {
+  background: #d3f9d8;
+  color: #2b9348;
+}
+
+@media (max-width: 600px) {
+  .test-state-tabs {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+  }
+}
