@@ -26,5 +26,10 @@ export class TeacherComponent {
       path: '/teacher/tests',
       icon: 'fas fa-file-alt',
     },
+    {
+      label: 'tests',
+      path: '/teacher/tests',
+      icon: 'fas fa-file-alt',
+    },
   ];
 }

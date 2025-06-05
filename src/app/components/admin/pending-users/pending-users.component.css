@@ -414,8 +414,6 @@
   margin-right: 8px;
 }
 
-/* Styles existants inchangés */
-
 /* Styles pour le modal */
 .role-modal-backdrop {
   position: fixed;
@@ -425,6 +423,8 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease forwards;
 }
 
 .role-modal {
@@ -433,8 +433,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   width: 90%;
   max-width: 500px;
   max-height: 80vh;
@@ -442,48 +442,68 @@
   z-index: 1001;
   display: flex;
   flex-direction: column;
+  animation: slideInUp 0.4s ease forwards;
+  border: 2px solid var(--primary-color);
 }
 
 .role-modal-header {
+  background: linear-gradient(135deg, var(--primary-color), #5a7fd8);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 20px;
+  border-bottom: 3px solid var(--accent-color);
+  position: relative;
+  overflow: hidden;
 }
 
 .role-modal-header h2 {
   margin: 0;
-  font-size: 1.2rem;
-  color: #333;
+  font-size: 24px;
+  color: white;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .close-btn {
-  background: none;
+  background: transparent;
   border: none;
-  font-size: 1.2rem;
+  color: white;
+  font-size: 24px;
   cursor: pointer;
-  color: #666;
+  padding: 0;
+  line-height: 1;
+  transition: all 0.3s ease;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .close-btn:hover {
-  color: #333;
+  transform: scale(1.2) rotate(90deg);
+  color: var(--accent-color);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .role-modal-body {
-  padding: 20px;
+  padding: 30px;
   flex-grow: 1;
 }
 
 .user-info-summary {
-  background-color: #f5f5f5;
-  padding: 12px;
-  border-radius: 6px;
+  background: #f8f9ff;
+  border: 2px solid #e0e6ff;
+  border-radius: 15px;
+  padding: 15px;
   margin-bottom: 20px;
 }
 
 .user-info-summary p {
   margin: 5px 0;
+  color: var(--dark-gray);
 }
 
 .grade-selection {
@@ -492,44 +512,64 @@
 
 .grade-selection label {
   display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 14px;
 }
 
 .grade-selection select {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
+  padding: 12px 15px;
+  border: 2px solid #e0e6ff;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.grade-selection select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 103, 197, 0.1);
+  outline: none;
 }
 
 .children-selection h3 {
   margin-top: 0;
   margin-bottom: 15px;
-  font-size: 1rem;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-color);
 }
 
 .students-list {
   max-height: 300px;
   overflow-y: auto;
-  border: 1px solid #eee;
-  border-radius: 6px;
+  border: 2px solid #e0e6ff;
+  border-radius: 12px;
+  background: white;
 }
 
 .no-students {
   text-align: center;
   padding: 20px;
   color: #666;
+  font-style: italic;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border: 2px dashed #dee2e6;
+  border-radius: 12px;
+  margin: 10px 0;
 }
 
 .student-item {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
-  border-bottom: 1px solid #eee;
+  padding: 12px 15px;
+  border-bottom: 2px solid #e0e6ff;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .student-item:last-child {
@@ -537,24 +577,27 @@
 }
 
 .student-item:hover {
-  background-color: #f9f9f9;
+  background-color: rgba(59, 103, 197, 0.05);
+  transform: translateY(-2px);
 }
 
 .student-item.selected {
-  background-color: #e8f4fe;
+  background: linear-gradient(135deg, rgba(59, 103, 197, 0.1), rgba(90, 127, 216, 0.1));
 }
 
 .student-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background-color: #5c6bc0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent-color), #ff5722);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   margin-right: 12px;
+  transform: rotate(-3deg);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .student-details {
@@ -563,53 +606,92 @@
 
 .student-name {
   margin: 0 0 4px 0;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--dark-gray);
 }
 
 .student-grade {
   margin: 0;
-  font-size: 0.85rem;
-  color: #666;
+  font-size: 12px;
+  color: #718096;
 }
 
 .selection-indicator {
-  color: #5c6bc0;
+  color: var(--primary-color);
   font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.student-item.selected .selection-indicator {
+  transform: scale(1.2);
 }
 
 .role-modal-footer {
   display: flex;
   justify-content: flex-end;
-  padding: 16px 20px;
-  border-top: 1px solid #e0e0e0;
+  gap: 15px;
+  margin-top: 10px;
+  padding: 20px;
+  border-top: 2px solid #e0e6ff;
 }
 
 .cancel-btn, .submit-btn {
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-weight: 500;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 120px;
 }
 
 .cancel-btn {
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  color: #333;
-  margin-right: 12px;
-}
-
-.submit-btn {
-  background-color: #5c6bc0;
-  border: none;
-  color: white;
+  background: #f8f9ff;
+  border: 2px solid #e0e6ff;
+  color: var(--dark-gray);
 }
 
 .cancel-btn:hover {
-  background-color: #e8e8e8;
+  background-color: #e0e5f0;
+  transform: translateY(-2px);
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, var(--primary-color), #5a7fd8);
+  border: none;
+  color: white;
+  box-shadow: 0 4px 10px rgba(59, 103, 197, 0.3);
 }
 
 .submit-btn:hover {
-  background-color: #4a59b5;
+  background: linear-gradient(135deg, #3a5bc1, #4a6cd1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(59, 103, 197, 0.4);
+}
+
+/* Animations pour les modals */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
 }
 
 /* Ajouter le bouton étudiant qui était manquant dans le code original */

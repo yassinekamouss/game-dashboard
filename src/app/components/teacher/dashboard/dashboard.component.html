@@ -1,0 +1,84 @@
+<div class="dashboard-container">
+  <!-- En-tête avec titre -->
+  <div class="dashboard-header">
+    <div class="title-section">
+      <h1 class="dashboard-title">Tableau de Bord Enseignant</h1>
+      <div class="dashboard-date">{{ currentDate | date : "longDate" }}</div>
+    </div>
+    <div class="refresh-section">
+      <button class="refresh-btn" (click)="refreshData()">
+        <i class="fas fa-sync-alt"></i> Rafraîchir
+      </button>
+    </div>
+  </div>
+
+  <!-- Chargement -->
+  <div *ngIf="isLoading" class="dashboard-loading">
+    <div class="spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+    <p>Chargement des données...</p>
+  </div>
+
+  <!-- Ce conteneur principal sera affiché une fois le chargement terminé -->
+  <div class="main-content-container" *ngIf="!isLoading">
+    <!-- Statistiques pour le professeur -->
+    <div class="stats-cards">
+      <div class="stat-card students-card">
+        <div class="stat-icon">
+          <i class="fas fa-user-graduate"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ totalStudents }}</div>
+          <div class="stat-label">Élèves</div>
+        </div>
+        <div class="stat-chart">
+          <div class="math-symbol">∑</div>
+        </div>
+      </div>
+
+      <div class="stat-card average-card">
+        <div class="stat-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ averageScore }}</div>
+          <div class="stat-label">Score moyen</div>
+        </div>
+        <div class="stat-chart">
+          <div class="math-symbol">μ</div>
+        </div>
+      </div>
+
+      <div class="stat-card best-card">
+        <div class="stat-icon">
+          <i class="fas fa-trophy"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ highestScore }}</div>
+          <div class="stat-label">Meilleur score</div>
+        </div>
+        <div class="stat-chart">
+          <div class="math-symbol">λ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Les graphiques pour le professeur -->
+    <div class="charts-container">
+      <div class="chart-card">
+        <h2>Distribution des niveaux de mathématiques</h2>
+        <div class="chart-container">
+          <canvas #mathLevelChart></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h2>Répartition des scores</h2>
+        <div class="chart-container">
+          <canvas #scoreByGradeChart></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
