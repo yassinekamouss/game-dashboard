@@ -51,7 +51,7 @@
     <button class="action-btn view-btn" title="Voir le profil">
       <i class="fas fa-eye"></i>
     </button>
-    <button class="action-btn edit-btn" title="Modifier">
+    <button class="action-btn edit-btn" title="Modifier" (click)="editTeacherClick(teacher)">
       <i class="fas fa-pencil-alt"></i>
     </button>
     <button class="action-btn delete-btn" title="Supprimer">
@@ -59,3 +59,12 @@
     </button>
   </div>
 </div>
+
+
+
+<app-modify-student
+  *ngIf="showModifyModalTeacher"
+  [user]="teacherToModify"
+  (close)="showModifyModalTeacher = false"
+  (teacherModified)="onTeacherModified($event)">
+</app-modify-student>

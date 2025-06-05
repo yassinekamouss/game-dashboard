@@ -4,11 +4,11 @@ import { Student } from '../../../models/student';
 import { ref } from 'firebase/database';
 import { Database, onValue } from '@angular/fire/database';
 import {QRCodeService} from '../../../services/qrcode/qrcode.service';
-import {ModifyStudentComponent} from '../modify-student/modify-student.component';
+import {ModifyStudentORTeacherComponent} from '../modify-student_OR_teacher/modify-student-OR-teacher.component';
 
 @Component({
   selector: 'app-student-card',
-  imports: [CommonModule , ModifyStudentComponent],
+  imports: [CommonModule , ModifyStudentORTeacherComponent],
   templateUrl: './student-card.component.html',
   styleUrl: './student-card.component.css',
   standalone: true,
@@ -64,12 +64,13 @@ export class StudentCardComponent implements OnInit {
 
   editStudentClick(student :Student): void {
     this.studentToModify = student;
-    this.showModifiyModalStudent = true;
+       this.showModifiyModalStudent = true;
 
 
   }
 
   onStudentModified($event: any) {
+
     this.showModifiyModalStudent = false;
 }
 

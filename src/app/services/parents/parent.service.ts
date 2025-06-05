@@ -17,6 +17,9 @@ export class ParentService {
 
   constructor(private userService :UserService) { }
 
+
+  
+
   getParentWithChildren(): Observable<ParentWithChildren []> {
     return this.userService.getUsersByRole('parent').pipe(
       switchMap((users: User[]) => {

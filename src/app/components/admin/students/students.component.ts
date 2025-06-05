@@ -43,6 +43,7 @@ export class StudentsComponent implements OnInit {
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
+    console.log("111")
     this.isLoading = true;
     this.userService.loadUsers(UserRole.STUDENT);
 
