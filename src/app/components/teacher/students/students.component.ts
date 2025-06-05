@@ -56,18 +56,19 @@ export class StudentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.userService.loadUsers(UserRole.STUDENT);
-    this.studentSub = this.userService.users$.subscribe({
-      next:(students:User[])=>{
-        this.students = students as Student[];
-        this.applyFilters();
-        this.isLoading = false;
-      }
-    })
     this.authService.currentUser$.subscribe({
       next: (teacher) => {
         this.teacher = teacher as Teacher;
-
+        if (this.teacher?.grade) {
+          this.studentService.loadStudents(this.teacher.grade);
+        }
+        this.studentSub = this.studentService.students$.subscribe({
+          next: (students: Student[]) => {
+            this.students = students;
+            this.applyFilters();
+            this.isLoading = false;
+          }
+        });
       },
       error: (error) => {
         console.error('Erreur lors de la récupération de l\'enseignant :', error);
@@ -75,7 +76,6 @@ export class StudentsComponent implements OnInit {
       }
     });
   }
-
   ngOnDestroy(): void {
     if (this.studentSub) {
       this.studentSub.unsubscribe();

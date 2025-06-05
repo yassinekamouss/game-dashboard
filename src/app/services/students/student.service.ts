@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Student} from '../../models/student';
-import {forkJoin, from, Observable, of, throwError} from 'rxjs';
+import {BehaviorSubject, forkJoin, from, Observable, of, Subject, throwError} from 'rxjs';
 import {equalTo, orderByChild, query} from 'firebase/database';
 import {Database, get, ref, update} from '@angular/fire/database';
 import {catchError, map} from 'rxjs/operators';
@@ -14,7 +14,8 @@ import {QRCodeService} from '../qrcode/qrcode.service';
  })
  export class StudentService {
 
-
+  private studentSubject = new Subject<Student[]>();
+  students$ = this.studentSubject.asObservable();
    constructor(private db:Database ,
                private  userService :UserService,
                private qrCodeService:QRCodeService
@@ -69,6 +70,16 @@ import {QRCodeService} from '../qrcode/qrcode.service';
       // forkJoin renvoie un tableau de résultats, on mappe vers void
       map(() => void 0)
     );
+  }
+
+  loadStudents(grade: GradeLevel): void {
+    this.getStudentsByGrade(grade).subscribe(users => {
+      this.studentSubject.next(users);
+    });
+  }
+
+  setStudents(students : Student[]){
+    this.studentSubject.next(students);
   }
 
   generateAndDownloadQRCode(studentId: string): Observable<boolean> {
