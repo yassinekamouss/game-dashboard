@@ -42,18 +42,9 @@ export class UserFactory {
   private static createStudent(base: User, form: FormValues): Student {
     const playerProfile: PlayerProfile = {
       playerName: `${form.firstName} ${form.lastName}`.toLowerCase(),
-      gameLevel: 1,
       mathLevel: 1,
       coins: 0,
-      questionsSolved: 0,
-      rewardProfile: {
-        score: 0,
-        rank: 0,
-        iScore: 0,
-        rewardCount: 0,
-        positives: 0,
-        negatives: 0
-      }
+      score: 0
     };
 
     const gameProgress: GameProgress[] = [];

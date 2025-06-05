@@ -14,68 +14,109 @@
 
   <!-- Chargement -->
   <div *ngIf="isLoading" class="dashboard-loading">
-    <div class="spinner">∞</div>
+    <div class="spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
     <p>Chargement des données...</p>
   </div>
 
-  <!-- Statistiques globales -->
-  <div class="stats-cards" *ngIf="!isLoading">
-    <div class="stat-card students-card">
-      <div class="stat-icon">
-        <i class="fas fa-user-graduate"></i>
+  <!-- Ce conteneur principal sera affiché une fois le chargement terminé -->
+  <div class="main-content-container" *ngIf="!isLoading">
+    <!-- Statistiques globales -->
+    <div class="stats-cards" *ngIf="!isLoading">
+      <div class="stat-card students-card">
+        <div class="stat-icon">
+          <i class="fas fa-user-graduate"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ statistics.studentCount }}</div>
+          <div class="stat-label">Élèves</div>
+        </div>
+        <div class="stat-chart">
+          <div class="math-symbol">∫</div>
+        </div>
       </div>
-      <div class="stat-content">
-        <div class="stat-value">{{ statistics.studentCount }}</div>
-        <div class="stat-label">Élèves</div>
+
+      <div class="stat-card teachers-card">
+        <div class="stat-icon">
+          <i class="fas fa-chalkboard-teacher"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ statistics.teacherCount }}</div>
+          <div class="stat-label">Enseignants</div>
+        </div>
+        <div class="stat-chart">
+          <div class="math-symbol">π</div>
+        </div>
       </div>
-      <div class="stat-chart">
-        <div class="math-symbol">∫</div>
+
+      <div class="stat-card parents-card">
+        <div class="stat-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ statistics.parentCount }}</div>
+          <div class="stat-label">Parents</div>
+        </div>
+        <div class="stat-chart">
+          <div class="math-symbol">√</div>
+        </div>
+      </div>
+
+      <div class="stat-card games-card">
+        <div class="stat-icon">
+          <i class="fas fa-gamepad"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ statistics.totalGamesPlayed }}</div>
+          <div class="stat-label">Parties jouées</div>
+        </div>
+        <div class="stat-chart">
+          <div class="math-symbol">∞</div>
+        </div>
       </div>
     </div>
+    <!-- Les graphiques sont maintenant à l'intérieur du conteneur principal conditionné par !isLoading -->
+    <div class="charts-container">
+      <div class="chart-card">
+        <h2>Distribution des niveaux de mathématiques</h2>
+        <div class="filter-controls">
+          <label for="gradeMathLevel">Filtrer par niveau scolaire:</label>
+          <select
+            id="gradeMathLevel"
+            [(ngModel)]="selectedGradeForMathLevel"
+            (change)="onGradeFilterChange()"
+          >
+            <option [ngValue]="null">Tous les niveaux</option>
+            <option *ngFor="let grade of gradeOptions" [value]="grade">
+              {{ grade }}
+            </option>
+          </select>
+        </div>
+        <div class="chart-container">
+          <canvas #mathLevelChart></canvas>
+        </div>
+      </div>
 
-    <div class="stat-card teachers-card">
-      <div class="stat-icon">
-        <i class="fas fa-chalkboard-teacher"></i>
-      </div>
-      <div class="stat-content">
-        <div class="stat-value">{{ statistics.teacherCount }}</div>
-        <div class="stat-label">Enseignants</div>
-      </div>
-      <div class="stat-chart">
-        <div class="math-symbol">π</div>
+      <div class="chart-card">
+        <h2>Répartition des scores par niveau scolaire</h2>
+        <div class="filter-controls">
+          <label for="gradeScores">Sélectionner un niveau scolaire:</label>
+          <select
+            id="gradeScores"
+            [(ngModel)]="selectedGradeForScores"
+            (change)="onGradeFilterChange()"
+          >
+            <option [ngValue]="null">Tous les niveaux</option>
+            <option *ngFor="let grade of gradeOptions" [value]="grade">
+              {{ grade }}
+            </option>
+          </select>
+        </div>
+        <div class="chart-container">
+          <canvas #scoreByGradeChart></canvas>
+        </div>
       </div>
     </div>
-
-    <div class="stat-card parents-card">
-      <div class="stat-icon">
-        <i class="fas fa-users"></i>
-      </div>
-      <div class="stat-content">
-        <div class="stat-value">{{ statistics.parentCount }}</div>
-        <div class="stat-label">Parents</div>
-      </div>
-      <div class="stat-chart">
-        <div class="math-symbol">√</div>
-      </div>
-    </div>
-
-    <div class="stat-card games-card">
-      <div class="stat-icon">
-        <i class="fas fa-gamepad"></i>
-      </div>
-      <div class="stat-content">
-        <div class="stat-value">{{ statistics.totalGamesPlayed }}</div>
-        <div class="stat-label">Parties jouées</div>
-      </div>
-      <div class="stat-chart">
-        <div class="math-symbol">∞</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Graphiques -->
-  <div class="chart-container">
-    <h2>Évolution des élèves</h2>
-    <app-line-chart [data]="studentGrowthData"></app-line-chart>
   </div>
 </div>

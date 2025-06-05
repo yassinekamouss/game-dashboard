@@ -5,13 +5,13 @@
   --primary-color: #3b67c5;
   --secondary-color: #e63946;
   --accent-color: #00b050;
+  --teacher-primary: #2a7b9b;
+  --teacher-secondary: #3a9188;
+  --teacher-accent: #67c38d;
   --light-gray: #f5f7fa;
   --dark-gray: #4a5568;
   --border-radius: 8px;
   --math-font: 'Cambria Math', 'STIX Two Math', serif;
-  --female-color: #e83e8c;
-  --male-color: #3b67c5;
-  --parent-color: #ff9800;
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
@@ -34,13 +34,13 @@
 }
 
 .dashboard-header::after {
-  content: "∞";
+  content: "π";
   position: absolute;
   bottom: 0;
   right: 0;
   font-size: 100px;
   font-family: var(--math-font);
-  color: rgba(59, 103, 197, 0.04);
+  color: rgba(42, 123, 155, 0.04);
   z-index: -1;
   transform: translateY(40%);
 }
@@ -66,7 +66,7 @@
   left: 0;
   width: 60px;
   height: 3px;
-  background: var(--primary-color);
+  background: var(--teacher-primary);
   border-radius: 3px;
 }
 
@@ -92,7 +92,7 @@
 
 .refresh-btn:hover {
   background-color: #e0e5f0;
-  color: var(--primary-color);
+  color: var(--teacher-primary);
 }
 
 /* Chargement */
@@ -108,7 +108,7 @@
 .spinner {
   font-family: var(--math-font);
   font-size: 4rem;
-  color: var(--primary-color);
+  color: var(--teacher-primary);
   animation: spin 2s infinite linear;
   margin-bottom: 1rem;
 }
@@ -144,7 +144,6 @@
 }
 
 .stat-icon {
-  background: rgba(59, 103, 197, 0.1);
   width: 60px;
   height: 60px;
   border-radius: 15px;
@@ -156,39 +155,30 @@
 
 .stat-icon i {
   font-size: 1.8rem;
-  color: var(--primary-color);
 }
 
 .students-card .stat-icon {
-  background-color: rgba(59, 103, 197, 0.1);
+  background-color: rgba(42, 123, 155, 0.1);
 }
 
 .students-card .stat-icon i {
-  color: var(--primary-color);
+  color: var(--teacher-primary);
 }
 
-.teachers-card .stat-icon {
-  background-color: rgba(39, 174, 96, 0.1);
+.average-card .stat-icon {
+  background-color: rgba(58, 145, 136, 0.1);
 }
 
-.teachers-card .stat-icon i {
-  color: var(--accent-color);
+.average-card .stat-icon i {
+  color: var(--teacher-secondary);
 }
 
-.parents-card .stat-icon {
-  background-color: rgba(255, 152, 0, 0.1);
+.best-card .stat-icon {
+  background-color: rgba(103, 195, 141, 0.1);
 }
 
-.parents-card .stat-icon i {
-  color: var(--parent-color);
-}
-
-.games-card .stat-icon {
-  background-color: rgba(232, 62, 140, 0.1);
-}
-
-.games-card .stat-icon i {
-  color: var(--female-color);
+.best-card .stat-icon i {
+  color: var(--teacher-accent);
 }
 
 .stat-content {
@@ -216,16 +206,10 @@
   font-family: var(--math-font);
   font-size: 3.5rem;
   opacity: 0.15;
-  color: var(--primary-color);
+  color: var(--teacher-primary);
   position: absolute;
   right: -15px;
   top: -25px;
-}
-
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 /* Conteneur principal */
@@ -233,97 +217,6 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-}
-
-/* Statistiques */
-.statistics-container {
-  margin-bottom: 2rem;
-}
-
-.statistics-card {
-  background: white;
-  border-radius: var(--border-radius);
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
-  position: relative;
-  overflow: hidden;
-}
-
-.statistics-card::before {
-  content: "∑";
-  position: absolute;
-  top: -20px;
-  right: 10px;
-  font-size: 120px;
-  font-family: var(--math-font);
-  color: rgba(59, 103, 197, 0.03);
-  z-index: 0;
-}
-
-.statistics-card h2 {
-  color: var(--primary-color);
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-  position: relative;
-  z-index: 1;
-  font-weight: 600;
-  display: inline-block;
-}
-
-.statistics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1rem;
-  position: relative;
-  z-index: 1;
-}
-
-.stat-item {
-  background-color: var(--light-gray);
-  border-radius: var(--border-radius);
-  padding: 1.2rem;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.stat-item:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
-}
-
-.stat-item::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  width: 100%;
-  background: var(--primary-color);
-  opacity: 0.7;
-}
-
-.stat-item:nth-child(1)::after { background: var(--primary-color); }
-.stat-item:nth-child(2)::after { background: var(--accent-color); }
-.stat-item:nth-child(3)::after { background: var(--parent-color); }
-.stat-item:nth-child(4)::after { background: var(--male-color); }
-.stat-item:nth-child(5)::after { background: var(--female-color); }
-.stat-item:nth-child(6)::after { background: var(--secondary-color); }
-
-.stat-value {
-  display: block;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--dark-gray);
-  margin-bottom: 0.5rem;
-}
-
-.stat-label {
-  display: block;
-  color: #667788;
-  font-weight: 500;
-  font-size: 0.9rem;
 }
 
 /* Conteneur des graphiques */
@@ -354,29 +247,29 @@
 }
 
 .chart-card:first-child::before {
-  content: "≈";
+  content: "δ";
   position: absolute;
   top: -30px;
   right: 10px;
   font-size: 120px;
   font-family: var(--math-font);
-  color: rgba(59, 103, 197, 0.03);
+  color: rgba(42, 123, 155, 0.03);
   z-index: 0;
 }
 
 .chart-card:last-child::before {
-  content: "∞";
+  content: "σ";
   position: absolute;
   top: -30px;
   right: 10px;
   font-size: 120px;
   font-family: var(--math-font);
-  color: rgba(59, 103, 197, 0.03);
+  color: rgba(42, 123, 155, 0.03);
   z-index: 0;
 }
 
 .chart-card h2 {
-  color: var(--primary-color);
+  color: var(--teacher-primary);
   font-size: 1.1rem;
   margin-bottom: 1.5rem;
   position: relative;
@@ -392,7 +285,7 @@
   left: 0;
   width: 40px;
   height: 2px;
-  background: var(--primary-color);
+  background: var(--teacher-primary);
   border-radius: 2px;
 }
 
@@ -408,18 +301,14 @@
 
 /* Responsive pour petits écrans */
 @media (max-width: 768px) {
-  .header {
+  .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
   
-  .header button {
+  .refresh-btn {
     align-self: flex-start;
-  }
-  
-  .statistics-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
   
   .charts-container {
@@ -428,7 +317,7 @@
 }
 
 @media (max-width: 480px) {
-  .statistics-grid {
+  .stats-cards {
     grid-template-columns: 1fr;
   }
 }
