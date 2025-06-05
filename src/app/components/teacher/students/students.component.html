@@ -61,8 +61,10 @@
 
   <!-- État de chargement -->
   <div *ngIf="isLoading" class="students-loading">
-    <div class="spinner">∫</div>
-    <p>Chargement des élèves...</p>
+    <div class="spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+    <p>Chargement des tests...</p>
   </div>
 
   <!-- Aucun résultat -->

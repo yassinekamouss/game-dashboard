@@ -266,11 +266,11 @@
 }
 
 .spinner {
-  font-family: var(--math-font);
-  font-size: 4rem;
-  color: var(--primary-color);
-  animation: spin 2s infinite linear;
+  font-size: 3rem;
+  color: var(--primary-color, #4a6cd1);
+  animation: spin 1.2s linear infinite;
   margin-bottom: 1rem;
+  display: inline-block;
 }
 
 @keyframes spin {
