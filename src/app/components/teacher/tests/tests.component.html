@@ -20,7 +20,21 @@
     </div>
 
     <div class="filters-grid">
-
+      <!-- Filtre par statut -->
+      <div class="filter-group">
+        <label for="stateFilter">Statut</label>
+        <select
+          id="stateFilter"
+          [(ngModel)]="filters.state"
+          (change)="applyFilters()"
+        >
+          <option value="">Tous les statuts</option>
+          <option [value]="TestState.CREATED">Créés</option>
+          <option [value]="TestState.PUBLISHED">Publiés</option>
+          <option [value]="TestState.COMPLETED">Terminés</option>
+        </select>
+        <div class="filter-icon">∫</div>
+      </div>
 
       <!-- Recherche par titre -->
       <div class="search-group">
@@ -46,70 +60,40 @@
     </div>
   </div>
 
-  <!-- Onglets de filtre par état de test -->
-  <div class="test-state-tabs">
-    <button
-      class="tab-btn"
-      [class.active]="!filters.state"
-      (click)="filters.state = ''; applyFilters(true)"
-    >
-      <i class="fas fa-list"></i>
-      Tous
-    </button>
-    <button
-      class="tab-btn created"
-      [class.active]="filters.state === TestState.CREATED"
-      (click)="filters.state = 'created'; applyFilters(true)"
-    >
-      <i class="fas fa-lightbulb"></i>
-      Créés
-    </button>
-    <button
-      class="tab-btn published"
-      [class.active]="filters.state === TestState.PUBLISHED"
-      (click)="filters.state = 'published'; applyFilters(true)"
-    >
-      <i class="fas fa-bullhorn"></i>
-      Publiés
-    </button>
-    <button
-      class="tab-btn completed"
-      [class.active]="filters.state === TestState.COMPLETED"
-      (click)="filters.state = 'completed'; applyFilters(true)"
-    >
-      <i class="fas fa-check-circle"></i>
-      Terminés
-    </button>
+  <div *ngIf="isLoading" class="tests-loading">
+    <div class="spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+    <p>Chargement des tests...</p>
   </div>
 
-<div *ngIf="isLoading" class="tests-loading">
-  <div class="spinner">
-    <i class="fas fa-spinner fa-spin"></i>
-  </div>
-  <p>Chargement des tests...</p>
-</div>
-
-
-  <div *ngIf="!isLoading  && filteredTests.length === 0" class="no-results">
+  <div *ngIf="!isLoading && filteredTests.length === 0" class="no-results">
     <p>Aucun test ne correspond à vos critères</p>
     <button (click)="resetFilters()">Réinitialiser les filtres</button>
   </div>
 
-
   <!-- Liste des tests -->
   <div *ngIf="!isLoading && filteredTests.length > 0" class="tests-grid">
     <app-test-card
-      *ngFor="let test of filteredTests.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-      )"
+      *ngFor="
+        let test of filteredTests.slice(
+          (currentPage - 1) * itemsPerPage,
+          currentPage * itemsPerPage
+        )
+      "
       [test]="test"
     ></app-test-card>
   </div>
 
   <!-- Pagination -->
-  <div class="pagination-controls" *ngIf="!isLoading && filteredTests.length > 0">
-    <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+  <div
+    class="pagination-controls"
+    *ngIf="!isLoading && filteredTests.length > 0"
+  >
+    <button
+      [disabled]="currentPage === 1"
+      (click)="changePage(currentPage - 1)"
+    >
       <i class="fas fa-chevron-left"></i> Précédent
     </button>
 
@@ -123,7 +107,10 @@
       </button>
     </div>
 
-    <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+    <button
+      [disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage + 1)"
+    >
       Suivant <i class="fas fa-chevron-right"></i>
     </button>
   </div>
@@ -133,5 +120,5 @@
   *ngIf="showAddTestModal"
   (close)="showAddTestModal = false"
   (testCreated)="onTestAdded($event)"
-  [grade] = "grade"
+  [grade]="grade"
 ></app-add-test>

@@ -27,9 +27,14 @@ export class TeacherComponent {
       icon: 'fas fa-file-alt',
     },
     {
-      label: 'tests',
-      path: '/teacher/tests',
-      icon: 'fas fa-file-alt',
+      label: 'Performance de classe',
+      path: '/teacher/classe-performance',
+      icon: 'fas fa-graduation-cap',
+    },
+    {
+      label: 'Rapports',
+      path: '/teacher/reports',
+      icon: 'fas fa-chart-line',
     },
   ];
 }

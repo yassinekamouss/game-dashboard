@@ -432,3 +432,96 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+
+/* Contrôles de filtres pour les graphiques */
+.filter-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed rgba(59, 103, 197, 0.2);
+  position: relative;
+  z-index: 2;
+}
+
+/* Style du label */
+.filter-controls label {
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.filter-controls label::before {
+  content: "∈";
+  font-family: var(--math-font);
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  opacity: 0.6;
+}
+
+/* Style du select */
+.filter-controls select {
+  padding: 0.5rem 2rem 0.5rem 0.8rem;
+  border: 1px solid #e0e5f0;
+  border-radius: var(--border-radius);
+  background-color: white;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233b67c5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  min-width: 180px;
+}
+
+/* États du select */
+.filter-controls select:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 2px 4px rgba(59, 103, 197, 0.1);
+}
+
+.filter-controls select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 103, 197, 0.15);
+}
+
+/* Style des options dans le select */
+.filter-controls select option {
+  padding: 8px;
+  font-size: 0.9rem;
+}
+
+/* Style spécifique pour le filtre de niveau math */
+#gradeMathLevel {
+  border-left: 3px solid var(--primary-color);
+}
+
+/* Style spécifique pour le filtre de scores */
+#gradeScores {
+  border-left: 3px solid var(--secondary-color);
+}
+
+/* Version responsive */
+@media (max-width: 576px) {
+  .filter-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filter-controls select {
+    width: 100%;
+    min-width: unset;
+  }
+}
