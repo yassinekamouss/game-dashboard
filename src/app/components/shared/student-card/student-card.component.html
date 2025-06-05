@@ -89,7 +89,7 @@
 
 <app-modify-student
   *ngIf="showModifiyModalStudent"
- [student]="studentToModify"
+ [user]="studentToModify"
   (close)="showModifiyModalStudent = false"
   (studentModified)="onStudentModified($event)"
 
