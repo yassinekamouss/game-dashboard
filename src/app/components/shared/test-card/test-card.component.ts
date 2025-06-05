@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Test} from '../../../models/test';
-import {DatePipe, KeyValuePipe, NgIf} from '@angular/common';
+import {CommonModule, DatePipe, KeyValuePipe, NgIf} from '@angular/common';
 import {UserService} from '../../../services/users/user.service';
 import {User} from '../../../models/user';
 import {AuthService} from '../../../services/auth/auth.service';
@@ -10,7 +10,7 @@ import {AuthService} from '../../../services/auth/auth.service';
   imports: [
     DatePipe,
     KeyValuePipe,
-    NgIf
+    CommonModule
   ],
   templateUrl: './test-card.component.html',
   styleUrl: './test-card.component.css',

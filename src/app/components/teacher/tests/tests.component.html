@@ -45,6 +45,43 @@
       </div>
     </div>
   </div>
+
+  <!-- Onglets de filtre par état de test -->
+  <div class="test-state-tabs">
+    <button
+      class="tab-btn"
+      [class.active]="!filters.state"
+      (click)="filters.state = ''; applyFilters(true)"
+    >
+      <i class="fas fa-list"></i>
+      Tous
+    </button>
+    <button
+      class="tab-btn created"
+      [class.active]="filters.state === TestState.CREATED"
+      (click)="filters.state = 'created'; applyFilters(true)"
+    >
+      <i class="fas fa-lightbulb"></i>
+      Créés
+    </button>
+    <button
+      class="tab-btn published"
+      [class.active]="filters.state === TestState.PUBLISHED"
+      (click)="filters.state = 'published'; applyFilters(true)"
+    >
+      <i class="fas fa-bullhorn"></i>
+      Publiés
+    </button>
+    <button
+      class="tab-btn completed"
+      [class.active]="filters.state === TestState.COMPLETED"
+      (click)="filters.state = 'completed'; applyFilters(true)"
+    >
+      <i class="fas fa-check-circle"></i>
+      Terminés
+    </button>
+  </div>
+
 <div *ngIf="isLoading" class="tests-loading">
   <div class="spinner">
     <i class="fas fa-spinner fa-spin"></i>
@@ -53,7 +90,7 @@
 </div>
 
 
-  <div *ngIf="!isLoading  && initialLoaded && filteredTests.length === 0" class="no-results">
+  <div *ngIf="!isLoading  && filteredTests.length === 0" class="no-results">
     <p>Aucun test ne correspond à vos critères</p>
     <button (click)="resetFilters()">Réinitialiser les filtres</button>
   </div>

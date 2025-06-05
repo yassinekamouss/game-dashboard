@@ -1,4 +1,5 @@
-import { Test } from '../models/test';
+import {Test} from '../models/test';
+import {TestState} from '../models/test-state';
 
 export class TestFactory {
 
@@ -11,7 +12,8 @@ export class TestFactory {
       duration: formValues.duration,
       createdAt: new Date().toISOString(),
       grade: formValues.grade,
-      groups: {}
+      groups: {},
+      state : TestState.CREATED
     };
 
     // Traiter les groupes

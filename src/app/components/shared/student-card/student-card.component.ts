@@ -4,10 +4,11 @@ import { Student } from '../../../models/student';
 import { ref } from 'firebase/database';
 import { Database, onValue } from '@angular/fire/database';
 import {QRCodeService} from '../../../services/qrcode/qrcode.service';
+import {ModifyStudentComponent} from '../modify-student/modify-student.component';
 
 @Component({
   selector: 'app-student-card',
-  imports: [CommonModule],
+  imports: [CommonModule , ModifyStudentComponent],
   templateUrl: './student-card.component.html',
   styleUrl: './student-card.component.css',
   standalone: true,
@@ -15,9 +16,11 @@ import {QRCodeService} from '../../../services/qrcode/qrcode.service';
 export class StudentCardComponent implements OnInit {
   @Input() student: Student | null = null;
   isGeneratingQR: boolean = false;
+  showModifiyModalStudent = false;
+  studentToModify :Student | null = null;
 
   constructor(private db: Database, private qrCodeService: QRCodeService) {}
-  
+
   ngOnInit(): void {
     onValue(ref(this.db, `users/${this.student?.id}`), (snapshot) => {
       this.student = snapshot.val();
@@ -58,4 +61,16 @@ export class StudentCardComponent implements OnInit {
       }
     });
   }
+
+  editStudentClick(student :Student): void {
+    this.studentToModify = student;
+    this.showModifiyModalStudent = true;
+
+
+  }
+
+  onStudentModified($event: any) {
+    this.showModifiyModalStudent = false;
+}
+
 }

@@ -1,0 +1,99 @@
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">Modifier l'élève</h2>
+      <button class="close-button" (click)="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="studentForm" class="form-step">
+        <!-- Nom -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="lastName">Nom</label>
+            <input
+              id="lastName"
+              class="input-field"
+              formControlName="lastName"
+              type="text"
+            />
+            <div *ngIf="studentForm.get('lastName')?.invalid && studentForm.get('lastName')?.touched" class="error-message">
+              Nom requis
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="firstName">Prénom</label>
+            <input
+              id="firstName"
+              class="input-field"
+              formControlName="firstName"
+              type="text"
+            />
+            <div *ngIf="studentForm.get('firstName')?.invalid && studentForm.get('firstName')?.touched" class="error-message">
+              Prénom requis
+            </div>
+          </div>
+        </div>
+        <!-- Date de naissance et Genre -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dateOfBirth">Date de naissance</label>
+            <input
+              id="dateOfBirth"
+              class="input-field"
+              formControlName="dateOfBirth"
+              type="date"
+            />
+            <div *ngIf="studentForm.get('dateOfBirth')?.invalid && studentForm.get('dateOfBirth')?.touched" class="error-message">
+              Date de naissance requise
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="gender">Genre</label>
+            <select
+              id="gender"
+              class="input-field"
+              formControlName="gender"
+            >
+              <option value="" disabled>Choisir</option>
+              <option value="male">Masculin</option>
+              <option value="female">Féminin</option>
+            </select>
+            <div *ngIf="studentForm.get('gender')?.invalid && studentForm.get('gender')?.touched" class="error-message">
+              Genre requis
+            </div>
+          </div>
+        </div>
+        <!-- Niveau -->
+        <div class="form-group">
+                        <label for="grade">Niveau</label>
+              
+              <select
+                *ngIf="currentUser?.role === UserRole.ADMIN"
+                id="grade"
+                class="input-field"
+                formControlName="grade"
+              >
+                <option value="" disabled>Choisir un niveau</option>
+                <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+              </select>
+             <input
+                *ngIf="currentUser?.role !== UserRole.ADMIN"
+                id="grade"
+                class="input-field"
+                [value]="studentForm.get('grade')?.value"
+                readonly
+                disabled
+              />
+              <div *ngIf="studentForm.get('grade')?.invalid && studentForm.get('grade')?.touched" class="error-message">
+                Niveau requis
+              </div>
+        </div>
+        <!-- Actions -->
+        <div class="form-actions">
+          <button class="btn btn-secondary" type="button" (click)="closeModal()">Annuler</button>
+          <button class="btn btn-success" type="button" (click)="onSave()" [disabled]="studentForm.invalid">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

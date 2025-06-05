@@ -10,6 +10,7 @@ import {TestCardComponent} from '../../shared/test-card/test-card.component';
 import {AddTestComponent} from './add-test/add-test.component';
 import {GradeLevel} from '../../../models/grade-level';
 import {CommonModule, NgIf} from '@angular/common';
+import {TestState} from '../../../models/test-state';
 
 @Component({
   selector: 'app-tests',
@@ -32,11 +33,12 @@ export class TestsComponent implements OnInit, OnDestroy {
   currentPage = 1;
   itemsPerPage = 6;
   totalPages = 1;
-  initialLoaded = false;
+
 
   // Filtres
   filters = {
-    search: ''
+    search: '',
+    state:'',
   };
 
   private testSub!: Subscription;
@@ -66,7 +68,7 @@ export class TestsComponent implements OnInit, OnDestroy {
         this.applyFilters();
 
         setTimeout(() => {
-          this.initialLoaded = true;
+
           this.isLoading = false;
         }  , 950);
       });
@@ -88,6 +90,11 @@ applyFilters(resetPage = false): void {
     );
   }
 
+  if(this.filters.state){
+    filtered = filtered.filter(test =>
+     test.state === this.filters.state)
+  }
+
   this.filteredTests = filtered;
   this.totalPages = Math.ceil(this.filteredTests.length / this.itemsPerPage);
   if (resetPage) {
@@ -97,7 +104,8 @@ applyFilters(resetPage = false): void {
 
   resetFilters(): void {
     this.filters = {
-      search: ''
+      search: '',
+      state: '',
     };
     this.applyFilters(true);
   }
@@ -128,4 +136,6 @@ applyFilters(resetPage = false): void {
       this.tests.push(test);
       this.testService.setTests([...this.tests]);
   }
+
+  protected readonly TestState = TestState;
 }
