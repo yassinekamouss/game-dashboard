@@ -18,7 +18,7 @@ export class ChartService {
    * @param gradeFilter Grade spécifique à filtrer (optionnel)
    * @param teacherId ID du professeur (optionnel, pour filtrer les étudiants d'un prof)
    */
-  async fetchStudents(gradeFilter?: GradeLevel, teacherId?: string): Promise<Student[]> {
+  async fetchStudents(gradeFilter?: GradeLevel): Promise<Student[]> {
     try {
       const studentsQuery = query(
         ref(this.db, 'users'),
@@ -38,10 +38,7 @@ export class ChartService {
           students = students.filter(student => student.grade === gradeFilter);
         }
         
-        // Filtrer par teacherId si spécifié
-        if (teacherId) {
-          students = students.filter(student => student.teacherId === teacherId);
-        }
+      
         
         return students;
       }

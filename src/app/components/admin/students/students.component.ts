@@ -155,4 +155,10 @@ export class StudentsComponent implements OnInit {
 
 
   protected readonly UserRole = UserRole;
+
+  removeStudent(studentId:string) {
+    this.students = this.students.filter(s => s.id !== studentId);
+    this.userService.setUsers([...this.students]);
+    this.applyFilters();
+  }
 }

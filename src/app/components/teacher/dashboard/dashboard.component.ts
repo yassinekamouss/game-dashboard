@@ -46,9 +46,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       console.log('Utilisateur connecté:', this.currentUser);
 
-      this.teacherGrade = this.currentUser?.grade || GradeLevel.GRADE_1;
-      this.teacherId = this.currentUser?.id || '';
- 
+      this.teacherGrade = this.currentUser?.grade ;
+     
     });
   }
 
@@ -70,7 +69,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private async fetchTeacherStudents(): Promise<void> {
     // Récupérer seulement les étudiants du professeur
-    this.students = await this.chartService.fetchStudents(this.teacherGrade, this.teacherId);
+    this.students = await this.chartService.fetchStudents(this.teacherGrade);
   }
 
   private calculateStatistics(): void {

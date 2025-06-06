@@ -139,7 +139,13 @@ export class StudentsComponent implements OnInit {
     this.showAddUserModal = false;
     const student = user as Student;
     this.students.push(student);
+    this.studentService.setStudents([...this.students]);
+  }
+
+  removeStudent(studentId:string) {
+    this.students = this.students.filter(s => s.id !== studentId);
     this.userService.setUsers([...this.students]);
+    this.applyFilters();
   }
 
   protected readonly UserRole = UserRole;

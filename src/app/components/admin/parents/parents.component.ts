@@ -128,5 +128,13 @@ export class ParentsComponent implements OnInit{
   }
 
 
+
+
   protected readonly UserRole = UserRole;
+
+  deletedParent(parentId: string) {
+    this.parents = this.parents.filter(s => s.id !== parentId);
+    this.parentService.setParents([...this.parents]);
+    this.applyFilters();
+  }
 }

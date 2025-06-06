@@ -3,39 +3,39 @@
     <div class="test-icon">
       <i class="fas fa-file-alt"></i>
     </div>
-    
+
     <div class="test-meta">
       <div class="test-grade-badge">
         <i class="fas fa-graduation-cap"></i>
-        <span>{{ test?.grade }}</span>
+        <span>{{ test.grade }}</span>
       </div>
       <div class="test-duration">
         <i class="fas fa-clock"></i>
-        <span>{{ test?.duration }} min</span>
+        <span>{{ test.duration }} min</span>
       </div>
     </div>
 
-    <div class="test-state-badge" [ngClass]="test?.state">
+    <div class="test-state-badge" [ngClass]="test.state">
       <i
-        *ngIf="test?.state === 'created'"
+        *ngIf="test.state === 'created'"
         class="fas fa-lightbulb"
         aria-label="Créé"
       ></i>
       <i
-        *ngIf="test?.state === 'published'"
+        *ngIf="test.state === 'published'"
         class="fas fa-bullhorn"
         aria-label="Publié"
       ></i>
       <i
-        *ngIf="test?.state === 'completed'"
+        *ngIf="test.state === 'completed'"
         class="fas fa-check-circle"
         aria-label="Terminé"
       ></i>
       <span>
         {{
-          test?.state === 'created'
+          test.state === 'created'
             ? 'Créé'
-            : test?.state === 'published'
+            : test.state === 'published'
             ? 'Publié'
             : 'Terminé'
         }}
@@ -44,12 +44,12 @@
   </div>
 
   <div class="test-card-content">
-    <h3 class="test-title">{{ test?.title }}</h3>
+    <h3 class="test-title">{{ test.title }}</h3>
 
     <div class="test-info">
       <div class="test-date">
         <i class="fas fa-calendar-alt"></i>
-        <span>{{ test?.createdAt | date: 'shortDate' }}</span>
+        <span>{{ test.createdAt | date: 'shortDate' }}</span>
       </div>
       <div class="test-author">
         <i class="fas fa-user"></i>
@@ -57,7 +57,7 @@
       </div>
     </div>
 
-    <ng-container *ngIf="test?.groups | keyvalue as groupEntries">
+    <ng-container *ngIf="test.groups | keyvalue as groupEntries">
       <div class="test-groups">
         <i class="fas fa-users"></i>
         <span>{{ groupEntries.length }} groupes</span>

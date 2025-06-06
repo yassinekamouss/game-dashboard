@@ -124,5 +124,9 @@ export class TeachersComponent implements OnInit {
   protected readonly UserRole = UserRole;
 
 
-
+  removeTeacher(teacherId: string) {
+    this.teachers = this.teachers.filter(s => s.id !== teacherId);
+    this.userService.setUsers([...this.teachers]);
+    this.applyFilters();
+  }
 }
