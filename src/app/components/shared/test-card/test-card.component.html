@@ -1,67 +1,239 @@
-<div *ngIf="test" class="test-card">
-  <div class="test-header">
-    <div class="test-icon">
-      <i class="fas fa-file-alt"></i>
-    </div>
+<div class="tests-table-container">
+  <table class="tests-table">
+    <thead>
+      <tr>
+        <th>Statut</th>
+        <th>Titre</th>
+        <th>Niveau</th>
+        <th>Durée</th>
+        <th>Date de création</th>
+        <th>Groupes</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let test of tests" [ngClass]="test?.state">
+        <td class="status-cell">
+          <div class="test-state" [ngClass]="test?.state">
+            <i *ngIf="test?.state === 'created'" class="fas fa-lightbulb"></i>
+            <i *ngIf="test?.state === 'published'" class="fas fa-bullhorn"></i>
+            <i
+              *ngIf="test?.state === 'completed'"
+              class="fas fa-check-circle"
+            ></i>
+            <span>
+              {{
+                test?.state === "created"
+                  ? "Créé"
+                  : test?.state === "published"
+                  ? "Publié"
+                  : "Terminé"
+              }}
+            </span>
+          </div>
+        </td>
+        <td>{{ test?.title }}</td>
+        <td>{{ test?.grade | uppercase }}</td>
+        <td>{{ test?.duration }} min</td>
+        <td>{{ test?.createdAt | date : "dd/MM/yyyy" }}</td>
+        <td>
+          {{ countGroups(test) }} ({{ calculateTotalStudents(test) }} élèves)
+        </td>
+        <td class="actions-cell">
+          <button
+            class="action-btn view-btn"
+            (click)="openModal(test)"
+            title="Voir les détails"
+          >
+            <i class="fas fa-eye"></i>
+          </button>
+          <!-- Nouveau bouton de suppression -->
+          <button
+            class="action-btn delete-btn"
+            (click)="confirmDeleteTest(test)"
+            title="Supprimer"
+          >
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-    <div class="test-meta">
-      <div class="test-grade-badge">
-        <i class="fas fa-graduation-cap"></i>
-        <span>{{ test.grade }}</span>
-      </div>
-      <div class="test-duration">
-        <i class="fas fa-clock"></i>
-        <span>{{ test.duration }} min</span>
-      </div>
-    </div>
+<!-- Modal pour afficher les détails -->
+<div *ngIf="showModal" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-btn" (click)="closeModal()">×</button>
+    <h3 class="modal-title">{{ selectedTest?.title }}</h3>
+    <div class="modal-body">
+      <!-- Contenu détaillé -->
+      <div class="test-details">
+        <!-- État avec possibilité de modification -->
+        <div class="detail-row state-row">
+          <strong>État :</strong>
+          <div class="state-selector">
+            <div *ngIf="!editingState" class="current-state">
+              <span class="test-state-badge" [ngClass]="selectedTest?.state">
+                <i
+                  *ngIf="selectedTest?.state === TestState.CREATED"
+                  class="fas fa-lightbulb"
+                ></i>
+                <i
+                  *ngIf="selectedTest?.state === TestState.PUBLISHED"
+                  class="fas fa-bullhorn"
+                ></i>
+                <i
+                  *ngIf="selectedTest?.state === TestState.COMPLETED"
+                  class="fas fa-check-circle"
+                ></i>
+                {{
+                  selectedTest?.state === "created"
+                    ? "Créé"
+                    : selectedTest?.state === "published"
+                    ? "Publié"
+                    : "Terminé"
+                }}
+              </span>
+              <button class="edit-state-btn" (click)="startEditingState()">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+            </div>
 
-    <div class="test-state-badge" [ngClass]="test.state">
-      <i
-        *ngIf="test.state === 'created'"
-        class="fas fa-lightbulb"
-        aria-label="Créé"
-      ></i>
-      <i
-        *ngIf="test.state === 'published'"
-        class="fas fa-bullhorn"
-        aria-label="Publié"
-      ></i>
-      <i
-        *ngIf="test.state === 'completed'"
-        class="fas fa-check-circle"
-        aria-label="Terminé"
-      ></i>
-      <span>
-        {{
-          test.state === 'created'
-            ? 'Créé'
-            : test.state === 'published'
-            ? 'Publié'
-            : 'Terminé'
-        }}
-      </span>
+            <div *ngIf="editingState" class="state-edit-form">
+              <div class="state-options">
+                <button
+                  [ngClass]="{ selected: newState === TestState.CREATED }"
+                  (click)="selectState(TestState.CREATED)"
+                  class="state-option created"
+                >
+                  <i class="fas fa-lightbulb"></i> Créé
+                </button>
+                <button
+                  [ngClass]="{ selected: newState === TestState.PUBLISHED }"
+                  (click)="selectState(TestState.PUBLISHED)"
+                  class="state-option published"
+                >
+                  <i class="fas fa-bullhorn"></i> Publié
+                </button>
+                <button
+                  [ngClass]="{ selected: newState === TestState.COMPLETED }"
+                  (click)="selectState(TestState.COMPLETED )"
+                  class="state-option completed"
+                >
+                  <i class="fas fa-check-circle"></i> Terminé
+                </button>
+              </div>
+
+              <div class="state-change-warning" *ngIf="showWarning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>
+                  Attention : Ce changement est irréversible et peut avoir un
+                  impact sur les données du test.
+                </p>
+              </div>
+
+              <div class="state-edit-actions">
+                <button class="btn btn-cancel" (click)="cancelEditingState()">
+                  Annuler
+                </button>
+                <button
+                  class="btn btn-save"
+                  [disabled]="!newState || newState === selectedTest?.state"
+                  (click)="updateTestState()"
+                >
+                  Enregistrer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Autres détails inchangés -->
+        <p>
+          <strong>Niveau :</strong>
+          {{ selectedTest?.grade || "" | uppercase }}
+        </p>
+        <p><strong>Durée :</strong> {{ selectedTest?.duration }} min</p>
+        <p>
+          <strong>Date de création :</strong>
+          {{ selectedTest?.createdAt | date : "dd/MM/yyyy" }}
+        </p>
+        <p>
+          <strong>Créé par :</strong> {{ currentUser?.firstName }}
+          {{ currentUser?.lastName }}
+        </p>
+        <p>
+          <strong>Nombre de groupes :</strong>
+          {{ selectedTest ? countGroups(selectedTest) : 0 }}
+        </p>
+        <p>
+          <strong>Nombre total d'élèves :</strong>
+          {{ selectedTest ? calculateTotalStudents(selectedTest) : 0 }}
+        </p>
+
+        <!-- Liste des groupes -->
+        <div class="groups-section">
+          <h4>Groupes et jeux configurés</h4>
+          <div *ngFor="let group of getGroups(selectedTest)" class="group-item">
+            <h5>
+              {{ group.groupName }} ({{ group.students.length || 0 }} élèves)
+            </h5>
+            <div class="games-list">
+              <div
+                *ngIf="group.configuredGames?.vertical_operations"
+                class="game-item"
+              >
+                <i class="fas fa-calculator"></i> Opérations verticales
+              </div>
+              <div
+                *ngIf="group.configuredGames?.find_compositions"
+                class="game-item"
+              >
+                <i class="fas fa-puzzle-piece"></i> Trouver les compositions
+              </div>
+              <div
+                *ngIf="group.configuredGames?.choose_answer"
+                class="game-item"
+              >
+                <i class="fas fa-check-square"></i> Choisir la réponse
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+>>>>>>> b8df80ea1f37882036006b74725c38f89aba606a
   </div>
+</div>
 
-  <div class="test-card-content">
-    <h3 class="test-title">{{ test.title }}</h3>
+<!-- Modal de confirmation de suppression -->
+<div *ngIf="showDeleteConfirmModal" class="modal-overlay">
+  <div class="delete-confirm-modal">
+    <div class="delete-icon">
+      <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <h3 class="delete-title">Confirmer la suppression</h3>
+    <p class="delete-message">
+      Êtes-vous sûr de vouloir supprimer le test <span class="delete-test-name">{{ testToDelete?.title }}</span> ?<br>
+      Cette action est irréversible et supprimera définitivement toutes les données associées à ce test.
+    </p>
 
-    <div class="test-info">
-      <div class="test-date">
-        <i class="fas fa-calendar-alt"></i>
-        <span>{{ test.createdAt | date: 'shortDate' }}</span>
-      </div>
-      <div class="test-author">
-        <i class="fas fa-user"></i>
-        <span>{{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
-      </div>
+    <div *ngIf="deleteError" class="state-change-warning">
+      <i class="fas fa-exclamation-circle"></i>
+      <p>{{ deleteError }}</p>
     </div>
 
-    <ng-container *ngIf="test.groups | keyvalue as groupEntries">
-      <div class="test-groups">
-        <i class="fas fa-users"></i>
-        <span>{{ groupEntries.length }} groupes</span>
-      </div>
-    </ng-container>
+    <div class="delete-actions">
+      <button class="btn btn-cancel" [disabled]="isDeleting" (click)="cancelDeleteTest()">
+        Annuler
+      </button>
+      <button class="btn btn-delete" [disabled]="isDeleting" (click)="deleteTest()">
+        <span *ngIf="!isDeleting">Supprimer</span>
+        <span *ngIf="isDeleting">
+          <i class="fas fa-spinner fa-spin"></i> Suppression...
+        </span>
+      </button>
+    </div>
   </div>
 </div>

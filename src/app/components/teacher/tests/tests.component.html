@@ -72,18 +72,14 @@
     <button (click)="resetFilters()">Réinitialiser les filtres</button>
   </div>
 
-  <!-- Liste des tests -->
-  <div *ngIf="!isLoading && filteredTests.length > 0" class="tests-grid">
-    <app-test-card
-      *ngFor="
-        let test of filteredTests.slice(
-          (currentPage - 1) * itemsPerPage,
-          currentPage * itemsPerPage
-        )
-      "
-      [test]="test"
-    ></app-test-card>
-  </div>
+  <!-- Table des tests -->
+  <app-test-card
+    *ngIf="!isLoading && filteredTests.length > 0"
+    [tests]="filteredTests.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    )"
+  ></app-test-card>
 
   <!-- Pagination -->
   <div
