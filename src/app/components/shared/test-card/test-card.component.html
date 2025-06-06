@@ -177,7 +177,7 @@
           <h4>Groupes et jeux configurés</h4>
           <div *ngFor="let group of getGroups(selectedTest)" class="group-item">
             <h5>
-              {{ group.groupName }} ({{ group.students?.length || 0 }} élèves)
+              {{ group.groupName }} ({{ group.students.length || 0 }} élèves)
             </h5>
             <div class="games-list">
               <div
