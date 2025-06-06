@@ -22,7 +22,7 @@ export class TeacherComponent {
       icon: 'fas fa-users-gear',
     },
     {
-      label: 'tests',
+      label: 'Gestion des Tests',
       path: '/teacher/tests',
       icon: 'fas fa-file-alt',
     },
