@@ -72,7 +72,7 @@
     <button class="action-btn edit-btn" title="Modifier" (click)="editStudentClick(student)">
       <i class="fas fa-pencil-alt"></i>
     </button>
-    <button class="action-btn delete-btn" title="Supprimer">
+    <button class="action-btn delete-btn" title="Supprimer" (click)="deleteStudentClick(student)">
       <i class="fas fa-trash-alt"></i>
     </button>
   </div>
@@ -96,3 +96,11 @@
 </app-modify-student>
 
 
+<app-delete-user
+ *ngIf="showDeleteUserModal"
+[user]="studentToDelete"
+(close) = "showDeleteUserModal = false"
+ (userDeleted) = "onUserDeleted($event)"
+>
+
+</app-delete-user>

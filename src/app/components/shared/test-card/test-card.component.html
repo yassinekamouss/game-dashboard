@@ -203,6 +203,7 @@
         </div>
       </div>
     </div>
+>>>>>>> b8df80ea1f37882036006b74725c38f89aba606a
   </div>
 </div>
 
@@ -217,12 +218,12 @@
       Êtes-vous sûr de vouloir supprimer le test <span class="delete-test-name">{{ testToDelete?.title }}</span> ?<br>
       Cette action est irréversible et supprimera définitivement toutes les données associées à ce test.
     </p>
-    
+
     <div *ngIf="deleteError" class="state-change-warning">
       <i class="fas fa-exclamation-circle"></i>
       <p>{{ deleteError }}</p>
     </div>
-    
+
     <div class="delete-actions">
       <button class="btn btn-cancel" [disabled]="isDeleting" (click)="cancelDeleteTest()">
         Annuler

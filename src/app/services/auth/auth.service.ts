@@ -16,6 +16,8 @@ import {catchError, finalize, map, switchMap, tap} from "rxjs/operators";
 import {User} from "../../models/user";
 import {environment} from '../../environments/environment';
 import {UserRole} from '../../models/user-role';
+import {UserService} from '../users/user.service';
+import {Parent} from '../../models/parent';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -29,7 +31,7 @@ export class AuthService {
 
   private isCreatingUser = false;
 
-  constructor(private auth: Auth, private db: Database) {
+  constructor(private auth: Auth, private db: Database , private userService: UserService) {
     this.setSessionStoragePersistence();
     this.user$ = user(this.auth);
     this.setupAuthStateListener();
@@ -37,7 +39,7 @@ export class AuthService {
     this.secondaryApp = initializeApp(environment.firebaseConfig, 'secondary');
   }
 
-  
+
 
   private setSessionStoragePersistence(): void {
     setPersistence(this.auth, browserSessionPersistence).catch(error => {
@@ -177,14 +179,39 @@ export class AuthService {
     );
   }
 
-  deleteUser(uid: string): Observable<void> {
-    const userRef = ref(this.db, `users/${uid}`);
-    return from(set(userRef, null)).pipe(
-      tap(() => console.log(`User ${uid} deleted from database`)),
-      catchError(error => {
-        console.error('Error deleting user from database:', error);
-        return throwError(() => error);
-      })
-    );
-  }
+
+deleteUser(uid: string): Observable<void> {
+  return this.userService.getUserById(uid).pipe(
+    switchMap(user => {
+      if (!user) {
+        return throwError(() => new Error('Utilisateur introuvable'));
+      }
+      if (user.role === UserRole.PARENT && Array.isArray((user as Parent).children)) {
+        const childrenIds: string[] = (user as Parent).children;
+        const updates = childrenIds.map(childId => {
+          const childRef = ref(this.db, `users/${childId}/parentId`);
+          return set(childRef, "");
+        });
+        return from(Promise.all(updates)).pipe(
+          switchMap(() => {
+            const userRef = ref(this.db, `users/${uid}`);
+            return from(set(userRef, null)).pipe(
+              tap(() => console.log(`Parent ${uid} et ses liens enfants supprimés de la DB`))
+            );
+          })
+        );
+      } else {
+        // Suppression simple pour les autres rôles
+        const userRef = ref(this.db, `users/${uid}`);
+        return from(set(userRef, null)).pipe(
+          tap(() => console.log(`User ${uid} deleted from database`))
+        );
+      }
+    }),
+    catchError(error => {
+      console.error('Error deleting user from database:', error);
+      return throwError(() => error);
+    })
+  );
+}
 }
