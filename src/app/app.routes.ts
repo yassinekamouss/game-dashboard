@@ -13,6 +13,7 @@ import { StudentsComponent as TeacherStudentComponent } from './components/teach
 import { RegisterComponent } from './components/register/register.component';
 import { PendingUsersComponent } from './components/admin/pending-users/pending-users.component';
 import { TestsComponent } from './components/teacher/tests/tests.component';
+import { ClassePerformanceComponent } from './components/teacher/classe-performance/classe-performance.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -41,6 +42,7 @@ export const routes: Routes = [
       { path: 'profile', component: ProfileComponent },
       { path: 'students', component: TeacherStudentComponent },
       { path: 'tests', component: TestsComponent },
+      { path: 'classe-performance', component: ClassePerformanceComponent },
     ],
   },
 ];

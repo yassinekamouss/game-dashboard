@@ -290,12 +290,11 @@
 }
 
 .chart-container {
-  height: 300px;
+  height: 400px;
   position: relative;
   z-index: 1;
   border-radius: var(--border-radius);
   overflow: hidden;
-  background-color: var(--light-gray);
   padding: 1rem;
 }
 

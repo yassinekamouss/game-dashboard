@@ -1,5 +1,5 @@
 export interface PlayerProfile {
-    playerName: string; // to be used in the game
+    playerName: string;
     mathLevel: number;
     coins: number;
     score: number;
