@@ -73,78 +73,58 @@
         <div class="detail-row state-row">
           <strong>État :</strong>
           <div class="state-selector">
-            <div *ngIf="!editingState" class="current-state">
-              <span class="test-state-badge" [ngClass]="selectedTest?.state">
-                <i
-                  *ngIf="selectedTest?.state === TestState.CREATED"
-                  class="fas fa-lightbulb"
-                ></i>
-                <i
-                  *ngIf="selectedTest?.state === TestState.PUBLISHED"
-                  class="fas fa-bullhorn"
-                ></i>
-                <i
-                  *ngIf="selectedTest?.state === TestState.COMPLETED"
-                  class="fas fa-check-circle"
-                ></i>
-                {{
-                  selectedTest?.state === "created"
-                    ? "Créé"
-                    : selectedTest?.state === "published"
-                    ? "Publié"
-                    : "Terminé"
-                }}
-              </span>
-              <button class="edit-state-btn" (click)="startEditingState()">
-                <i class="fas fa-pencil-alt"></i>
-              </button>
-            </div>
-
-            <div *ngIf="editingState" class="state-edit-form">
-              <div class="state-options">
-                <button
-                  [ngClass]="{ selected: newState === TestState.CREATED }"
-                  (click)="selectState(TestState.CREATED)"
-                  class="state-option created"
-                >
-                  <i class="fas fa-lightbulb"></i> Créé
+           
+              <div *ngIf="!editingState" class="current-state">
+                <span class="test-state-badge" [ngClass]="selectedTest?.state">
+                  <i
+                    *ngIf="selectedTest?.state === TestState.CREATED"
+                    class="fas fa-lightbulb"
+                  ></i>
+                  <i
+                    *ngIf="selectedTest?.state === TestState.PUBLISHED"
+                    class="fas fa-bullhorn"
+                  ></i>
+                  <i
+                    *ngIf="selectedTest?.state === TestState.COMPLETED"
+                    class="fas fa-check-circle"
+                  ></i>
+                  {{
+                    selectedTest?.state === "created"
+                      ? "Créé"
+                      : selectedTest?.state === "published"
+                      ? "Publié"
+                      : "Terminé"
+                  }}
+                </span>
+                <button class="edit-state-btn" (click)="toggleStateMenu($event)">
+                  <i class="fas fa-pencil-alt"></i>
                 </button>
-                <button
-                  [ngClass]="{ selected: newState === TestState.PUBLISHED }"
-                  (click)="selectState(TestState.PUBLISHED)"
-                  class="state-option published"
-                >
-                  <i class="fas fa-bullhorn"></i> Publié
-                </button>
-                <button
-                  [ngClass]="{ selected: newState === TestState.COMPLETED }"
-                  (click)="selectState(TestState.COMPLETED )"
-                  class="state-option completed"
-                >
-                  <i class="fas fa-check-circle"></i> Terminé
-                </button>
-              </div>
-
-              <div class="state-change-warning" *ngIf="showWarning">
-                <i class="fas fa-exclamation-triangle"></i>
-                <p>
-                  Attention : Ce changement est irréversible et peut avoir un
-                  impact sur les données du test.
-                </p>
-              </div>
-
-              <div class="state-edit-actions">
-                <button class="btn btn-cancel" (click)="cancelEditingState()">
-                  Annuler
-                </button>
-                <button
-                  class="btn btn-save"
-                  [disabled]="!newState || newState === selectedTest?.state"
-                  (click)="updateTestState()"
-                >
-                  Enregistrer
-                </button>
-              </div>
+                <!-- Menu contextuel pour changer l'état -->
+                <div *ngIf="showStateMenu" class="state-context-menu">
+                  <button
+                    class="state-menu-item created"
+                    (click)="changeState(TestState.CREATED)"
+                    [disabled]="selectedTest?.state === TestState.CREATED"
+                  >
+                    <i class="fas fa-lightbulb"></i> Créé
+                  </button>
+                  <button
+                    class="state-menu-item published"
+                    (click)="changeState(TestState.PUBLISHED)"
+                    [disabled]="selectedTest?.state === TestState.PUBLISHED"
+                  >
+                    <i class="fas fa-bullhorn"></i> Publié
+                  </button>
+                  <button
+                    class="state-menu-item completed"
+                    (click)="changeState(TestState.COMPLETED)"
+                    [disabled]="selectedTest?.state === TestState.COMPLETED"
+                  >
+                    <i class="fas fa-check-circle"></i> Terminé
+                  </button>
+                </div>
+              
+             
             </div>
           </div>
         </div>
@@ -203,7 +183,7 @@
         </div>
       </div>
     </div>
->>>>>>> b8df80ea1f37882036006b74725c38f89aba606a
+
   </div>
 </div>
 

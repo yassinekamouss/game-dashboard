@@ -113,6 +113,7 @@ showStudentList: { [groupIndex: number]: boolean } = {};
   createGameConfigForm(): FormGroup {
     return this.fb.group({
       numOperations: [10, [Validators.required, Validators.min(1), Validators.max(50)]],
+      numComposition:[1 , [Validators.required , Validators.min(1) , Validators.max(50)]],
       maxNumberRange: [100, [Validators.required, Validators.min(10), Validators.max(1000)]],
       requiredCorrectAnswersMinimumPercent: [70, [Validators.required, Validators.min(0), Validators.max(100)]],
       order: [1, [Validators.required, Validators.min(1), Validators.max(3)]]

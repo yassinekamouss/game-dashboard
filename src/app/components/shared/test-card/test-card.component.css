@@ -836,3 +836,49 @@
     gap: 8px;
   }
 }
+
+
+/* ...existing code... */
+.state-context-menu {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: white;
+  border: 1px solid #e0e6ff;
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  z-index: 10;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  animation: fadeInScale 0.2s;
+}
+
+.state-menu-item {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s;
+}
+
+.state-menu-item:hover:not(:disabled) {
+  background: #f5f7fa;
+}
+
+.state-menu-item.created i { color: #ffc107; }
+.state-menu-item.published i { color: #2196f3; }
+.state-menu-item.completed i { color: #4caf50; }
+
+.state-menu-item:disabled {
+  color: #aaa;
+  cursor: not-allowed;
+  background: none;
+}

@@ -51,6 +51,7 @@ export class UserFactory {
 
     return {
       ...base,
+      historyMathLevel : [{ date: new Date().toISOString().split('T')[0], level:1 }],
       role: UserRole.STUDENT,
       grade: form.grade!,
       teacherId: form.teacherId || '',

@@ -28,6 +28,8 @@ export class TestCardComponent implements OnInit {
   testToDelete: Test | null = null;
   isDeleting: boolean = false;
   deleteError: string | null = null;
+  showStateMenu: boolean = false;
+
 
   protected readonly TestState = TestState; // Pour l'utilisation dans le template
 
@@ -159,4 +161,30 @@ updateTestState() {
   });
 }
 
+
+  toggleStateMenu(event: MouseEvent) {
+  event.stopPropagation();
+  this.showStateMenu = !this.showStateMenu;
+  // Fermer le menu si on clique ailleurs
+  if (this.showStateMenu) {
+    setTimeout(() => {
+      window.addEventListener('click', this.closeStateMenu);
+    });
+  }
+}
+
+closeStateMenu = () => {
+  this.showStateMenu = false;
+  window.removeEventListener('click', this.closeStateMenu);
+};
+
+changeState(state: TestState) {
+  if (!this.selectedTest || this.selectedTest.state === state) {
+    this.showStateMenu = false;
+    return;
+  }
+  this.showStateMenu = false;
+  this.newState = state;
+  this.updateTestState();
+}
 }
