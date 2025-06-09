@@ -14,7 +14,6 @@ import { RegisterComponent } from './components/register/register.component';
 import { PendingUsersComponent } from './components/admin/pending-users/pending-users.component';
 import { TestsComponent } from './components/teacher/tests/tests.component';
 import { ClassePerformanceComponent as TeacherClassePerformanceComponent } from './components/teacher/classe-performance/classe-performance.component';
-import {ClassePerformanceComponent as AdminClassePerformanceComponent} from './components/admin/classe-performance/classe-performance.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -32,7 +31,7 @@ export const routes: Routes = [
       { path: 'parents', component: AdminParentComponent },
       { path: 'teachers', component: AdminTeachersComponent },
       { path: 'pending-users', component: PendingUsersComponent },
-      { path: 'classes-performance' , component: AdminClassePerformanceComponent}
+      { path: 'classes-performance' , component: TeacherClassePerformanceComponent}
     ],
   },
   {

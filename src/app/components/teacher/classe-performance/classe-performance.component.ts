@@ -1,15 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Student } from '../../../models/student';
-import { Chart, registerables } from 'chart.js';
-import { Subscription } from 'rxjs';
-import { UserRole } from '../../../models/user-role';
-import { GradeLevel } from '../../../models/grade-level';
-import { GameProgress } from '../../../models/game-progress';
-import { ClassePerformanceService } from '../../../services/classe-performance/classe-performance.service';
-import { AuthService } from '../../../services/auth/auth.service';
-import { Teacher } from '../../../models/teacher';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {Student} from '../../../models/student';
+import {Chart, registerables} from 'chart.js';
+import {Subscription} from 'rxjs';
+import {UserRole} from '../../../models/user-role';
+import {GradeLevel} from '../../../models/grade-level';
+import {ClassePerformanceService} from '../../../services/classe-performance/classe-performance.service';
+import {AuthService} from '../../../services/auth/auth.service';
+import {Teacher} from '../../../models/teacher';
 
 // Register Chart.js components
 Chart.register(...registerables);
@@ -37,6 +36,10 @@ export class ClassePerformanceComponent implements OnInit, OnDestroy {
   isLoading: boolean = true;
 
   topPerformers: Student[] = [];
+
+  // Admin grade navigation
+  grades = Object.values(GradeLevel);
+  selectedGrade: GradeLevel = GradeLevel.GRADE_1;
   // Filters and pagination
   selectedClassId: string = '';
   selectedClass: ClassGroup | null = null;
@@ -63,14 +66,26 @@ export class ClassePerformanceComponent implements OnInit, OnDestroy {
     private authService: AuthService
   ) {}
 
+
   ngOnInit(): void {
     const user = this.authService.getCurrentUser();
     if (user) {
+      // Initialiser le grade sélectionné selon le rôle
+      if (user.role === UserRole.ADMIN) {
+        this.selectedGrade = GradeLevel.GRADE_1; // Grade par défaut pour l'admin
+      } else if (user.role === UserRole.TEACHER) {
+        this.selectedGrade = (user as Teacher).grade;
+      }
       this.loadStudents();
     } else if (this.authService.currentUser$) {
-      // Si l'utilisateur est chargé de façon asynchrone
       const sub = this.authService.currentUser$.subscribe((user) => {
         if (user) {
+          // Initialiser le grade sélectionné selon le rôle
+          if (user.role === UserRole.ADMIN) {
+            this.selectedGrade = GradeLevel.GRADE_1;
+          } else if (user.role === UserRole.TEACHER) {
+            this.selectedGrade = (user as Teacher).grade;
+          }
           this.loadStudents();
         }
       });
@@ -130,15 +145,31 @@ export class ClassePerformanceComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     const currentUser = this.authService.getCurrentUser();
-    if (currentUser && currentUser.role === UserRole.TEACHER) {
-      const teacherGrade = (currentUser as Teacher).grade;
+    if (currentUser) {
+      let gradeToUse: GradeLevel;
+
+      if (currentUser.role === UserRole.ADMIN) {
+        // Pour l'admin, utiliser le grade sélectionné
+        gradeToUse = this.selectedGrade;
+      } else if (currentUser.role === UserRole.TEACHER) {
+        // Pour le teacher, utiliser son grade
+        gradeToUse = (currentUser as Teacher).grade;
+      } else {
+        console.error('Current user is not a teacher or admin');
+        this.students = [];
+        this.filteredStudents = [];
+        this.displayedStudents = [];
+        this.topPerformers = [];
+        this.isLoading = false;
+        return;
+      }
 
       const subscription = this.classePerformanceService
-        .getStudentsByGrade(teacherGrade)
+        .getStudentsByGrade(gradeToUse)
         .subscribe({
           next: (students) => {
             this.students = students || [];
-            this.applyStudentFilter(); // Apply filter instead of direct assignment
+            this.applyStudentFilter();
             this.findTopPerformers();
             this.isLoading = false;
           },
@@ -154,7 +185,7 @@ export class ClassePerformanceComponent implements OnInit, OnDestroy {
 
       this.subscriptions.add(subscription);
     } else {
-      console.error('Current user is not a teacher');
+      console.error('No current user found');
       this.students = [];
       this.filteredStudents = [];
       this.displayedStudents = [];
@@ -289,6 +320,18 @@ export class ClassePerformanceComponent implements OnInit, OnDestroy {
     this.loadStudents();
   }
 
+  // Admin grade navigation method
+  onGradeChange(grade: GradeLevel): void {
+    this.selectedGrade = grade;
+    this.currentPage = 1; // Reset pagination
+    this.loadStudents();
+  }
+
+// Helper method to check if current user is admin
+  isAdmin(): boolean {
+    const currentUser = this.authService.getCurrentUser();
+    return currentUser?.role === UserRole.ADMIN;
+  }
   // Modal methods
   openStudentModal(student: Student): void {
     this.selectedStudent = student;
@@ -381,4 +424,17 @@ export class ClassePerformanceComponent implements OnInit, OnDestroy {
       console.error('Error rendering chart:', error);
     }
   }
+
+  getGradeDisplayName(grade: GradeLevel): string {
+    const gradeTranslations: { [key in GradeLevel]: string } = {
+      [GradeLevel.GRADE_1]: '1ère année',
+      [GradeLevel.GRADE_2]: '2ème année',
+      [GradeLevel.GRADE_3]: '3ème année',
+      [GradeLevel.GRADE_4]: '4ème année',
+      [GradeLevel.GRADE_5]: '5ème année',
+      [GradeLevel.GRADE_6]: '6ème année'
+    };
+    return gradeTranslations[grade];
+  }
+
 }

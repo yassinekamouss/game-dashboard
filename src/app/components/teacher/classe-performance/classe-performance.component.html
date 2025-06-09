@@ -4,9 +4,7 @@
     <div class="title-section">
       <h1 class="performance-title">Performance de la classe</h1>
       <div class="class-info">
-        <span class="grade-badge">{{
-          selectedClass?.grade || "Toutes les classes"
-          }}</span>
+        <span class="grade-badge">{{ getGradeDisplayName(selectedGrade) }}</span>
         <div class="students-counter">{{ filteredStudents.length }} élèves</div>
       </div>
     </div>
@@ -22,6 +20,22 @@
     </div>
   </div>
 
+<div class="grade-navigation" *ngIf="isAdmin()">
+  <div class="grade-tabs" role="tablist" aria-label="Navigation des niveaux">
+    <button
+      *ngFor="let grade of grades"
+      [class.active]="selectedGrade === grade"
+      (click)="onGradeChange(grade)"
+      class="grade-tab"
+      role="tab"
+      [attr.aria-selected]="selectedGrade === grade"
+      [attr.tabindex]="selectedGrade === grade ? 0 : -1"
+    >
+      {{ getGradeDisplayName(grade) }}
+    </button>
+  </div>
+</div>
+<!-- ...existing code... -->
   <!-- Loader -->
   <div *ngIf="isLoading" class="performance-loading">
     <div class="spinner">

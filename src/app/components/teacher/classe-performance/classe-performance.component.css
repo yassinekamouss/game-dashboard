@@ -548,3 +548,65 @@
     padding: 1rem;
   }
 }
+/* ...existing code... */
+.grade-navigation {
+  margin: 2rem 0 1.5rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.grade-tabs {
+  display: flex;
+  gap: 1rem;
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 12px rgba(59, 103, 197, 0.08);
+  padding: 0.7rem 1.2rem;
+}
+
+.grade-tab {
+  background: var(--light-gray);
+  border: 2px solid transparent;
+  border-radius: var(--border-radius);
+  padding: 0.6rem 1.2rem;
+  color: var(--dark-gray);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1rem;
+  min-width: 100px;
+  white-space: nowrap;
+  position: relative;
+  outline: none;
+}
+
+.grade-tab.active,
+.grade-tab:focus {
+  background: var(--primary-color);
+  color: #fff;
+  border-color: var(--primary-color);
+  box-shadow: 0 2px 8px rgba(59, 103, 197, 0.12);
+}
+
+.grade-tab:hover:not(.active) {
+  background: #eaf0fb;
+  color: var(--primary-color);
+  border-color: #b3c6ec;
+  transform: translateY(-2px) scale(1.04);
+}
+
+
+.grade-tabs {
+  animation: fadeInScale 0.4s;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
