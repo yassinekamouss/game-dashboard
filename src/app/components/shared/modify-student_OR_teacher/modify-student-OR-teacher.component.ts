@@ -22,6 +22,11 @@ export class ModifyStudentORTeacherComponent implements OnInit, OnChanges {
   @Output() studentModified = new EventEmitter<Student>();
   @Output() teacherModified = new EventEmitter<Teacher>();
   @Output() close = new EventEmitter<void>();
+  roleOfUser! : UserRole.STUDENT | UserRole.TEACHER | undefined;
+
+  role : string = '';
+
+
 
   currentUser: User | null = null;
 
@@ -34,11 +39,18 @@ export class ModifyStudentORTeacherComponent implements OnInit, OnChanges {
     private userService: UserService
   ) {}
 
+
+
   ngOnInit() {
     this.initForm();
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
+
+    this.roleOfUser  = this.user?.role;
+
+    if (this.roleOfUser === UserRole.TEACHER) this.role = 'enseignant';
+    else if(this.roleOfUser === UserRole.STUDENT) this.role = 'élève';
   }
 
   ngOnChanges(changes: SimpleChanges) {

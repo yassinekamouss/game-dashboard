@@ -22,6 +22,20 @@
     </div>
   </div>
 
+  <!-- Grade Navigation for Admin -->
+  <div class="grade-navigation" *ngIf="isAdmin()">
+    <div class="grade-tabs">
+      <button
+        *ngFor="let grade of grades"
+        [class.active]="selectedGrade === grade"
+        (click)="onGradeChange(grade)"
+        class="grade-tab"
+      >
+        {{ grade }}
+      </button>
+    </div>
+  </div>
+
   <!-- Loader -->
   <div *ngIf="isLoading" class="performance-loading">
     <div class="spinner">
