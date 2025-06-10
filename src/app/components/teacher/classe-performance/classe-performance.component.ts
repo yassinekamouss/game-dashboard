@@ -138,7 +138,7 @@ export class ClassePerformanceComponent implements OnInit, OnDestroy {
       .sort(
         (a, b) => (b.playerProfile?.score || 0) - (a.playerProfile?.score || 0)
       )
-      .slice(0, 6);
+      .slice(0, 3);
   }
 
   loadStudents(): void {
@@ -294,27 +294,23 @@ export class ClassePerformanceComponent implements OnInit, OnDestroy {
     return pages;
   }
 
-  getLastActivity(student: Student): Date {
-    if (
-      !student ||
-      !student.gameProgress ||
-      student.gameProgress.length === 0
-    ) {
-      return new Date(0); // Return epoch if no activity
-    }
-
-    // Find the most recent gameplay
-    try {
-      const dates = student.gameProgress.map((progress) =>
-        progress.completedAt ? new Date(progress.completedAt) : new Date(0)
-      );
-      return new Date(Math.max(...dates.map((date) => date.getTime())));
-    } catch (error) {
-      console.error('Error getting last activity:', error);
-      return new Date(0);
-    }
+getLastActivity(student: Student): Date {
+  if (
+    !student ||
+    !Array.isArray(student.historyMathLevel) ||
+    student.historyMathLevel.length === 0
+  ) {
+    return new Date(0); // Pas de test passé
   }
 
+  // Cherche la date la plus récente dans historyMathLevel
+  const last = student.historyMathLevel.reduce((latest, entry) => {
+    const entryDate = new Date(entry.date);
+    return entryDate > latest ? entryDate : latest;
+  }, new Date(0));
+
+  return last;
+}
   refreshData(): void {
     this.isLoading = true;
     this.loadStudents();

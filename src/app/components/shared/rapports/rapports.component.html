@@ -1,0 +1,39 @@
+<div class="rapport-generator-container mini">
+  <form class="rapport-filter-form mini">
+    <!-- Grade (pour admin) -->
+    <div class="filter-group mini" *ngIf="isAdmin()">
+      <select id="grade" name="grade">
+        <option value="" disabled selected>Niveau</option>
+        <option value="GRADE_1">1ère année</option>
+        <option value="GRADE_2">2ème année</option>
+        <option value="GRADE_3">3ème année</option>
+        <option value="GRADE_4">4ème année</option>
+        <option value="GRADE_5">5ème année</option>
+        <option value="GRADE_6">6ème année</option>
+      </select>
+    </div>
+
+    <!-- Période -->
+    <div class="filter-group mini">
+      <input type="date" name="dateFrom" placeholder="De">
+      <span class="date-sep">à</span>
+      <input type="date" name="dateTo" placeholder="Jusqu'à">
+    </div>
+
+    <!-- Seuil de difficulté -->
+    <div class="filter-group mini seuil">
+      <input type="number" id="seuil" name="seuil" min="0" max="100" placeholder="Seuil">
+      <span class="seuil-help" title="Score sous lequel un étudiant est en difficulté">
+        <i class="fas fa-question-circle"></i>
+      </span>
+    </div>
+
+    <button type="button" class="generate-btn-horizontal mini">
+      <i class="fas fa-magic"></i>
+    </button>
+  </form>
+
+  <div class="rapport-result mini">
+    <!-- Le rapport généré s'affichera ici -->
+  </div>
+</div>
