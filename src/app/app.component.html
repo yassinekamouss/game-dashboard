@@ -1,4 +1,11 @@
 <main class="main">
-  <router-outlet></router-outlet>
 
+
+ <div *ngIf="isLoading" class="performance-loading">
+    <div class="spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+    <p>Chargement de page...</p>
+  </div>
+<router-outlet *ngIf="!isLoading"></router-outlet>
 </main>

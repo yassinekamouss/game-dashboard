@@ -29,6 +29,11 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
+
+  private isAuthLoadingSubject = new BehaviorSubject<boolean>(true);
+  public isAuthLoading$ = this.isAuthLoadingSubject.asObservable();
+
+
   private isCreatingUser = false;
 
   constructor(private auth: Auth, private db: Database , private userService: UserService) {
@@ -103,10 +108,13 @@ export class AuthService {
       }
 
       if (firebaseUser) {
-        this.fetchUserWithRole(firebaseUser.uid).subscribe();
+        this.fetchUserWithRole(firebaseUser.uid).subscribe(() => {
+          this.isAuthLoadingSubject.next(false); // <-- ici, après avoir chargé l'utilisateur
+        });
       } else {
         console.log('User logged out, clearing current user');
         this.currentUserSubject.next(null);
+        this.isAuthLoadingSubject.next(false);
       }
     });
   }
@@ -214,4 +222,6 @@ deleteUser(uid: string): Observable<void> {
     })
   );
 }
+
+
 }

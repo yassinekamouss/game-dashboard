@@ -67,10 +67,10 @@ export class TestsComponent implements OnInit, OnDestroy {
         this.tests = tests;
         this.applyFilters();
 
-        setTimeout(() => {
+
 
           this.isLoading = false;
-        }  , 950);
+
       });
   }
 
