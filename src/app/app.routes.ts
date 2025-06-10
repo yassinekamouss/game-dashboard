@@ -15,6 +15,7 @@ import { PendingUsersComponent } from './components/admin/pending-users/pending-
 import { TestsComponent } from './components/teacher/tests/tests.component';
 import { ClassePerformanceComponent as TeacherClassePerformanceComponent } from './components/teacher/classe-performance/classe-performance.component';
 import {RapportsComponent} from './components/shared/rapports/rapports.component';
+import {AuthGuard} from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -24,6 +25,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
+    canActivate : [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: AdminDashboardComponent },
@@ -39,6 +41,7 @@ export const routes: Routes = [
   {
     path: 'teacher',
     component: TeacherComponent,
+    canActivate : [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: TeacherDashboardComponent },
@@ -49,4 +52,5 @@ export const routes: Routes = [
       { path: 'reports' ,component: RapportsComponent}
     ],
   },
+  { path: '**', redirectTo: 'login' }
 ];

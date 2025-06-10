@@ -66,12 +66,7 @@ export class LoginComponent {
       case 'teacher':
         this.router.navigate(['/teacher']);
         break;
-      case 'student':
-        this.router.navigate(['/student']);
-        break;
-      case 'principal':
-        this.router.navigate(['/principal']);
-        break;
+
       case 'pending':
         this.isVisible = true;
         this.authService.logout();
