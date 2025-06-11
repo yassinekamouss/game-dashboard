@@ -1,3 +1,4 @@
+import { GradeLevel } from './grade-level';
 import { UserRole } from './user-role';
 
 export interface User {
@@ -9,5 +10,7 @@ export interface User {
     email: string;
     dateOfBirth: string;
     role: UserRole;
+
+    grade?: GradeLevel;
 
 }

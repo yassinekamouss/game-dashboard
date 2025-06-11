@@ -1,39 +1,52 @@
-<div class="rapport-generator-container mini">
-  <form class="rapport-filter-form mini">
-    <!-- Grade (pour admin) -->
-    <div class="filter-group mini" *ngIf="isAdmin()">
-      <select id="grade" name="grade">
-        <option value="" disabled selected>Niveau</option>
-        <option value="GRADE_1">1ère année</option>
-        <option value="GRADE_2">2ème année</option>
-        <option value="GRADE_3">3ème année</option>
-        <option value="GRADE_4">4ème année</option>
-        <option value="GRADE_5">5ème année</option>
-        <option value="GRADE_6">6ème année</option>
+<div class="report-container advanced">
+  <h2>Générateur de Rapport</h2>
+
+  <div class="filters">
+    <label>Grade :
+      <select [(ngModel)]="selectedGrade" [disabled]="isTeacher()" required>
+        <option value="" disabled>Choisir un grade</option>
+        <option *ngFor="let g of grades" [value]="g">{{g}}</option>
       </select>
-    </div>
+    </label>
 
-    <!-- Période -->
-    <div class="filter-group mini">
-      <input type="date" name="dateFrom" placeholder="De">
-      <span class="date-sep">à</span>
-      <input type="date" name="dateTo" placeholder="Jusqu'à">
-    </div>
+    <label>Date de début :
+      <input type="date" [(ngModel)]="startDate" />
+    </label>
 
-    <!-- Seuil de difficulté -->
-    <div class="filter-group mini seuil">
-      <input type="number" id="seuil" name="seuil" min="0" max="100" placeholder="Seuil">
-      <span class="seuil-help" title="Score sous lequel un étudiant est en difficulté">
-        <i class="fas fa-question-circle"></i>
-      </span>
-    </div>
+    <label>Date de fin :
+      <input type="date" [(ngModel)]="endDate" />
+    </label>
 
-    <button type="button" class="generate-btn-horizontal mini">
-      <i class="fas fa-magic"></i>
+    <button (click)="generateReport()" [disabled]="!selectedGrade || !startDate || !endDate || loading">
+      <span *ngIf="!loading">Afficher le rapport</span>
+      <span *ngIf="loading" class="loader"></span>
     </button>
-  </form>
+  </div>
 
-  <div class="rapport-result mini">
-    <!-- Le rapport généré s'affichera ici -->
+  <div *ngIf="reportData.length > 0" class="report-table advanced">
+    <table>
+      <thead>
+        <tr>
+          <th>Nom de l'élève</th>
+          <th>Grade actuel</th>
+          <th>Niveau de math</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of reportData">
+          <td>{{ student.name }}</td>
+          <td>{{ student.grade }}</td>
+          <td>{{ student.mathLevel }}</td>
+          <td>{{ student.score }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button (click)="downloadCSV()">Télécharger CSV</button>
+  </div>
+
+  <div class="no-data-message" *ngIf="reportData.length === 0 && clicked && !loading">
+    <p>Aucune donnée pour cette période.</p>
   </div>
 </div>

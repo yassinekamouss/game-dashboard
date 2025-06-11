@@ -1,132 +1,208 @@
-/* Ajoute à la fin de rapports.component.css */
-.rapport-generator-container.mini {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(59, 103, 197, 0.08);
-  padding: 1.1rem 1.2rem 1.2rem 1.2rem;
-  max-width: 650px;
-  margin: 1.2rem 0 1.2rem 1.2rem;
+:host {
+  display: block;
   font-family: 'Fira Sans', 'Roboto', sans-serif;
+  --primary-color: #3b67c5;
+  --secondary-color: #e63946;
+  --accent-color: #00b050;
+  --light-gray: #f5f7fa;
+  --dark-gray: #4a5568;
+  --border-radius: 8px;
+  --math-font: 'Cambria Math', 'STIX Two Math', serif;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.report-container.advanced {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
   position: relative;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
 }
 
-.rapport-filter-form.mini {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.7rem;
-  justify-content: flex-start;
-  background: transparent;
-  box-shadow: none;
-  padding: 0;
-  margin-bottom: 0.5rem;
-}
-
-.filter-group.mini {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: #f5f7fa;
-  border-radius: 7px;
-  padding: 0.3rem 0.7rem;
-  min-width: unset;
-  box-shadow: 0 1px 3px rgba(59, 103, 197, 0.03);
-}
-
-.filter-group.mini input,
-.filter-group.mini select {
-  border: 1.2px solid #e0e6ff;
-  border-radius: 6px;
-  padding: 0.38rem 0.7rem;
-  font-size: 0.98rem;
-  background: #fff;
-  min-width: 90px;
-  transition: border 0.2s;
-}
-
-.filter-group.mini input[type="date"] {
-  min-width: 110px;
-}
-
-.filter-group.mini input:focus,
-.filter-group.mini select:focus {
-  border-color: #3b67c5;
-  outline: none;
-}
-
-.date-sep {
-  color: #888;
-  font-weight: 600;
-  font-size: 1.05rem;
-  margin: 0 0.2rem;
-}
-
-.seuil-help {
-  color: #b3c6ec;
-  cursor: pointer;
-  margin-left: 0.15rem;
-  font-size: 1.05rem;
-  transition: color 0.2s;
-}
-.seuil-help:hover {
-  color: #3b67c5;
-}
-
-.generate-btn-horizontal.mini {
-  background: linear-gradient(90deg, #3b67c5 60%, #00b050 100%);
-  color: #fff;
-  border: none;
-  border-radius: 7px;
-  padding: 0.48rem 1.1rem;
-  font-size: 1.1rem;
+.report-container h2 {
+  font-size: 2rem;
+  color: var(--dark-gray);
+  margin: 0 0 2rem 0;
   font-weight: 700;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.report-container h2::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: var(--light-gray);
+  border-radius: var(--border-radius);
+  padding: 1.2rem;
+}
+
+.filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: var(--dark-gray);
+}
+
+.filters select, 
+.filters input[type="date"] {
+  padding: 0.7rem 1rem;
+  border: 1px solid #d0d7e2;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  background: white;
+  color: var(--dark-gray);
+  min-width: 180px;
+}
+
+.filters select:focus,
+.filters input[type="date"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.filters select:disabled {
+  background: #e9e9e9;
+  color: #888;
+}
+
+.filters button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 1px 6px rgba(59, 103, 197, 0.10);
-  transition: background 0.2s, transform 0.2s;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-left: 0.5rem;
-  margin-top: 0;
-  height: 38px;
+  transition: all 0.3s ease;
+  min-height: 42px;
+  min-width: 140px;
+  justify-content: center;
 }
 
-.generate-btn-horizontal.mini:hover {
-  background: linear-gradient(90deg, #2a4c97 60%, #009040 100%);
-  transform: translateY(-1px) scale(1.03);
+.filters button:hover:not(:disabled) {
+  background-color: #2a4c97;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 
-.rapport-result.mini {
-  margin-top: 1.1rem;
-  min-height: 60px;
-  background: #f5f7fa;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(59, 103, 197, 0.04);
-  padding: 0.9rem;
-  color: #4a5568;
-  font-size: 1.01rem;
+.filters button:disabled {
+  background: #bfc4d1;
+  cursor: not-allowed;
+}
+
+.loader {
+  font-size: 1.2rem;
+  color: white;
+  animation: spin 1.2s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.report-table.advanced {
+  overflow-x: auto;
+  animation: fadeIn 0.4s;
+}
+
+.report-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.report-table th,
+.report-table td {
+  padding: 0.9rem 0.7rem;
   text-align: left;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  font-weight: 500;
+  border-bottom: 1px solid #e5e9f2;
 }
 
-/* Responsive compact */
-@media (max-width: 700px) {
-  .rapport-generator-container.mini {
-    max-width: 98vw;
-    margin: 0.7rem 0.5vw;
-    padding: 0.7rem 0.5rem;
-  }
-  .rapport-filter-form.mini {
+.report-table th {
+  background: var(--light-gray);
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.report-table td {
+  font-size: 0.97rem;
+  color: var(--dark-gray);
+}
+
+.report-table tr:hover {
+  background: #eaf0fb;
+}
+
+.report-table button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: block;
+  margin: 1.5rem 0 0.5rem auto;
+}
+
+.report-table button:hover {
+  background: #2a4c97;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+/* Message quand pas de données */
+.no-data-message {
+  background-color: var(--light-gray);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  color: var(--dark-gray);
+  margin: 2rem 0;
+}
+
+/* Animation d'entrée */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .filters {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.5rem;
   }
-  .generate-btn-horizontal.mini {
+  
+  .filters select,
+  .filters input[type="date"] {
     width: 100%;
-    justify-content: center;
-    margin-left: 0;
   }
 }
