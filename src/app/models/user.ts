@@ -1,4 +1,3 @@
-import { GradeLevel } from './grade-level';
 import { UserRole } from './user-role';
 
 export interface User {

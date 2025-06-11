@@ -17,10 +17,14 @@
       <input type="date" [(ngModel)]="endDate" />
     </label>
 
-    <button (click)="generateReport()" [disabled]="!selectedGrade || !startDate || !endDate || loading">
-      <span *ngIf="!loading">Afficher le rapport</span>
-      <span *ngIf="loading" class="loader"></span>
-    </button>
+    <div class="button-wrapper">
+      <label class="button-label">Action :
+        <button class="report-button" (click)="generateReport()" [disabled]="!selectedGrade || !startDate || !endDate || loading">
+          <span *ngIf="!loading">Afficher le rapport</span>
+          <span *ngIf="loading" class="loader"></span>
+        </button>
+      </label>
+    </div>
   </div>
 
   <div *ngIf="reportData.length > 0" class="report-table advanced">

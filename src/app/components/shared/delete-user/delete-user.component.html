@@ -1,24 +1,21 @@
 <div class="modal-overlay" (click)="closeModal()">
-  <div class="modal-container" (click)="$event.stopPropagation()">
-    <div class="modal-header danger">
-      <h2 class="modal-title">
-        <i class="fas fa-exclamation-triangle"></i>
-        Confirmation de suppression
-      </h2>
-      <button class="close-button" (click)="closeModal()">&times;</button>
+  <div class="delete-confirm-modal" (click)="$event.stopPropagation()">
+    <div class="delete-icon">
+      <i class="fas fa-exclamation-triangle"></i>
     </div>
-    <div class="modal-body">
-      <div class="delete-warning">
-        <i class="fas fa-user-slash fa-3x"></i>
-        <p>
-          Êtes-vous sûr de vouloir supprimer cet utilisateur ?<br>
-          <span class="danger-text">Cette action est irréversible.</span>
-        </p>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn-secondary" type="button" (click)="closeModal()">Annuler</button>
-        <button class="btn btn-danger" type="button" (click)="confirmDelete()">Supprimer</button>
-      </div>
+    <h3 class="delete-title">Confirmation de suppression</h3>
+    <p class="delete-message">
+      Êtes-vous sûr de vouloir supprimer cet utilisateur ?<br>
+      <span class="danger-text">Cette action est irréversible</span> et supprimera définitivement toutes les données associées à ce profil.
+    </p>
+
+    <div class="delete-actions">
+      <button class="btn btn-secondary" (click)="closeModal()">
+        Annuler
+      </button>
+      <button class="btn btn-danger" (click)="confirmDelete()">
+        <span>Supprimer</span>
+      </button>
     </div>
   </div>
 </div>
