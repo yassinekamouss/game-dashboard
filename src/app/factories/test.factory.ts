@@ -28,8 +28,11 @@ export class TestFactory {
           configuredGames[gameType] = {
             numOperations: gameConfig.numOperations,
             maxNumberRange: gameConfig.maxNumberRange,
-            requiredCorrectAnswersMinimumPercent: gameConfig.requiredCorrectAnswersMinimumPercent,
-            order: gameConfig.order
+            requiredCorrectAnswers: gameConfig.requiredCorrectAnswers,
+            order: gameConfig.order,
+            minComposition:gameConfig.minComposition,
+            minNumberRange: gameConfig.minNumberRange,
+
         }
       });
 

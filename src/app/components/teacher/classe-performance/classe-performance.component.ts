@@ -50,7 +50,7 @@ export class ClassePerformanceComponent implements OnInit, OnDestroy {
   sortDirection: 'asc' | 'desc' = 'desc';
 
   currentPage: number = 1;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 4;
   totalPages: number = 0;
 
   // Modal properties
@@ -432,5 +432,8 @@ getLastActivity(student: Student): Date {
     };
     return gradeTranslations[grade];
   }
+
+
+
 
 }

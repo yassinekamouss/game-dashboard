@@ -164,77 +164,66 @@
                       Aucun étudiant trouvé
                     </div>
                   </div>
-             
+
               </div>
 
               <!-- Configuration des jeux -->
               <div formGroupName="configuredGames" class="games-config">
                 <h5 class="games-title">Configuration des Jeux</h5>
-
                 <div *ngFor="let gameType of gameTypes" class="game-config-card">
-                  <div [formGroupName]="gameType.key" class="game-config">
-                    <div class="game-header">
-                      <label class="game-label">
-                        {{ gameType.label }}
-                      </label>
-                    </div>
-                    <div class="game-details">
-                      <div class="game-config-row">
-                        <div class="form-group">
-                          <label [for]="'order-' + groupIndex + '-' + gameType.key">Ordre</label>
-                          <input
-                            [id]="'order-' + groupIndex + '-' + gameType.key"
-                            class="input-field small"
-                            formControlName="order"
-                            type="number"
-                            min="1"
-                            max="3"
-                          />
-                          <div *ngIf="getGameConfigFormGroup(groupIndex, gameType.key).get('order')?.invalid && getGameConfigFormGroup(groupIndex, gameType.key).get('order')?.touched" class="error-message">
-                            Ordre unique entre 1 et 3
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label [for]="'numOp-' + groupIndex + '-' + gameType.key">Nombre d'Opérations</label>
-                          <input
-                            [id]="'numOp-' + groupIndex + '-' + gameType.key"
-                            class="input-field small"
-                            formControlName="numOperations"
-                            type="number"
-                            min="1"
-                            max="50"
-                          />
-                          <div *ngIf="getGameConfigFormGroup(groupIndex, gameType.key).get('numOperations')?.invalid && getGameConfigFormGroup(groupIndex, gameType.key).get('numOperations')?.touched" class="error-message">
-                            Entre 1 et 50
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label [for]="'maxRange-' + groupIndex + '-' + gameType.key">Plage Maximum</label>
-                          <input
-                            [id]="'maxRange-' + groupIndex + '-' + gameType.key"
-                            class="input-field small"
-                            formControlName="maxNumberRange"
-                            type="number"
-                            min="10"
-                            max="1000"
-                          />
-                          <div *ngIf="getGameConfigFormGroup(groupIndex, gameType.key).get('maxNumberRange')?.invalid && getGameConfigFormGroup(groupIndex, gameType.key).get('maxNumberRange')?.touched" class="error-message">
-                            Entre 10 et 1000
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label [for]="'minPercent-' + groupIndex + '-' + gameType.key">% Minimum de Réussite</label>
-                          <input
-                            [id]="'minPercent-' + groupIndex + '-' + gameType.key"
-                            class="input-field small"
-                            formControlName="requiredCorrectAnswersMinimumPercent"
-                            type="number"
-                            min="0"
-                            max="100"
-                          />
-                          <div *ngIf="getGameConfigFormGroup(groupIndex, gameType.key).get('requiredCorrectAnswersMinimumPercent')?.invalid && getGameConfigFormGroup(groupIndex, gameType.key).get('requiredCorrectAnswersMinimumPercent')?.touched" class="error-message">
-                            Entre 0 et 100%
-                          </div>
+                    <div [formGroupName]="gameType.key" class="game-config">
+                      <div class="game-header">
+                        <label class="game-label">
+                          {{ gameType.label }}
+                        </label>
+                      </div>
+                      <div class="game-details">
+                        <div class="game-config-row">
+                          <!-- Champs pour choose_answer -->
+                          <ng-container *ngIf="gameType.key === 'choose_answer'">
+                            <div class="form-group">
+                              <label>Plage Maximum</label>
+                              <input class="input-field small" formControlName="maxNumberRange" type="number" min="10" max="1000" />
+                            </div>
+                            <div class="form-group">
+                              <label>Plage Minimum</label>
+                              <input class="input-field small" formControlName="minNumberRange" type="number" min="1" max="1000" />
+                            </div>
+                            <div class="form-group">
+                              <label>Minimum de Réussite</label>
+                              <input class="input-field small" formControlName="requiredCorrectAnswers" type="number" min="1" />
+                            </div>
+                          </ng-container>
+                          <!-- Champs pour find_compositions -->
+                          <ng-container *ngIf="gameType.key === 'find_compositions'">
+                            <div class="form-group">
+                              <label>Nombre de Compositions</label>
+                              <input class="input-field small" formControlName="minComposition" type="number" min="4" max="10" />
+                            </div>
+                            <div class="form-group">
+                              <label>Plage Maximum</label>
+                              <input class="input-field small" formControlName="maxNumberRange" type="number" min="10" max="1000" />
+                            </div>
+                            <div class="form-group">
+                              <label>Minimum de Réussite</label>
+                              <input class="input-field small" formControlName="requiredCorrectAnswers" type="number" min="1" />
+                            </div>
+                          </ng-container>
+                          <!-- Champs pour vertical_operations -->
+                          <ng-container *ngIf="gameType.key === 'vertical_operations'">
+                            <div class="form-group">
+                              <label>Plage Maximum</label>
+                              <input class="input-field small" formControlName="maxNumberRange" type="number" min="10" max="1000" />
+                            </div>
+                            <div class="form-group">
+                              <label>Plage Minimum</label>
+                              <input class="input-field small" formControlName="minNumberRange" type="number" min="1" max="1000" />
+                            </div>
+                            <div class="form-group">
+                              <label>Minimum de Réussite</label>
+                              <input class="input-field small" formControlName="requiredCorrectAnswers" type="number" min="1" />
+                            </div>
+                          </ng-container>
                         </div>
                       </div>
                     </div>
@@ -243,7 +232,7 @@
               </div>
             </div>
           </div>
-        </div>
+
 
         <!-- Actions -->
         <div class="form-actions">

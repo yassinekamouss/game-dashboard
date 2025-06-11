@@ -11,6 +11,4 @@ export interface User {
     dateOfBirth: string;
     role: UserRole;
 
-    grade?: GradeLevel;
-
 }

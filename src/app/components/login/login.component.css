@@ -476,3 +476,60 @@ p {
     transform: translateY(0);
   }
 }
+
+/* Ajoute à la fin de login.component.css */
+
+/* Style spécifique pour la modale de validation */
+.validation-modal {
+  padding: 40px 30px 30px 30px;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(74, 108, 209, 0.15);
+  background: linear-gradient(135deg, #f9f9ff 80%, #eaf1ff 100%);
+  position: relative;
+}
+
+.modal-icon {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.validation-modal h2 {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.validation-modal p {
+  color: #444;
+  font-size: 1.08rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.validation-modal button {
+  min-width: 120px;
+  padding: 12px 0;
+  font-size: 1rem;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--primary-color), #6c8ae4);
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(74, 108, 209, 0.08);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.validation-modal button:hover {
+  background: linear-gradient(90deg, #3a5bc1, #4a6cd1);
+  transform: translateY(-2px) scale(1.04);
+}

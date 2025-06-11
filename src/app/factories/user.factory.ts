@@ -47,7 +47,27 @@ export class UserFactory {
       score: 0
     };
 
-    const gameProgress: GameProgress[] = [];
+    const gameProgress = {
+      vertical_operations: {
+        gameId: 'vertical_operations',
+        lastScore: 0,
+        bestScore: 0,
+        completedAt: ''
+      },
+      find_compositions: {
+        gameId: 'find_compositions',
+        lastScore: 0,
+        bestScore: 0,
+        completedAt: ''
+      },
+      choose_answer: {
+        gameId: 'choose_answer',
+        lastScore: 0,
+        bestScore: 0,
+        completedAt: ''
+      }
+    };
+
 
     return {
       ...base,

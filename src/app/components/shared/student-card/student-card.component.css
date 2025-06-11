@@ -327,3 +327,30 @@
   outline: 2px solid var(--primary-color);
   outline-offset: 1px;
 }
+
+.games-list {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.game-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  border: 1px solid #e0e6ff;
+  transition: all 0.2s ease;
+}
+
+.game-item:hover {
+  background-color: #f0f2f8;
+  transform: translateY(-2px);
+}
+
+.game-item i {
+  color: var(--primary-color);
+}

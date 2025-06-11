@@ -31,7 +31,7 @@ export class TestsComponent implements OnInit, OnDestroy {
 
   // Pagination
   currentPage = 1;
-  itemsPerPage = 6;
+  itemsPerPage = 5;
   totalPages = 1;
 
 

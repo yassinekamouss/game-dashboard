@@ -169,34 +169,7 @@
         <p>Aucun élève dans cette classe.</p>
       </div>
       <!-- Pagination pour le tableau des élèves -->
-      <div
-        class="pagination-controls"
-        *ngIf="filteredStudents.length > itemsPerPage"
-      >
-        <button
-          [disabled]="currentPage === 1"
-          (click)="changePage(currentPage - 1)"
-        >
-          <i class="fas fa-chevron-left"></i> Précédent
-        </button>
 
-        <div class="page-numbers">
-          <button
-            *ngFor="let page of getPageNumbers()"
-            [class.active]="page === currentPage"
-            (click)="changePage(page)"
-          >
-            {{ page }}
-          </button>
-        </div>
-
-        <button
-          [disabled]="currentPage === totalPages"
-          (click)="changePage(currentPage + 1)"
-        >
-          Suivant <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
     </div>
   </div>
 </div>
@@ -276,4 +249,33 @@
       </div>
     </div>
   </div>
+</div>
+
+<div
+  class="pagination-controls"
+  *ngIf="filteredStudents.length > itemsPerPage"
+>
+  <button
+    [disabled]="currentPage === 1"
+    (click)="changePage(currentPage - 1)"
+  >
+    <i class="fas fa-chevron-left"></i> Précédent
+  </button>
+
+  <div class="page-numbers">
+    <button
+      *ngFor="let page of getPageNumbers()"
+      [class.active]="page === currentPage"
+      (click)="changePage(page)"
+    >
+      {{ page }}
+    </button>
+  </div>
+
+  <button
+    [disabled]="currentPage === totalPages"
+    (click)="changePage(currentPage + 1)"
+  >
+    Suivant <i class="fas fa-chevron-right"></i>
+  </button>
 </div>

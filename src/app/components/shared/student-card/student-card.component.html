@@ -27,45 +27,33 @@
         <i class="fas fa-chart-line"></i>
         <span>Niveau {{ student.grade }}</span>
       </div>
-      <div class="detail-item">
-        <i class="fas fa-gamepad"></i>
-        <span *ngIf="student.gameProgress && student.gameProgress.length > 0; else noGames">
-          {{ student.gameProgress.length }} jeux
-        </span>
-        <ng-template #noGames>
-          <span>Aucun jeu</span>
-        </ng-template>
+            <div class="detail-item">
+        <i class="fas fa-star"></i>
+        <span>Score global : {{ student.playerProfile.score }}</span>
       </div>
     </div>
   </div>
-
-  <!-- Barre de progression et médailles -->
-  <div class="student-progress-section">
-    <div class="progress-bar">
-      <div
-        class="progress-fill"
-        [style.width.%]="calculateProgress(student)"
-      ></div>
-      <span class="progress-text">{{ calculateProgress(student) }}%</span>
-    </div>
-
-    <div class="achievements-section">
-      <ng-container *ngIf="student.achievements && student.achievements.length > 0; else noAchievements">
-        <span
-          class="badge"
-          *ngFor="let badge of getLimitedAchievements(student); let i = index"
-        >
-          <i class="fas fa-medal" [ngClass]="getBadgeClass(i)"></i>
-        </span>
-        <span class="more-badge" *ngIf="student.achievements.length > 3">
-          +{{ student.achievements.length - 3 }}
-        </span>
-      </ng-container>
-      <ng-template #noAchievements>
-        <span class="no-data-message">Aucun achievement</span>
-      </ng-template>
-    </div>
+<div class="games-list">
+  <div class="game-item" *ngIf="student.gameProgress?.vertical_operations">
+    <i class="fas fa-calculator"></i>
+    Opérations verticales :
+    <span class="game-score">Score : {{ student.gameProgress.vertical_operations?.lastScore }}</span>
   </div>
+
+  <div class="game-item" *ngIf="student.gameProgress?.find_compositions">
+    <i class="fas fa-puzzle-piece"></i>
+    Trouver les compositions :
+    <span class="game-score">Score : {{ student.gameProgress.find_compositions?.lastScore }}</span>
+  </div>
+
+  <div class="game-item" *ngIf="student.gameProgress?.choose_answer">
+    <i class="fas fa-check-square"></i>
+    Choisir la réponse :
+    <span class="game-score">Score : {{ student.gameProgress.choose_answer?.lastScore }}</span>
+  </div>
+</div>
+
+
 
   <!-- Actions -->
   <div class="student-actions">

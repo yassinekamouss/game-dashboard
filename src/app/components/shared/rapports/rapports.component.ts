@@ -6,6 +6,8 @@ import { User } from '../../../models/user';
 import { UserRole } from '../../../models/user-role';
 import { StudentService } from '../../../services/students/student.service'
 import { GradeLevel } from '../../../models/grade-level';
+import {Teacher} from '../../../models/teacher';
+import {Student} from '../../../models/student';
 
 @Component({
   selector: 'app-rapports',
@@ -17,12 +19,14 @@ import { GradeLevel } from '../../../models/grade-level';
 export class RapportsComponent implements OnInit {
   startDate: string = '';
   endDate: string = '';
+  students! : Student[];
   currentUser: User | null = null;
   selectedGrade: GradeLevel = GradeLevel.GRADE_1;
   grades = [GradeLevel.GRADE_1, GradeLevel.GRADE_2, GradeLevel.GRADE_3, GradeLevel.GRADE_4, GradeLevel.GRADE_5, GradeLevel.GRADE_6];
   reportData: any[] = [];
   loading: boolean = false;
   clicked: boolean = false;
+  teacher! : Teacher;
 
   constructor(
     private authService: AuthService,
@@ -32,8 +36,9 @@ export class RapportsComponent implements OnInit {
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
-      if (this.isTeacher() && user?.grade) {
-        this.selectedGrade = user.grade;
+      if (this.isTeacher()) {
+        this.teacher = user as Teacher;
+        this.selectedGrade = this.teacher.grade;
       }
     });
   }
@@ -51,15 +56,18 @@ export class RapportsComponent implements OnInit {
     this.loading = true;
     this.reportData = [];
     try {
+
       const grade = this.selectedGrade;
       // Récupération des élèves du grade sélectionné
-      const students = await this.studentService.getStudentsByGrade(grade).toPromise();
+      this.studentService.getStudentsByGrade(grade).subscribe(students=>{
+        this.students = students;
+      });
       // Si vous voulez filtrer par date, faites-le ici (exemple sur historyMathLevel)
-      let filtered = students || [];
-      if (this.startDate && this.endDate && students) {
+      let filtered = this.students || [];
+      if (this.startDate && this.endDate && this.students) {
         const start = new Date(this.startDate);
         const end = new Date(this.endDate);
-        filtered = students.filter(s => {
+        filtered = this.students.filter(s => {
           // Exemple : on prend le dernier niveau de math dans la période
           if (!s.historyMathLevel) return false;
           return s.historyMathLevel.some(h =>
@@ -78,7 +86,7 @@ export class RapportsComponent implements OnInit {
           };
         });
       } else {
-        filtered = (students ?? []).map(s => ({
+        filtered = (this.students ?? []).map(s => ({
           ...s,
           mathLevel: s.historyMathLevel?.length ? s.historyMathLevel[s.historyMathLevel.length - 1].level : '',
           score: s.playerProfile?.score ?? ''
@@ -94,7 +102,7 @@ export class RapportsComponent implements OnInit {
   downloadCSV() {
     let csvContent = "data:text/csv;charset=utf-8,Nom,Grade,Niveau de Math,Score\n";
     this.reportData.forEach(s => {
-      csvContent += `${s.name},${s.grade},${s.mathLevel},${s.score}\n`;
+      csvContent += `${s.firstName } ${s.lastName},${s.grade},${s.mathLevel},${s.score}\n`;
     });
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");

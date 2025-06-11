@@ -1,7 +1,8 @@
 export interface GameConfig {
-    enabled: boolean;
     numOperations: number;
     maxNumberRange: number;
-    requiredCorrectAnswersMinimumPercent: number;
+    minNumberRange: number;
+    requiredCorrectAnswers: number;
     order:number;
+    minComposition: number;
 }

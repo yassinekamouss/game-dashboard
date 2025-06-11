@@ -10,12 +10,17 @@ export interface Student extends User {
     role: UserRole.STUDENT;
     parentId: string;
     teacherId: string;
-    historyMathLevel?: 
+    historyMathLevel?:
         {
             date: string;
             level: number;
         }[];
     playerProfile: PlayerProfile;
     achievements: string[];
-    gameProgress:  GameProgress[];
+  gameProgress: {
+    vertical_operations?: GameProgress;
+    find_compositions?: GameProgress;
+    choose_answer?: GameProgress;
+  };
+
 }

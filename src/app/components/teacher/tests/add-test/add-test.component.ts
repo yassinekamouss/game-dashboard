@@ -100,9 +100,9 @@ showStudentList: { [groupIndex: number]: boolean } = {};
     const groupForm = this.fb.group({
       groupName: ['', Validators.required],
       configuredGames: this.fb.group({
-        vertical_operations: this.createGameConfigForm(),
-        find_compositions: this.createGameConfigForm(),
-        choose_answer: this.createGameConfigForm()
+        vertical_operations: this.createGameConfigForm('vertical_operations'),
+        find_compositions: this.createGameConfigForm('find_compositions'),
+        choose_answer: this.createGameConfigForm('choose_answer')
       })
     });
 
@@ -110,15 +110,39 @@ showStudentList: { [groupIndex: number]: boolean } = {};
     this.selectedStudents[groupIndex] = [];
   }
 
-  createGameConfigForm(): FormGroup {
-    return this.fb.group({
-      numOperations: [10, [Validators.required, Validators.min(1), Validators.max(50)]],
-      numComposition:[1 , [Validators.required , Validators.min(1) , Validators.max(50)]],
-      maxNumberRange: [100, [Validators.required, Validators.min(10), Validators.max(1000)]],
-      requiredCorrectAnswersMinimumPercent: [70, [Validators.required, Validators.min(0), Validators.max(100)]],
-      order: [1, [Validators.required, Validators.min(1), Validators.max(3)]]
-   });
+private createGameConfigForm(gameType: string): FormGroup {
+  switch (gameType) {
+    case 'choose_answer':
+      return this.fb.group({
+        maxNumberRange: [10, [Validators.required, Validators.min(10), Validators.max(1000)]],
+        minNumberRange: [1, [Validators.required, Validators.min(1), Validators.max(1000)]],
+        requiredCorrectAnswers: [10, [Validators.required, Validators.min(1)]],
+        numOperations: [0],
+        order: [0],
+        minComposition: [0]
+      });
+    case 'find_compositions':
+      return this.fb.group({
+        requiredCorrectAnswers: [10, [Validators.required, Validators.min(1)]],
+        minComposition: [4, [Validators.required, Validators.min(4), Validators.max(10)]],
+        maxNumberRange: [10, [Validators.required, Validators.min(10), Validators.max(1000)]],
+        minNumberRange: [0],
+        numOperations: [0],
+        order: [0]
+      });
+    case 'vertical_operations':
+      return this.fb.group({
+        maxNumberRange: [10, [Validators.required, Validators.min(10), Validators.max(1000)]],
+        minNumberRange: [1, [Validators.required, Validators.min(1), Validators.max(1000)]],
+        requiredCorrectAnswers: [10, [Validators.required, Validators.min(1)]],
+        numOperations: [0],
+        order: [0],
+        minComposition: [0]
+      });
+    default:
+      return this.fb.group({});
   }
+}
 
   removeGroup(index: number) {
     if (this.groupsFormArray.length > 1) {
@@ -163,10 +187,7 @@ showStudentList: { [groupIndex: number]: boolean } = {};
     }
 
 
-  if (!this.hasUniqueOrdersInAllGroups()) {
-    this.showErrorMessage("L'ordre des jeux doit être unique (1, 2, 3) dans chaque groupe.");
-    return;
-  }
+
 
     if (!this.currentUser) {
       this.showErrorMessage("Vous n'êtes plus connecté. Veuillez vous reconnecter.");
@@ -177,22 +198,7 @@ showStudentList: { [groupIndex: number]: boolean } = {};
   }
 
 
-  private hasUniqueOrdersInAllGroups(): boolean {
-  const groups = this.testForm.value.groups;
-  for (let i = 0; i < groups.length; i++) {
-    const group = groups[i];
-    const orders = [
-      group.configuredGames.vertical_operations.order,
-      group.configuredGames.find_compositions.order,
-      group.configuredGames.choose_answer.order
-    ];
-    const uniqueOrders = Array.from(new Set(orders));
-    if (uniqueOrders.length !== 3 || ![1, 2, 3].every(o => uniqueOrders.includes(o))) {
-      return false;
-    }
-  }
-  return true;
-}
+
 
   private isFormValid(): boolean {
     if (this.testForm.invalid) {

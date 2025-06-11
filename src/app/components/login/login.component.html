@@ -56,14 +56,20 @@
   </footer>
 </div>
 
+
 <div *ngIf="isVisible" class="modal-overlay">
-  <div class="modal-content">
+  <div class="modal-content validation-modal">
+    <div class="modal-icon">
+      <i class="fas fa-user-check"></i>
+    </div>
     <h2>Validation de votre compte en cours</h2>
     <p>
-      Merci pour votre inscription ! Votre compte est actuellement en cours de
-      validation. Pour finaliser votre accès, merci de bien vouloir contacter un
-      administrateur qui attribuera votre rôle.
+      Merci pour votre inscription !<br>
+      Votre compte est actuellement en <strong>cours de validation</strong>.<br>
+      Pour finaliser votre accès, merci de bien vouloir contacter un administrateur qui attribuera votre rôle.
     </p>
-    <button (click)="close()">Compris</button>
+    <div class="modal-actions">
+      <button (click)="close()">Compris</button>
+    </div>
   </div>
 </div>
