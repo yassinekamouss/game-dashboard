@@ -40,14 +40,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private authService : AuthService) {}
 
   ngOnInit(): void {
-    this.loadData();
+    
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user as Teacher;
 
       console.log('Utilisateur connecté:', this.currentUser);
 
       this.teacherGrade = this.currentUser?.grade ;
-     
+      this.loadData();
     });
   }
 
