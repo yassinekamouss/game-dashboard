@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
 import { User } from '../../../models/user';
 import { UserRole } from '../../../models/user-role';
-import { Parent } from '../../../models/parent';
 import { GradeLevel } from '../../../models/grade-level';
 import {catchError, finalize, switchMap, take, tap} from 'rxjs/operators';
 import {of, throwError} from 'rxjs';
@@ -19,7 +18,7 @@ import {FirebaseErrorsService} from '../../../services/firebaseErrors/firebase-e
 @Component({
   selector: 'app-add-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './add-user.component.html',
   styleUrls: ['./add-user.component.css']
 })
@@ -35,6 +34,8 @@ export class AddUserComponent implements OnInit {
   teacherGrade: string = '';
   availableStudents:Student[] = [];
   selectedStudents:string[] =[];
+  studentSearchTerm: string = '';
+  filteredStudents: Student[] = [];
 
 
   @Input() role!: UserRole;
@@ -95,11 +96,43 @@ export class AddUserComponent implements OnInit {
 
         this.studentService.getStudentsWithoutParent().subscribe(students => {
           this.availableStudents = students;
+          this.filteredStudents = students; // Initialiser les étudiants filtrés
         });
       }
     });
   }
 
+  // Méthode pour filtrer les étudiants basé sur la recherche
+  filterStudents() {
+    if (!this.studentSearchTerm.trim()) {
+      this.filteredStudents = this.availableStudents;
+      return;
+    }
+    
+    const searchTerm = this.studentSearchTerm.toLowerCase().trim();
+    this.filteredStudents = this.availableStudents.filter(student => {
+      return student.firstName.toLowerCase().includes(searchTerm) || 
+             student.lastName.toLowerCase().includes(searchTerm);
+    });
+  }
+
+  // Vérifier si un étudiant est sélectionné
+  isStudentSelected(studentId: string): boolean {
+    return this.selectedStudents.includes(studentId);
+  }
+
+  // Méthode pour basculer la sélection quand on clique sur la carte
+  toggleStudentSelection(studentId: string) {
+    if (this.isStudentSelected(studentId)) {
+      const index = this.selectedStudents.indexOf(studentId);
+      if (index !== -1) {
+        this.selectedStudents.splice(index, 1);
+      }
+    } else {
+      this.selectedStudents.push(studentId);
+    }
+    this.userForm.patchValue({ children: this.selectedStudents });
+  }
 
   onStudentSelectionChange(event: Event, studentId: string) {
     const checkbox = event.target as HTMLInputElement;
@@ -205,7 +238,6 @@ export class AddUserComponent implements OnInit {
     );
   }
 
-
   showSuccessMessage(userData: User) {
     const roleName = this.getRoleLabel().toLowerCase();
     this.successMessage = `${roleName} ${userData.firstName} ${userData.lastName} a été ajouté avec succès!`;
@@ -229,7 +261,6 @@ export class AddUserComponent implements OnInit {
       this.showError = false;
     }, 7000);
   }
-
 
   getRoleLabel(): string {
     switch (this.role) {

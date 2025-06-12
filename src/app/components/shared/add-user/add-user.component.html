@@ -168,23 +168,51 @@
         <ng-container *ngIf="role === UserRole.PARENT">
           <div class="form-group">
             <label for="children">Enfants</label>
-            <div *ngIf="availableStudents.length > 0" class="children-selection">
-              <div class="child-options">
-                <div *ngFor="let student of availableStudents" class="child-option">
+            
+            <!-- Barre de recherche -->
+            <div class="search-container">
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Rechercher un élève par nom ou prénom..."
+                [(ngModel)]="studentSearchTerm"
+                [ngModelOptions]="{standalone: true}"
+                (input)="filterStudents()"
+              />
+              <span class="search-icon">🔍</span>
+            </div>
+            
+            <div *ngIf="filteredStudents.length > 0" class="children-selection">
+              <div class="students-grid">
+                <div *ngFor="let student of filteredStudents" class="student-card" 
+                    [class.selected]="isStudentSelected(student.id)"
+                    (click)="toggleStudentSelection(student.id)">
                   <input
                     type="checkbox"
                     [id]="'child-' + student.id"
-                    [value]="student.id"
+                    [checked]="isStudentSelected(student.id)"
+                    class="student-checkbox"
+                    (click)="$event.stopPropagation()"
                     (change)="onStudentSelectionChange($event, student.id)"
                   />
-                  <label [for]="'child-' + student.id">
-                    {{ student.firstName }} {{ student.lastName }} ({{ student.grade }})
-                  </label>
+                  <div class="student-info">
+                    <div class="student-name">{{ student.firstName }} {{ student.lastName }}</div>
+                    <div class="student-grade">Niveau: {{ student.grade }}</div>
+                  </div>
                 </div>
               </div>
             </div>
+            
+            <div *ngIf="filteredStudents.length === 0 && availableStudents.length > 0" class="no-students-message">
+              Aucun élève ne correspond à votre recherche
+            </div>
+            
             <div *ngIf="availableStudents.length === 0" class="no-students-message">
               Aucun étudiant disponible à associer
+            </div>
+            
+            <div *ngIf="selectedStudents.length > 0" class="selected-summary">
+              <span>{{ selectedStudents.length }} élève(s) sélectionné(s)</span>
             </div>
           </div>
         </ng-container>
