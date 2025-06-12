@@ -93,23 +93,32 @@
         </div>
         <div class="sorting-options">
           <span>Trier par:</span>
-          <button
+          <button 
             [class.active]="sortBy === 'name'"
             (click)="sortStudents('name')"
           >
             Nom
+            <span *ngIf="sortBy === 'name'" class="sort-indicator">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
           </button>
           <button
             [class.active]="sortBy === 'score'"
             (click)="sortStudents('score')"
           >
             Score
+            <span *ngIf="sortBy === 'score'" class="sort-indicator">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
           </button>
           <button
             [class.active]="sortBy === 'level'"
             (click)="sortStudents('level')"
           >
             Niveau
+            <span *ngIf="sortBy === 'level'" class="sort-indicator">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
           </button>
         </div>
       </div>
@@ -135,7 +144,7 @@
                 <div class="student-avatar">
                   <i class="fas fa-user-circle"></i>
                 </div>
-                <div>{{ student.firstName }} {{ student.lastName }}</div>
+                <div>{{ student.lastName }} {{ student.firstName }}</div>
               </div>
             </td>
             <td>

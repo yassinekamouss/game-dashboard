@@ -46,7 +46,7 @@ export class ClassePerformanceComponent implements OnInit, OnDestroy {
   selectedPeriod: string = 'month';
   studentSearch: string = '';
 
-  sortBy: 'name' | 'score' | 'level' | 'activity' = 'score';
+  sortBy: 'name' | 'score' | 'level' = 'score';
   sortDirection: 'asc' | 'desc' = 'desc';
 
   currentPage: number = 1;
@@ -214,11 +214,6 @@ export class ClassePerformanceComponent implements OnInit, OnDestroy {
           compareValue =
             (a.playerProfile?.mathLevel || 0) -
             (b.playerProfile?.mathLevel || 0);
-          break;
-        case 'activity':
-          const aDate = this.getLastActivity(a).getTime();
-          const bDate = this.getLastActivity(b).getTime();
-          compareValue = aDate - bDate;
           break;
       }
 

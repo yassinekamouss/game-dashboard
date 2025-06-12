@@ -610,3 +610,12 @@
     transform: scale(1);
   }
 }
+
+.sort-indicator {
+  display: inline-block;
+  margin-left: 5px;
+  font-weight: bold;
+  color: inherit; /* Hérite de la couleur du texte du parent */
+  transition: transform 0.2s ease;
+  color: white;
+}
