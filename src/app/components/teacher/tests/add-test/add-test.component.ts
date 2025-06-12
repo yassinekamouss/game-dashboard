@@ -119,13 +119,13 @@ private createGameConfigForm(gameType: string): FormGroup {
         requiredCorrectAnswers: [10, [Validators.required, Validators.min(1)]],
         numOperations: [0],
         order: [0],
-        minComposition: [0]
+        numComposition: [0]
       });
     case 'find_compositions':
       return this.fb.group({
         requiredCorrectAnswers: [10, [Validators.required, Validators.min(1)]],
-        minComposition: [4, [Validators.required, Validators.min(4), Validators.max(10)]],
-        maxNumberRange: [10, [Validators.required, Validators.min(10), Validators.max(1000)]],
+        numComposition: [1, [Validators.required, Validators.min(1), Validators.max(5)]],
+        maxNumberRange: [10, [Validators.required, Validators.min(4), Validators.max(15)]],
         minNumberRange: [0],
         numOperations: [0],
         order: [0]
@@ -137,7 +137,7 @@ private createGameConfigForm(gameType: string): FormGroup {
         requiredCorrectAnswers: [10, [Validators.required, Validators.min(1)]],
         numOperations: [0],
         order: [0],
-        minComposition: [0]
+        numComposition: [0]
       });
     default:
       return this.fb.group({});

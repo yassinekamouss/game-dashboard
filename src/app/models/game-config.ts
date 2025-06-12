@@ -4,5 +4,5 @@ export interface GameConfig {
     minNumberRange: number;
     requiredCorrectAnswers: number;
     order:number;
-    minComposition: number;
+    numComposition: number;
 }

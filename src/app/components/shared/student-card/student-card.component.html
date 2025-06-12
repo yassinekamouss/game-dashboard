@@ -34,16 +34,15 @@
     </div>
   </div>
 <div class="games-list">
+   <div class="game-item" *ngIf="student.gameProgress?.find_compositions">
+    <i class="fas fa-puzzle-piece"></i>
+    Trouver les compositions :
+    <span class="game-score">Score : {{ student.gameProgress.find_compositions?.lastScore }}</span>
+  </div>
   <div class="game-item" *ngIf="student.gameProgress?.vertical_operations">
     <i class="fas fa-calculator"></i>
     Opérations verticales :
     <span class="game-score">Score : {{ student.gameProgress.vertical_operations?.lastScore }}</span>
-  </div>
-
-  <div class="game-item" *ngIf="student.gameProgress?.find_compositions">
-    <i class="fas fa-puzzle-piece"></i>
-    Trouver les compositions :
-    <span class="game-score">Score : {{ student.gameProgress.find_compositions?.lastScore }}</span>
   </div>
 
   <div class="game-item" *ngIf="student.gameProgress?.choose_answer">
