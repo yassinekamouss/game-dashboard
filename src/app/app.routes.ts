@@ -13,7 +13,7 @@ import { StudentsComponent as TeacherStudentComponent } from './components/teach
 import { RegisterComponent } from './components/register/register.component';
 import { PendingUsersComponent } from './components/admin/pending-users/pending-users.component';
 import { TestsComponent } from './components/teacher/tests/tests.component';
-import { ClassePerformanceComponent as TeacherClassePerformanceComponent } from './components/teacher/classe-performance/classe-performance.component';
+import { ClassePerformanceComponent } from './components/shared/classe-performance/classe-performance.component';
 import {RapportsComponent} from './components/shared/rapports/rapports.component';
 import {AuthGuard} from './guards/auth.guard';
 
@@ -34,7 +34,7 @@ export const routes: Routes = [
       { path: 'parents', component: AdminParentComponent },
       { path: 'teachers', component: AdminTeachersComponent },
       { path: 'pending-users', component: PendingUsersComponent },
-      { path: 'classes-performance' , component: TeacherClassePerformanceComponent},
+      { path: 'classes-performance' , component: ClassePerformanceComponent},
       { path: 'reports' , component: RapportsComponent}
     ],
   },
@@ -48,7 +48,7 @@ export const routes: Routes = [
       { path: 'profile', component: ProfileComponent },
       { path: 'students', component: TeacherStudentComponent },
       { path: 'tests', component: TestsComponent },
-      { path: 'classe-performance', component: TeacherClassePerformanceComponent },
+      { path: 'classe-performance', component: ClassePerformanceComponent },
       { path: 'reports' ,component: RapportsComponent}
     ],
   },
