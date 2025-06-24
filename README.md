@@ -6,6 +6,12 @@
 
 Tableau de bord web développé avec Angular 19 et Firebase Realtime Database, conçu pour le suivi des performances des étudiants dans un environnement d'apprentissage ludique des mathématiques. Cette plateforme est destinée aux enseignants, parents et administrateurs, et s'interface avec des jeux éducatifs développés séparément (Unity) et une application mobile de suivi parental.
 
+
+<div align="center">
+  <img src="src/assets/capture/admin_dashboard.png" alt="Capture d'écran du tableau de bord administrateur" width="80%" />
+  <p><em>Vue du tableau de bord administrateur permettant le suivi des performances</em></p>
+</div>
+
 ## Liens des Dépôts de l'Écosystème
 
 | Composant | Description | Lien du Dépôt |
