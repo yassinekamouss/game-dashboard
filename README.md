@@ -302,7 +302,7 @@ Merci à toutes les personnes ayant contribué à cet écosystème !
 - [Yahya Ahmane](https://github.com/ahyahya1616) – Contributeur principal
 
 ### Jeux Unity
-- [Junaid Uthman](https://github.com/JunaidUthman) – Développeur principal des mini-jeux
+- [Junaid Uthman](https://github.com/JunaidUthman) et [Mohammed Salhi](https://github.com/SALHI-1) – Principaux développeurs de mini-jeux
 
 ### Application Mobile
 - [Yassine Kamouss](https://github.com/yassinekamouss) – Développeur principal
