@@ -30,7 +30,7 @@ export class TestFactory {
             maxNumberRange: gameConfig.maxNumberRange,
             requiredCorrectAnswers: gameConfig.requiredCorrectAnswers,
             order: gameConfig.order,
-            minComposition:gameConfig.minComposition,
+            numComposition:gameConfig.numComposition,
             minNumberRange: gameConfig.minNumberRange,
 
         }
